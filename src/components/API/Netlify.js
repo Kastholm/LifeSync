@@ -135,7 +135,7 @@ function Netlify() {
                     ></div>
                   </div>
                   <span className="text-sm">
-                    {bandwidthStatus.used / (1024 * 1024)} /{" "}
+                    {bandwidthStatus.used / (1024 * 1024 )} /{" "}
                     {bandwidthStatus.included / (1024 * 1024 * 1024)}
                   </span>
                 </div>
