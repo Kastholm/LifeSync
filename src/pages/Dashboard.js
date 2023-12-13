@@ -1,6 +1,5 @@
 import { useState } from "react";
 import React from "react";
-import Netlify from "../components/API/Netlify";
 import Habitica from "../components/API/Habitica";
 
 function Dashboard() {
