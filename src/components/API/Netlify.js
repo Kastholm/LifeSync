@@ -4,27 +4,6 @@ function Netlify() {
   const [sites, setSites] = useState(null);
   const [buildStatus, setBuildStatus] = useState(null);
   const [bandwidthStatus, setBandwidthStatus] = useState(null);
-  /* useEffect(() => {
-    const token = process.env.REACT_APP_NETLIFY_TOKEN;
-    fetch(`https://api.netlify.com/api/v1/kastholm/builds/status`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Netværksrespons var ikke ok");
-        }
-        return response.json(); // Parse responsen som JSON
-      })
-      .then((data) => {
-        console.log(data); // Tilføj denne linje for at se dataen
-        setBuildStatus(data);
-      })
-      .catch((error) => {
-        console.error("Fejl ved hentning af byggestatus:", error);
-      });
-  }, []); */
 
   useEffect(() => {
     const token = process.env.REACT_APP_NETLIFY_TOKEN;
@@ -53,7 +32,7 @@ function Netlify() {
 
         const buildData = await buildResponse.json();
         const bandwidthData = await bandwidthResponse.json();
-        console.log(bandwidthData);
+        //console.log(bandwidthData);
         setBuildStatus(buildData);
         setBandwidthStatus(bandwidthData);
       })
@@ -71,7 +50,7 @@ function Netlify() {
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data); // Tilføj denne linje for at se dataen
+        //console.log(data); // Tilføj denne linje for at se dataen
         setSites(data);
       })
       .catch((error) => console.error("Fejl ved hentning af sider:", error));
@@ -111,7 +90,7 @@ function Netlify() {
   return (
     <div>
       <div>
-        <h2 className="text-5xl mb-12 ">Mine Netlify Sider</h2>
+        <h2 className="text-5xl my-12 ">Mine Netlify Sider</h2>
 
         {buildStatus && bandwidthStatus ? (
           <div className="bg-gray-800 p-4 rounded-lg max-w-4xl mx-auto text-white">
@@ -134,9 +113,9 @@ function Netlify() {
                       style={{ width: "25%" }}
                     ></div>
                   </div>
-                  <span className="text-sm">
-                    {bandwidthStatus.used / (1024 * 1024 )} /{" "}
-                    {bandwidthStatus.included / (1024 * 1024 * 1024)}
+                  <span className="text-2xl">
+                    {(bandwidthStatus.used / (1024 * 1024 * 1024)).toFixed(2)}{" "}
+                    GB / {bandwidthStatus.included / (1024 * 1024 * 1024)} GB
                   </span>
                 </div>
                 <div>
@@ -192,13 +171,15 @@ function Netlify() {
                     </div>
                   </div>
                   <div className="p-6 pt-3">
-                    <button
-                      className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
-                      type="button"
-                      data-ripple-light="true"
-                    >
-                      Go to page
-                    </button>
+                    <a href={site.url}>
+                      <button
+                        className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        type="button"
+                        data-ripple-light="true"
+                      >
+                        Go to page
+                      </button>
+                    </a>
                   </div>
                 </section>
               </div>

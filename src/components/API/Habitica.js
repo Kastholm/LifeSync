@@ -1,53 +1,78 @@
 import { useState, useEffect } from "react";
 
 function Habitica() {
+  const [dailies, setDailies] = useState();
+  const [todo, setTodos] = useState();
 
-     const [dailies, setDailies] = useState([]);
+  useEffect(() => {
+    const userId = process.env.REACT_APP_HABITICA_USERID;
+    const apiToken = process.env.REACT_APP_HABITICA_TOKEN;
 
-     const fetchDailies = async () => {
-       const userId = process.env.REACT_APP_HABITICA_USERID;
-       const apiToken = process.env.REACT_APP_HABITICA_TOKEN;
-   
-       try {
-         const response = await fetch(
-           "https://habitica.com/api/v3/tasks/user?type=dailys",
-           {
-             headers: {
-               "x-api-user": userId,
-               "x-api-key": apiToken,
-             },
-           }
-         );
-   
-         if (!response.ok) {
-           throw new Error("Fejl ved hentning af daglige opgaver");
-         }
-   
-         const data = await response.json();
-         return data.data; // Dine daglige opgaver
-       } catch (error) {
-         console.error("Der opstod en fejl:", error);
-       }
-     };
+    const fetchDailies = fetch(
+      "https://habitica.com/api/v3/tasks/user?type=dailys",
+      {
+        headers: {
+          "x-api-user": userId,
+          "x-api-key": apiToken,
+        },
+      }
+    );
 
-     useEffect(() => {
-          fetchDailies().then(fetchedDailies => {
-            setDailies(fetchedDailies);
-          });
-        }, []);
+    const fetchTodos = fetch(
+      "https://habitica.com/api/v3/tasks/user?type=todos",
+      {
+        headers: {
+          "x-api-user": userId,
+          "x-api-key": apiToken,
+        },
+      }
+    );
 
+    Promise.all([fetchDailies, fetchTodos])
+      .then(async ([fetchedDailies, fetchedTodos]) => {
+        const dailyData = await fetchedDailies.json();
+        const todoData = await fetchedTodos.json();
+
+        setDailies(dailyData.data);
+        setTodos(todoData.data);
+        console.log(dailyData.data);
+        console.log(todoData.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  }, []);
 
   return (
     <div>
       <h1 className="text-6xl">Habitica</h1>
-      <ul>
-      {dailies.map(daily => (
-        <li key={daily.id}>
-          {daily.text} - {daily.completed ? 'Fuldført' : 'Ikke fuldført'}
-          {/* Flere detaljer eller interaktioner her */}
-        </li>
-      ))}
-    </ul>
+      <div>
+        {dailies && todo ? (
+          <div>
+            <ul>
+              {dailies.map((daily) => (
+                <li>
+                  {daily.text} -{" "}
+                  {daily.completed ? "Fuldført" : "Ikke fuldført"} - Streak:
+                  {daily.streak}
+                </li>
+              ))}
+            </ul>
+            <ul>
+              {todo.map((todo) => (
+                <li>
+                  {todo.text} - {todo.completed ? "Fuldført" : "Ikke fuldført"}{" "}
+                  - Streak:
+                  {todo.streak}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ) : (
+          <p>Henter data...</p>
+        )}
+        {/*   */}
+      </div>
     </div>
   );
 }

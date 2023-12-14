@@ -11,10 +11,12 @@ function App() {
     <div className="App">
       <main className="flex">
         <Header />
-        <Routes>
-          <Route exact path="/" element={<Dashboard />} />
-          <Route path="/webtify" element={<Webtify />} />
-        </Routes>
+        <div className="mx-auto">
+          <Routes >
+            <Route exact path="/" element={<Dashboard />} />
+            <Route path="/webtify" element={<Webtify />} />
+          </Routes>
+        </div>
       </main>
     </div>
   );
