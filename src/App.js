@@ -5,6 +5,7 @@ import { Route, Routes } from "react-router-dom";
 import Header from "./components/Base/Header";
 import Dashboard from "./pages/Dashboard";
 import Webtify from "./pages/Webtify";
+import Movies from "./pages/Movies";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
           <Routes >
             <Route exact path="/" element={<Dashboard />} />
             <Route path="/webtify" element={<Webtify />} />
+            <Route path="/movies" element={<Movies />} />
           </Routes>
         </div>
       </main>

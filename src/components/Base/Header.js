@@ -7,6 +7,7 @@ function Header() {
   let navItems = [
     { key: "1", name: "Dashboard", icon: "Home", link: "/" },
     { key: "2", name: "Webtify", icon: "Home", link: "/webtify" },
+    { key: "3", name: "Movies", icon: "Home", link: "/Movies" },
   ];
   return (
     <aside className="h-screen w-20 h-12 bg-gray-800 text-gray-200">
