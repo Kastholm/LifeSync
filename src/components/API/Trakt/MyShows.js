@@ -1,5 +1,10 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { LoginContext } from "../../Base/Login";
+import LoginForm from "../LoginForm";
 function MyShows() {
+
+  const {loginStatus} = useContext(LoginContext)
+
   const [watchShows, getWatchShows] = useState([]);
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
@@ -42,7 +47,7 @@ function MyShows() {
   return (
     <div>
       <h2 className="text-4xl font-bold text-gray-100 my-12">Current Shows</h2>
-      {watchShows ? (
+      {watchShows && loginStatus ? (
         <div className=" grid grid-cols-6 gap-4 rounded-3xl">
           {watchShows.map((show) => {
             return (
@@ -104,9 +109,7 @@ function MyShows() {
           })}
         </div>
       ) : (
-        <div>
-          <p> No Data </p>
-        </div>
+        <LoginForm />
       )}
     </div>
   );

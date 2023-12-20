@@ -1,8 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
+import { LoginContext } from "../../Base/Login";
+import LoginForm from "../LoginForm";
 function NeedToWatch() {
   const [watchMovies, getWatchMovies] = useState([]);
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
+
+  const { loginStatus} = useContext(LoginContext);
+
+  /* console.log("fra WL", one, loginStatus); */
 
   const fetchNeedToWatch = () => {
     const traktAccessToken = localStorage.getItem("traktAccessToken");
@@ -44,7 +50,7 @@ function NeedToWatch() {
         Need to watch
       </h1>
       <h2 className="text-4xl font-bold text-gray-100 mb-12">Movies</h2>
-      {watchMovies ? (
+      {watchMovies && loginStatus ? (
         <div className=" grid grid-cols-6 gap-4 rounded-3xl">
           {watchMovies.map((movie) => {
             return (
@@ -114,9 +120,7 @@ function NeedToWatch() {
           })}
         </div>
       ) : (
-        <div>
-          <p> No Data </p>
-        </div>
+        <LoginForm />
       )}
     </div>
   );

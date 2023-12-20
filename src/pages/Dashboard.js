@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
 import React from "react";
 import Habitica from "../components/API/Habitica";
-import { Columns } from "lucide-react";
+
+import { LoginContext } from "../components/Base/Login";
 import Movies from "./Movies";
 
 function Dashboard() {
@@ -33,10 +34,20 @@ function Dashboard() {
       src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1200px-ChatGPT_logo.svg.png",
       link: "https://chat.openai.com/",
     },
+    {
+      name: "ChatGPT",
+      key: "4",
+      src: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/ChatGPT_logo.svg/1200px-ChatGPT_logo.svg.png",
+      link: "https://chat.openai.com/",
+    },
   ];
 
   const [searchGooTerm, setSearchGooTerm] = useState("");
   const [searchYBTerm, setSearchYBTerm] = useState("");
+
+  const [traktAuth, setTraktAuth] = useState(false)
+
+  const {loginStatus} = useContext(LoginContext)
 
   const handleGooSubmit = (e) => {
     //Stopper almindelig opførelse
@@ -55,6 +66,11 @@ function Dashboard() {
 
   return (
     <main >
+
+
+      {traktAuth ? (<Movies />) : (null)}
+
+
       <div className=" bg-gray-900 p-4 rounded-2xl mt-12 m-3 grid grid-cols-2 gap-4">
         <form
           className="rounded-lg bg-white p-8 shadow-lg"
@@ -98,7 +114,7 @@ function Dashboard() {
       <div className="grid " style={{gridTemplateColumns: 'repeat(3, auto)' }} >
       <Habitica />
         <div className="bg-gray-700 rounded-2xl h-fit p-4 m-3">
-        <h2 className="text-4xl text-gray-200 font-semibold">Hyperlinks</h2>
+        <h2 className="text-4xl text-gray-200 font-semibold" onClick={() => setTraktAuth(true)}>Hyperlinks</h2>
           <div className="p-4 bg-gray-900 mt-8 rounded-2xl">
             <div className="container m-auto space-y-6 px-12">
               <div className="m-auto text-center ">
@@ -112,7 +128,7 @@ function Dashboard() {
                     key={hyperlink.key}
                     className=" w-16 bg-gray-200 rounded-xl p-2 grid place-content-center"
                   >
-                    <a href={hyperlink.link}>
+                    <a href={hyperlink.link} target="_blank">
                       <img src={hyperlink.src} className="m-auto" alt="" />
                     </a>
                   </div>
@@ -127,7 +143,7 @@ function Dashboard() {
                     key={hyperlink.key}
                     className=" w-16 bg-gray-200 rounded-xl p-2 grid place-content-center"
                   >
-                    <a href={hyperlink.link}>
+                    <a href={hyperlink.link} target="_blank">
                       <img src={hyperlink.src} className="m-auto" alt="" />
                     </a>
                   </div>

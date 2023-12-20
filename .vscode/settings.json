@@ -1,0 +1,17 @@
+{
+     "sqltools.connections": [
+          {
+               "mysqlOptions": {
+                    "authProtocol": "default",
+                    "enableSsl": "Disabled"
+               },
+               "previewLimit": 50,
+               "server": "192.168.87.155",
+               "port": 3309,
+               "driver": "MySQL",
+               "database": "lifesync",
+               "name": "LifeSync",
+               "username": "lifesync"
+          }
+     ]
+}

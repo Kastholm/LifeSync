@@ -1,4 +1,6 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import { LoginContext } from "../../Base/Login";
+import LoginForm from "../LoginForm";
 function WatchedMovies() {
   const [movies, setMovies] = useState([]);
   const [movieDetails, setMovieDetails] = useState({});
@@ -8,6 +10,8 @@ function WatchedMovies() {
 
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
+
+  const { loginStatus } = useContext(LoginContext);
 
   const fetchWatchList = (pageNumber) => {
     const traktAccessToken = localStorage.getItem("traktAccessToken");
@@ -66,12 +70,12 @@ function WatchedMovies() {
     setPage((prevPage) => prevPage + 1);
   };
   return (
-    <div>
-      {movies ? (
-        <div className="bg-gray-900 rounded-t-3xl p-12">
-          <h1 className="text-4xl font-bold text-center my-12 text-gray-100">
-            Currently Watched
-          </h1>
+    <div className="bg-gray-900 rounded-t-3xl p-12">
+      <h1 className="text-4xl font-bold text-center mb-12 text-gray-100">
+        Currently Watched
+      </h1>
+      {movies && loginStatus ? (
+        <div>
           <div className=" grid grid-cols-6 gap-4">
             {movies.map((movie) => {
               if (!duplicateMovie.has(movie.movie.title)) {
@@ -178,16 +182,19 @@ function WatchedMovies() {
           </div>
         </div>
       ) : (
-        <p> hej </p>
+        <LoginForm />
       )}
-      <div className=" bg-gray-900 rounded-b-3xl  ">
-        <button
-          className="mx-auto text-center bg-green-400 px-12 py-4 my-8"
-          onClick={handleShowMore}
-        >
-          Indlæs mere
-        </button>
-      </div>
+
+      {loginStatus ? (
+        <div className=" bg-gray-900 rounded-b-3xl  ">
+          <button
+            className="mx-auto text-center bg-green-400 px-12 py-4 my-8"
+            onClick={handleShowMore}
+          >
+            Indlæs mere
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 }
