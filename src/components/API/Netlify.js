@@ -96,11 +96,11 @@ function Netlify() {
   return (
     <div>
 
-        <h2 className="text-5xl text-gray-200 my-12 ">Mine Netlify Sider</h2>
       { loginStatus ? (<div>
 
         {buildStatus && bandwidthStatus ? (
-          <div className="bg-gray-800 p-4 rounded-lg max-w-4xl mx-auto text-white">
+          <div className="bg-gray-900 p-4 mb-4 rounded-lg mx-4 text-white">
+            <h2 className="text-3xl text-gray-200  ">Mine Netlify Sider</h2>
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-semibold">Kastholm</h2>
               <span className="text-lg">
@@ -146,21 +146,21 @@ function Netlify() {
         )}
 
         {sites && sites.length > 0 ? (
-          <ul className="grid grid-cols-4">
+          <ul className="grid grid-cols-4 bg-gray-900 m-4 p-8 rounded-xl">
             {sites.map((site) => (
               <div key={site.id}>
-                <section className="flex w-full max-w-[20rem] flex-col rounded-xl bg-white bg-clip-border text-gray-700 shadow-lg">
-                  <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-white shadow-lg shadow-blue-gray-500/40">
+                <section className="flex w-full max-w-[20rem] flex-col mb-4 rounded-xl bg-gray-700 bg-clip-border text-gray-700 shadow-lg">
+                  <div className="relative mx-4 mt-4 overflow-hidden rounded-xl bg-blue-gray-500 bg-clip-border text-gray-100 shadow-lg shadow-blue-gray-500/40">
                     <img src={site.screenshot_url} />
-                    <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent to-black/60"></div>
+                    <div className="to-bg-black-10 absolute inset-0 h-full w-full bg-gradient-to-tr from-transparent via-transparent "></div>
                   </div>
                   <div className="p-6">
                     <div className="mb-3 flex items-center text-center">
-                      <h5 className="text-center font-sans text-2xl font-bold leading-snug tracking-normal uppercase text-blue-gray-900 m-auto ">
+                      <h5 className="text-center font-sans text-2xl font-bold leading-snug tracking-normal uppercase text-blue-gray-900 m-auto text-gray-100 ">
                         {site.name}
                       </h5>
                     </div>
-                    <p className="block font-sans text-base font-light leading-relaxed text-gray-700 antialiased">
+                    <p className="block font-sans text-base font-light leading-relaxed text-gray-100 antialiased">
                       <b className=" font-semibold">
                         {" "}
                         <br /> Branch: {
@@ -171,7 +171,7 @@ function Netlify() {
                     <div className="group mt-8 inline-flex flex-wrap items-center gap-3">
                       <span /* onClick={() => deleteSite(site.id)} */
                         data-tooltip-target="money"
-                        className="cursor-pointer rounded-full border border-pink-500/5 bg-pink-500/5 p-3 text-pink-500 transition-colors hover:border-pink-500/10 hover:bg-pink-500/10 hover:!opacity-100 group-hover:opacity-70"
+                        className="cursor-pointer rounded-full border  p-3 text-red-400 transition-colors hover:border-red-500/10 hover:bg-red-500/10 hover:!opacity-100 group-hover:opacity-70"
                       >
                         <Trash2 />
                       </span>
@@ -180,7 +180,7 @@ function Netlify() {
                   <div className="p-6 pt-3">
                     <a href={site.url}>
                       <button
-                        className="block w-full select-none rounded-lg bg-pink-500 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-white shadow-md shadow-pink-500/20 transition-all hover:shadow-lg hover:shadow-pink-500/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
+                        className="block w-full select-none rounded-lg bg-gray-900 py-3.5 px-7 text-center align-middle font-sans text-sm font-bold uppercase text-gray-100 shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none active:opacity-[0.85] active:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                         type="button"
                         data-ripple-light="true"
                       >
