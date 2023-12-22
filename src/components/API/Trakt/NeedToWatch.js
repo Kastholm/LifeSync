@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { LoginContext } from "../../Base/Login";
 import LoginForm from "../LoginForm";
+import { MonitorPlay } from "lucide-react";
 function NeedToWatch() {
   const [watchMovies, getWatchMovies] = useState([]);
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
@@ -46,50 +47,45 @@ function NeedToWatch() {
   }, []);
   return (
     <div>
+      
       <h1 className="text-4xl font-bold text-center mb-12  text-gray-100 ">
-        Need to watch
+        Watching list
       </h1>
-      <h2 className="text-4xl font-bold text-gray-100 mb-12">Movies</h2>
       {watchMovies && loginStatus ? (
-        <div className=" grid grid-cols-6 gap-4 rounded-3xl">
+        <div className=" grid grid-cols-4 gap-4 rounded-3xl">
           {watchMovies.map((movie) => {
             return (
               <div
                 key={movie.id}
-                className=" mx-auto bg-white rounded-3xl shadow-xl "
+                className=" mx-auto bg-gray-300 rounded-3xl max-w-[18em] shadow-xl "
               >
-                <div className="grid  rounded-3xl max-w-sm shadow-sm bg-slate-100 ">
+                <div className="grid  rounded-3xl max-w-sm shadow-sm bg-gray-800 shadow-slate-700 shadow-xl hover:scale-105 transition-all ">
                   <img
                     src={`https://image.tmdb.org/t/p/w500${movie.tmdbData.poster_path}`}
                     alt={`Plakat for ${movie.movie.title}`}
                     width="390"
                     height="200"
-                    className="rounded-t-3xl justify-center grid object-cover h-80 transition-all"
+                    className="rounded-t-3xl justify-center grid object-cover h-60 transition-all"
                   />
 
-                  <div className="group p-6 grid z-10 min-h-[22em] ">
-                    <a className="group-hover:text-cyan-700 font-bold sm:text-2xl line-clamp-2">
-                      {movie.movie.title}
+                  <div className="group p-6 grid z-10 min-h-[15em] ">
+                    <a className=" font-bold text-xl text-gray-100 line-clamp-2">
+                    {movie.movie.year} - {movie.movie.title}
                     </a>
-                    <span className="text-slate-400 pt-2 font-semibold">
-                      ({movie.movie.year})
-                    </span>
-                    <div>
-                      <a
+                    <div className="grid my-2">
+                      <a className="m-auto bg-gray-200 p-2 rounded-full"
                         href={`https://www.youtube.com/results?search_query=${movie.movie.title} trailer`}
                       >
-                        <button className="bg-red-500 text-white px-6 py-2">
-                          {" "}
-                          Trailer{" "}
-                        </button>
+                        <MonitorPlay color="#111827" size={32} />
                       </a>
+                      
                     </div>
                     <div className=" grid-cols-2 flex group justify-between">
                       <div className="font-black flex flex-col">
-                        <span className="text-yellow-500 text-xl">
+                        <span className="text-yellow-300 text-lg">
                           IMDB SCORE
                         </span>
-                        <span className="text-3xl flex gap-x-1 items-center group-hover:text-yellow-600">
+                        <span className="text-2xl text-gray-100 flex gap-x-1 items-center">
                           {movie.tmdbData.vote_average.toFixed(1)}
                           <svg
                             width="24px"

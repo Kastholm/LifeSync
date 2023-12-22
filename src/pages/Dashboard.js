@@ -62,13 +62,19 @@ function Dashboard() {
 
   const handleYBSubmit = (f) => {
     f.preventDefault();
-    window.open(`https://www.youtube.com/results?search_query=${encodeURIComponent(searchYBTerm)}`, "_blank");
-};
-
+    window.open(
+      `https://www.youtube.com/results?search_query=${encodeURIComponent(
+        searchYBTerm
+      )}`,
+      "_blank"
+    );
+  };
 
   return (
     <main>
       {traktAuth ? <Movies /> : null}
+      
+<iframe title="test" src='https://lifesync.us' />
 
       <div className=" bg-gray-900 p-4 mx-4 rounded-2xl grid grid-cols-2 gap-4">
         <div>
@@ -137,7 +143,7 @@ function Dashboard() {
         </div>
       </div>
 
-      <div className="grid " style={{ gridTemplateColumns: "repeat(3, auto)" }}>
+      <div className="grid ">
         <Habitica />
       </div>
       <div className="bg-gray-900 mx-4 px-4 mb-12 pt-2 pb-6 rounded-xl">

@@ -6,6 +6,7 @@ import WatchedMovies from "../components/API/Trakt/WatchedMovies";
 import { LoginContext } from "../components/Base/Login";
 
 import LoginForm from "../components/API/LoginForm";
+import { KeyRound, KeyRoundIcon, LogIn } from "lucide-react";
 
 function Movies() {
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
@@ -55,22 +56,22 @@ function Movies() {
 
 
   return (
-    <div className="bg-black mt-2 px-12 rounded-3xl">
+    <div className="bg-black mt-2 px-4 rounded-3xl">
       {loginStatus ? (
-        <div className="rounded-3xl ">
-          <button className="bg-orange-200 p-2 " onClick={() => authenticateWithTrakt()}>
-            1. OAuth
+        <div className="rounded-t-3xl mt-4 flex py-4 bg-gray-900 justify-end ">
+          <button className=" bg-gray-200 p-2 rounded-full my-auto ml-auto " onClick={() => authenticateWithTrakt()}>
+            <LogIn />
           </button>
           <button
             onClick={() => getAccessToken()}
-            className="bg-orange-200 p-2 m-10"
+            className=" mx-4 bg-gray-200 p-2 rounded-full"
           >
-            2. Token
+           <KeyRoundIcon />
           </button>
         </div>
       ) : null}
        <div>
-        <div className="bg-gray-900 rounded-3xl mb-12 p-12">
+        <div className="bg-gray-900 rounded-b-3xl mb-12 p-12">
           <NeedToWatch />
 
           <MyShows />

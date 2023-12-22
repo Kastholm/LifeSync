@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../Base/Login";
 import LoginForm from "../LoginForm";
+import { ArrowDownToLine } from "lucide-react";
 function WatchedMovies() {
   const [movies, setMovies] = useState([]);
   const [movieDetails, setMovieDetails] = useState({});
@@ -70,13 +71,13 @@ function WatchedMovies() {
     setPage((prevPage) => prevPage + 1);
   };
   return (
-    <div className="bg-gray-900 rounded-t-3xl p-12">
+    <div className="bg-gray-900 rounded-t-3xl p-12 mb-12 rounded-b-xl">
       <h1 className="text-4xl font-bold text-center mb-12 text-gray-100">
         Currently Watched
       </h1>
       {movies && loginStatus ? (
         <div>
-          <div className=" grid grid-cols-6 gap-4">
+          <div className=" grid grid-cols-4 gap-4">
             {movies.map((movie) => {
               if (!duplicateMovie.has(movie.movie.title)) {
                 duplicateMovie.add(movie.movie.title);
@@ -84,9 +85,9 @@ function WatchedMovies() {
                 return (
                   <div
                     key={movie.id}
-                    className=" mx-auto bg-white rounded-3xl shadow-xl "
+                    className=" mx-auto bg-gray-800 rounded-3xl shadow-xl "
                   >
-                    <div className="grid  rounded-3xl max-w-sm shadow-sm bg-slate-100 ">
+                    <div className="grid text-gray-100 rounded-3xl bg-gray-800 shadow-gray-700 shadow-xl hover:scale-[102%] transition-all ">
                       <img
                         src={details?.posterUrl}
                         alt={`Plakat for ${movie.movie.title}`}
@@ -95,13 +96,10 @@ function WatchedMovies() {
                         className="rounded-t-3xl justify-center grid object-cover h-80 transition-all"
                       />
 
-                      <div className="group p-6 grid z-10 min-h-[22em] ">
-                        <a className="group-hover:text-cyan-700 font-bold sm:text-2xl line-clamp-2">
-                          {movie.movie.title}
+                      <div className="group p-6 grid z-10 min-h-[19em] ">
+                        <a className=" font-bold sm:text-2xl line-clamp-2">
+                        {movie.movie.year}- {movie.movie.title}
                         </a>
-                        <span className="text-slate-400 pt-2 font-semibold">
-                          ({movie.movie.year})
-                        </span>
                         <div>
                           <span className="line-clamp-4 py-2 text-base font-light leading-relaxed">
                             <p>
@@ -148,7 +146,7 @@ function WatchedMovies() {
                             <span className="text-yellow-500 text-xl">
                               IMDB SCORE
                             </span>
-                            <span className="text-3xl flex gap-x-1 items-center group-hover:text-yellow-600">
+                            <span className="text-3xl flex gap-x-1 items-center ">
                               {details?.rating.toFixed(1)}
                               <svg
                                 width="24px"
@@ -188,10 +186,10 @@ function WatchedMovies() {
       {loginStatus ? (
         <div className=" bg-gray-900 rounded-b-3xl  ">
           <button
-            className="mx-auto text-center bg-green-400 px-12 py-4 my-8"
+            className="mx-auto text-center bg-green-400 px-4 rounded-xl py-4 mt-8"
             onClick={handleShowMore}
           >
-            Indlæs mere
+          <ArrowDownToLine />
           </button>
         </div>
       ) : null}

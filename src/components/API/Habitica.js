@@ -8,16 +8,13 @@ function Habitica() {
   const [todo, setTodos] = useState();
 
   const [taskName, setTaskName] = useState();
-  const [taskType, setTaskType] = useState();
+  const [taskType, setTaskType] = useState("codetask");
 
   useEffect(() => {
     checkPassword();
   }, []);
 
-  const {
-    loginStatus,
-    checkPassword,
-  } = useContext(LoginContext);
+  const { loginStatus, checkPassword } = useContext(LoginContext);
 
   useEffect(() => {
     const userId = process.env.REACT_APP_HABITICA_USERID;
@@ -51,7 +48,7 @@ function Habitica() {
         setDailies(dailyData.data);
         setTodos(todoData.data);
         //console.log(dailyData.data);
-        //console.log(todoData.data);
+        console.log(todoData.data);
       })
       .catch((err) => {
         console.log(err);
@@ -89,9 +86,11 @@ function Habitica() {
     }, 1000);
   };
 
-  const createTask = (name, type) => {
+  const createTask = (name, note) => {
     const userId = process.env.REACT_APP_HABITICA_USERID;
     const apiToken = process.env.REACT_APP_HABITICA_TOKEN;
+    const ranAlias = Math.floor(Math.random() * 100000000000);
+    console.log(ranAlias);
     fetch(`https://habitica.com/api/v3/tasks/user`, {
       method: "POST",
       headers: {
@@ -101,9 +100,9 @@ function Habitica() {
       },
       body: JSON.stringify({
         text: `${name}`,
-        type: `${type}`,
-        alias: `alias-${name}`,
-        notes: "",
+        type: `todo`,
+        alias: `alias-${ranAlias}`,
+        notes: `${note}`,
         tags: ["ed427623-9a69-4aac-9852-13deb9c190c3"],
         checklist: [],
         priority: 2,
@@ -111,7 +110,7 @@ function Habitica() {
     }).catch((err) => {
       console.log(err);
     });
-    console.log(name, type);
+    console.log(name, note);
     /*  setTimeout(() => {
       window.location.reload();
     }, 1000); */
@@ -126,7 +125,7 @@ function Habitica() {
         <div>
           <div className="bg-gray-700 w-full rounded-2xl grid p-4 mb-4">
             <div>
-              <div className="-mx-3 grid grid-cols-3 place-content-center ">
+              <div className="-mx-3 flex w-2/3 mx-auto ">
                 <div className="w-full px-3 m-auto ">
                   <div className="mb-5">
                     <label className="mb-3 block text-base font-medium text-gray-200">
@@ -149,121 +148,177 @@ function Habitica() {
                       className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                       onChange={(e) => setTaskType(e.target.value)}
                     >
-                      <option value="daily">Daily</option>
-                      <option value="todo">ToDo</option>
+                      <option value="codetask">Web Dev</option>
+                      <option value="todo">Gøremål</option>
+                      <option value="appointment">Aftale</option>
                     </select>
                   </div>
                 </div>
-              <div className="grid w-fit mt-4 ml-4" >
-                <button
-                  onClick={() => createTask(taskName, taskType)}
-                  className="hover:shadow-form rounded-md m-auto bg-[#481847] py-3 px-8 text-center text-base font-semibold text-white outline-none"
-                >
-                  Send
-                </button>
-              </div>
+                <div className="grid w-fit mt-4 ml-4">
+                  <button
+                    onClick={() => createTask(taskName, taskType)}
+                    className="hover:shadow-form rounded-md m-auto bg-[#481847] py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                  >
+                    Send
+                  </button>
+                </div>
               </div>
             </div>
           </div>
           <div>
             {dailies && todo ? (
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <div>
                   <ul className="bg-gray-700 p-4 rounded-2xl">
                     <h2 className="text-4xl mb-6 text-gray-200 font-semibold">
-                      Daily
+                      Web Dev
                     </h2>
-                    {dailies.map((daily) => (
-                      <div key={daily.id}>
-                        <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
-                          <div className=" py-4">
-                            <div>
-                              <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
-                                <div className="flex items-center flex-1 min-w-0">
-                                  <img
-                                    src="https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/SlackLogo_CompanyNews_SecondaryAubergine_Hero.jpg?d=500x500&amp;f=fill"
-                                    className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
-                                  />
-
-                                  <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
-                                    <p className="text-lg font-bold truncate">
-                                      {daily.text}
-                                    </p>
+                    {todo.map((todo) => (
+                      <div key={todo.id}>
+                        {todo.notes === "codetask" ? (
+                          <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
+                            <div className=" py-4">
+                              <div>
+                                <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
+                                  <div className="flex items-center flex-1 min-w-0">
+                                    <img
+                                      src="https://pm1.aminoapps.com/6564/ee09ccac2da477f00735db9aa49a11579fdea271_00.jpg"
+                                      className="flex-shrink-0 bg-black object-cover rounded-full btn- w-10 h-10"
+                                      />
+                                    <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
+                                      <p className="text-lg font-bold  truncate">
+                                        {todo.text}
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-
-                                <div className="mt-4 mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
-                                  {daily.completed ? (
-                                    <a
-                                      onClick={() => unCompleteTask(daily.id)}
-                                      className="buttonCompleted bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
-                    duration-200 hover:bg-gray-700 rounded-lg"
-                                    >
-                                      <CheckSquare />
-                                    </a>
-                                  ) : (
-                                    <a
-                                      onClick={() => completeTask(daily.id)}
-                                      className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
-                  duration-200 hover:bg-gray-700 rounded-lg"
-                                    >
-                                      <ScanLine />
-                                    </a>
-                                  )}
+                                  <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
+                                    {todo.completed ? (
+                                      <a
+                                      onClick={() => unCompleteTask(todo.id)}
+                                      className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                      duration-200 hover:bg-gray-700 rounded-lg"
+                                      >
+                                        <CheckSquare />
+                                      </a>
+                                    ) : (
+                                      <a
+                                        onClick={() => completeTask(todo.id)}
+                                        className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                        duration-200 hover:bg-gray-700 rounded-lg"
+                                        >
+                                        <ScanLine />
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        ) : null}
                       </div>
                     ))}
                   </ul>
                 </div>
+
                 <div>
                   <ul className="bg-gray-700 p-4 rounded-2xl">
                     <h2 className="text-4xl mb-6 text-gray-200 font-semibold">
-                      ToDo
+                      Gøremål
                     </h2>
                     {todo.map((todo) => (
                       <div key={todo.id}>
-                        <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
-                          <div className=" py-4">
-                            <div >
-                              <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
-                                <div className="flex items-center flex-1 min-w-0">
-                                  <img
-                                    src="https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/SlackLogo_CompanyNews_SecondaryAubergine_Hero.jpg?d=500x500&amp;f=fill"
-                                    className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
-                                  />
-                                  <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
-                                    <p className="text-lg font-bold  truncate">
-                                      {todo.text}
-                                    </p>
+                        {todo.notes === "todo" ? (
+                          <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
+                            <div className=" py-4">
+                              <div>
+                                <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
+                                  <div className="flex items-center flex-1 min-w-0">
+                                    <img
+                                      src="https://pm1.aminoapps.com/6564/ee09ccac2da477f00735db9aa49a11579fdea271_00.jpg"
+                                      className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
+                                      />
+                                    <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
+                                      <p className="text-lg font-bold  truncate">
+                                        {todo.text}
+                                      </p>
+                                    </div>
                                   </div>
-                                </div>
-                                <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
-                                  {todo.completed ? (
-                                    <a
+                                  <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
+                                    {todo.completed ? (
+                                      <a
                                       onClick={() => unCompleteTask(todo.id)}
                                       className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
-                    duration-200 hover:bg-gray-700 rounded-lg"
-                                    >
-                                       <CheckSquare />
-                                    </a>
-                                  ) : (
-                                    <a
+                                      duration-200 hover:bg-gray-700 rounded-lg"
+                                      >
+                                        <CheckSquare />
+                                      </a>
+                                    ) : (
+                                      <a
                                       onClick={() => completeTask(todo.id)}
-                                      className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
-                  duration-200 hover:bg-gray-700 rounded-lg"
-                                    >
-                                      <ScanLine />
-                                    </a>
-                                  )}
+                                        className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                        duration-200 hover:bg-gray-700 rounded-lg"
+                                        >
+                                        <ScanLine />
+                                      </a>
+                                    )}
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           </div>
-                        </div>
+                        ) : null}
+                      </div>
+                    ))}
+                  </ul>
+                </div>
+
+                <div>
+                  <ul className="bg-gray-700 p-4 rounded-2xl">
+                    <h2 className="text-4xl mb-6 text-gray-200 font-semibold">
+                      Aftaler
+                    </h2>
+                    {todo.map((todo) => (
+                      <div key={todo.id}>
+                        {todo.notes === "appointment" ? (
+                          <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
+                            <div className=" py-4">
+                              <div>
+                                <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
+                                  <div className="flex items-center flex-1 min-w-0">
+                                    <img
+                                      src="https://pm1.aminoapps.com/6564/ee09ccac2da477f00735db9aa49a11579fdea271_00.jpg"
+                                      className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
+                                      />
+                                    <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
+                                      <p className="text-lg font-bold  truncate">
+                                        {todo.text}
+                                      </p>
+                                    </div>
+                                  </div>
+                                  <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
+                                    {todo.completed ? (
+                                      <a
+                                      onClick={() => unCompleteTask(todo.id)}
+                                      className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                      duration-200 hover:bg-gray-700 rounded-lg"
+                                      >
+                                        <CheckSquare />
+                                      </a>
+                                    ) : (
+                                      <a
+                                      onClick={() => completeTask(todo.id)}
+                                      className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                      duration-200 hover:bg-gray-700 rounded-lg"
+                                      >
+                                        <ScanLine />
+                                      </a>
+                                    )}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        ) : null}
                       </div>
                     ))}
                   </ul>
@@ -271,15 +326,72 @@ function Habitica() {
               </div>
             ) : (
               <p>Henter data...</p>
-            )}
+              )}
             {/*   */}
           </div>
         </div>
       ) : (
         <LoginForm />
-      )}
+        )}
     </div>
   );
 }
 
 export default Habitica;
+
+{/* <div>
+  <ul className="bg-gray-700 p-4 rounded-2xl">
+    <h2 className="text-4xl mb-6 text-gray-200 font-semibold">
+      Daily
+    </h2>
+    {dailies.map((daily) => (
+      <div key={daily.id}>
+        <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
+          <div className=" py-4">
+            <div>
+              <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
+                <div className="flex items-center flex-1 min-w-0">
+                  <img
+                    src="https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/SlackLogo_CompanyNews_SecondaryAubergine_Hero.jpg?d=500x500&amp;f=fill"
+                    className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
+                  />
+
+                  <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
+                    <p className="text-lg font-bold truncate">
+                      {daily.text}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="mt-4 mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
+                  {daily.completed ? (
+                    <a
+                      onClick={() => unCompleteTask(daily.id)}
+                      className="buttonCompleted bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+    duration-200 hover:bg-gray-700 rounded-lg"
+                    >
+                      <CheckSquare />
+                    </a>
+                  ) : (
+                    <a
+                      onClick={() => completeTask(daily.id)}
+                      className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+  duration-200 hover:bg-gray-700 rounded-lg"
+                    >
+                      <ScanLine />
+                    </a>
+                  )}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    ))}
+  </ul>
+</div> */}
+{/* {
+      todo.notes === 'codetask' ? (
+        <h1>HEj{todo.text}</h1>
+      ) : null
+    } */}

@@ -1,6 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../Base/Login";
 import LoginForm from "../LoginForm";
+import { BadgeInfo } from "lucide-react";
 function MyShows() {
 
   const {loginStatus} = useContext(LoginContext)
@@ -48,14 +49,14 @@ function MyShows() {
     <div>
       <h2 className="text-4xl font-bold text-gray-100 my-12">Current Shows</h2>
       {watchShows && loginStatus ? (
-        <div className=" grid grid-cols-6 gap-4 rounded-3xl">
+        <div className=" grid grid-cols-4 gap-4 rounded-3xl">
           {watchShows.map((show) => {
             return (
               <div
                 key={show.id}
-                className=" mx-auto bg-white rounded-3xl shadow-xl "
+                className=" mx-auto bg-white max-w-[18em] rounded-3xl shadow-xl "
               >
-                <div className="grid  rounded-3xl max-w-sm shadow-sm bg-slate-100 ">
+                <div className="grid  rounded-3xl max-w-sm text-gray-100 bg-gray-800 shadow-gray-700 shadow-xl hover:scale-105 transition-all ">
                   <img
                     src={`https://image.tmdb.org/t/p/w500${show.tmdbsData.poster_path}`}
                     alt={`Plakat for ${show.show.title}`}
@@ -64,17 +65,14 @@ function MyShows() {
                     className="rounded-t-3xl justify-center grid object-cover h-60 transition-all"
                   />
 
-                  <div className="group p-6 grid z-10 min-h-[14em] ">
-                    <a className="group-hover:text-cyan-700 font-bold sm:text-2xl line-clamp-2">
+                  <div className="group p-6 grid z-10 min-h-[16em] ">
+                    <a className=" font-bold sm:text-xl line-clamp-2">
                       {show.show.title}
                     </a>
 
-                    <div>
-                      <a href={show.tmdbsData.homepage}>
-                        <button className="bg-orange-500 text-white px-6 py-2">
-                          {" "}
-                          See Information{" "}
-                        </button>
+                    <div className="grid my-2">
+                      <a className="m-auto bg-gray-200 p-2 rounded-full" href={show.tmdbsData.homepage}>
+                        <BadgeInfo color="#111827" size={32} />
                       </a>
                     </div>
                     <div>
@@ -86,7 +84,7 @@ function MyShows() {
                         }
                       </p>
 
-                      <div className="text-2xl">
+                      <div className="text-2xl font-bold">
                         {show.tmdbsData.seasons[
                           show.tmdbsData.seasons.length - 1
                         ].air_date == null ? (

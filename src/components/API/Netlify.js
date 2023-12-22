@@ -146,7 +146,7 @@ function Netlify() {
         )}
 
         {sites && sites.length > 0 ? (
-          <ul className="grid grid-cols-4 bg-gray-900 m-4 p-8 rounded-xl">
+          <ul className="grid grid-cols-4 place-content-center bg-gray-900 m-4 p-8 rounded-xl">
             {sites.map((site) => (
               <div key={site.id}>
                 <section className="flex w-full max-w-[20rem] flex-col mb-4 rounded-xl bg-gray-700 bg-clip-border text-gray-700 shadow-lg">
