@@ -27,7 +27,13 @@ function Header() {
       key: "4",
       name: "Economy",
       icon: "https://pnghq.com/wp-content/uploads/14-cashapp-icons-free-in-svg-74161.png",
-      link: "/Economy",
+      link: "/economy",
+    },
+    {
+      key: "5",
+      name: "HA",
+      icon: "https://community-assets.home-assistant.io/original/4X/1/3/8/13882a481a57f91f670def0fc33cf99d09dec293.png",
+      link: "/homeassistant",
     },
   ];
   return (
