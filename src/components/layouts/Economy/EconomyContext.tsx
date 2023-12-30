@@ -8,6 +8,8 @@ interface EconomyContextType {
   getIncome: () => void;
   expenseData: IncomeData[];
   getExpense: () => void;
+  selectedMonth: string;
+  getFullIncome: () => void;
 }
 // Definerer en standardværdi
 const defaultEconomyContextValue: EconomyContextType = {
@@ -16,7 +18,9 @@ const defaultEconomyContextValue: EconomyContextType = {
   incomeData: [],
   getIncome: () => {},
   expenseData: [],
-  getExpense: () => {}
+  getExpense: () => {},
+  selectedMonth: "",
+  getFullIncome: () => {},
 };
 export type MonthData = {
   id: number;
@@ -27,64 +31,90 @@ export type MonthData = {
 export type IncomeData = [
   id: number,
   RefId: number,
-  evalue: number,
   ename: string,
   enote?: string,
-  eamount?: number,
-]
+  ecategory?: number,
+  etype?: number,
+  eyear?: number,
+  eamount?: number
+];
 
-
-export const EconomyContext = createContext<EconomyContextType>(defaultEconomyContextValue);
-
-
+export const EconomyContext = createContext<EconomyContextType>(
+  defaultEconomyContextValue
+);
 
 export function EconomyProvider({ children }) {
   const [monthData, setMonthData] = useState<MonthData[]>([]);
   const [incomeData, setIncomeData] = useState<IncomeData[]>([]);
   const [expenseData, setExpenseData] = useState<IncomeData[]>([]);
 
-// GET MONTHS
-const getMonths = (): Promise<MonthData[]> => {
-  return fetch("http://localhost:3001/get/months")
-    .then((res) => res.json() as Promise<MonthData[]>)
-    .then((data: MonthData[]) => {
-      setMonthData(data);
-      return data;
-    })
-    .catch((err: any) => {
-      console.log(err);
-      return [];
-    });
-};
+  const [selectedMonth, setSelectedMonth] = useState<string>("");
 
-// GET Income from a specific Month
-// Types Klarer vi i frontenden
-const getIncome = (): Promise<IncomeData[]> => {
-  return fetch(`http://localhost:3001/get/months/income`)
-  .then((res) => res.json())
-  .then((data: IncomeData[]) => {
-    setIncomeData(data)
-    //console.log('income data hentet', data)
-    return data;
-  })
-  .catch((err: any) => { console.log(err); return[]})
-};
+  const [incomeFullData, setFullIncomeData] = useState<IncomeData[]>([]);
 
+  // GET MONTHS
+  const getMonths = (): Promise<MonthData[]> => {
+    return fetch("http://localhost:3001/get/months")
+      .then((res) => res.json() as Promise<MonthData[]>)
+      .then((data: MonthData[]) => {
+        setMonthData(data);
+        return data;
+      })
+      .catch((err: any) => {
+        console.log(err);
+        return [];
+      });
+  };
 
-// GET Income from a specific Month
-// Types Klarer vi i frontenden
-const getExpense = (): Promise<IncomeData[]> => {
-  return fetch(`http://localhost:3001/get/months/expense`)
-  .then((res) => res.json())
-  .then((data: IncomeData[]) => {
-    setExpenseData(data)
-    //console.log('income data hentet', data)
-    return data;
-  })
-  .catch((err: any) => { console.log(err); return[]})
-};
+  // GET Income from a specific Month
+  // Types Klarer vi i frontenden
+  const getIncome = (monthEconomyId, year): Promise<IncomeData[]> => {
+    setSelectedMonth(year);
+    return fetch(`http://localhost:3001/get/months/${monthEconomyId}/income`)
+      .then((res) => res.json())
+      .then((data: IncomeData[]) => {
+        setIncomeData(data);
+        console.log("income data hentet", data);
+        console.log(incomeData);
+        return data;
+      })
+      .catch((err: any) => {
+        console.log(err);
+        return [];
+      });
+  };
 
+  const getFullIncome = (eyear): Promise<IncomeData[]> => {
+    //setSelectedYear(eyear);
+    return fetch(`http://localhost:3001/get/allmonths/${eyear}/income`)
+      .then((res) => res.json())
+      .then((data: IncomeData[]) => {
+        setFullIncomeData(data);
+        console.log("year cho", eyear);
+        console.log("Full income data hentet", data);
+        return data;
+      })
+      .catch((err: any) => {
+        console.log(err);
+        return [];
+      });
+  };
 
+  // GET Income from a specific Month
+  // Types Klarer vi i frontenden
+  const getExpense = (): Promise<IncomeData[]> => {
+    return fetch(`http://localhost:3001/get/months/expense`)
+      .then((res) => res.json())
+      .then((data: IncomeData[]) => {
+        setExpenseData(data);
+        //console.log('income data hentet', data)
+        return data;
+      })
+      .catch((err: any) => {
+        console.log(err);
+        return [];
+      });
+  };
 
   //EXPORT Context
   const economyExport = {
@@ -93,7 +123,10 @@ const getExpense = (): Promise<IncomeData[]> => {
     incomeData,
     getIncome,
     expenseData,
-    getExpense
+    getExpense,
+    selectedMonth,
+    getFullIncome,
+    incomeFullData,
   };
   return (
     <EconomyContext.Provider value={economyExport}>
@@ -101,4 +134,3 @@ const getExpense = (): Promise<IncomeData[]> => {
     </EconomyContext.Provider>
   );
 }
-

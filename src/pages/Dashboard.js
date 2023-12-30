@@ -73,8 +73,6 @@ function Dashboard() {
   return (
     <main>
       {traktAuth ? <Movies /> : null}
-      
-<iframe title="test" src='https://lifesync.us' />
 
       <div className=" bg-gray-900 p-4 mx-4 rounded-2xl grid grid-cols-2 gap-4">
         <div>

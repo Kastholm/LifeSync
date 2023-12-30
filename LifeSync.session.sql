@@ -10,7 +10,7 @@ CREATE TABLE Users (
 INSERT INTO MonthEconomy (monthName, monthYear)
 VALUES (
           'Oktober',
-          2023
+          2021
      ) 
      
 
@@ -27,13 +27,50 @@ CREATE TABLE MonthEconomy (
 
 CREATE TABLE Income (
      id INT PRIMARY KEY AUTO_INCREMENT,
-     monthEconomyId INT,
-     etype INT(1) NOT NULL,
+     monthEconomyId INT NOT NULL,
+     eyear INT(4) NOT NULL,
      ename VARCHAR(255) NOT NULL,
      enote TEXT,
+     etype INT NOT NULL,
+     ecategory VARCHAR(255) NOT NULL,
      eamount DECIMAL(10,2) NOT NULL,
      FOREIGN KEY (monthEconomyId) REFERENCES MonthEconomy(id)
 )
+
+-- @block
+INSERT INTO Income (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
+VALUES (1, 2023, 'SU', '', 1, 'Løn', 4774)
+
+-- @block
+
+INSERT INTO Income (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount) 
+VALUES 
+(1, 2023, 'Grafikkort', 'RTX 960', 2, 'Salg', 380),
+(1, 2023, 'CPU', 'Ryzen 3500', 2, 'Salg', 380),
+(1, 2023, 'Grafikkort', 'Radeon 5700XT', 2, 'Salg', 1200),
+(1, 2023, 'Motherboard', 'Asus Rog', 2, 'Salg', 400),
+(1, 2023, 'Wacom', 'Tablet', 2, 'Salg', 250),
+(1, 2023, 'Rasp PI', '', 2, 'Salg', 600);
+
+-- @block
+-- 1 = Fast, 2 = Other
+
+-- Indkomst -- 1 = Løn, 2 = investering, 3 = Salg, 4 = gaver og arv, 5 Skatte refussioner, 6 = Andet
+
+-- @block
+
+SELECT * FROM Income WHERE eyear = 2023
+
+-- @block
+INSERT INTO Income (monthEconomyId, etype, ename, enote, eamount) 
+VALUES 
+(1, 2, 'Grafikkort', 'RTX 960', 380),
+(1, 2, 'CPU', 'Ryzen 3500', 380),
+(1, 2, 'Grafikkort', 'Radeon 5700XT', 1200),
+(1, 2, 'Motherboard', 'Asus Rog', 400),
+(1, 2, 'Wacom', 'Tablet', 250),
+(1, 2, 'Rasp PI', '', 600);
+
 
 -- @block
 
@@ -52,10 +89,14 @@ CREATE TABLE Sell (
 
 CREATE TABLE Expense (
      id INT PRIMARY KEY AUTO_INCREMENT,
+     --Hvilken måned
      monthEconomyId INT,
-     etype INT(1) NOT NULL,
      ename VARCHAR(255) NOT NULL,
      enote TEXT,
+     -- 1 = Fast, 2 = MD
+     etype INT NOT NULL,
+     --Hvilken kategori
+     ecategory VARCHAR(255) NOT NULL,
      eamount DECIMAL(10,2) NOT NULL,
      FOREIGN KEY (monthEconomyId) REFERENCES MonthEconomy(id)
 )
