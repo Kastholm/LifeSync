@@ -11,6 +11,7 @@ import Movies from "./pages/Movies";
 import { LoginContext, LoginProvider } from "./components/Base/Login";
 import Economy from "./pages/Economy.tsx";
 import Homeassistant from "./pages/Homeassistant.tsx";
+import Notebook from "./pages/Notebook.tsx";
 function App() {
   return (
     <div className="App">
@@ -23,6 +24,7 @@ function App() {
               <Route path="/webtify" element={<Webtify />} />
               <Route path="/movies" element={<Movies />} />
               <Route path="/economy" element={<Economy />} />
+              <Route path="/notebook" element={<Notebook />} />
               <Route path="/homeassistant" element={<Homeassistant />} />
             </Routes>
           </div>

@@ -26,11 +26,17 @@ function Header() {
     {
       key: "4",
       name: "Economy",
-      icon: "https://pnghq.com/wp-content/uploads/14-cashapp-icons-free-in-svg-74161.png",
+      icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Square_Cash_app_logo.svg/1200px-Square_Cash_app_logo.svg.png",
       link: "/economy",
     },
     {
       key: "5",
+      name: "Notebook",
+      icon: "https://play-lh.googleusercontent.com/NW7BrJSmuTBWKQvHH6sDi1u2R04cWChs-2APl50c2J3FmPimuT35Y306ZmoPdAjsabg",
+      link: "/notebook",
+    },
+    {
+      key: "6",
       name: "HA",
       icon: "https://community-assets.home-assistant.io/original/4X/1/3/8/13882a481a57f91f670def0fc33cf99d09dec293.png",
       link: "/homeassistant",
@@ -40,7 +46,7 @@ function Header() {
     <aside className=" w-[5vw] bg-gray-800 text-gray-200">
       <ul className="text-center flex flex-row sm:flex-col w-full">
         {/* <li className="h-14 border-b  border-gray-900 hidden sm:block">
-          <a
+          <a https://play-lh.googleusercontent.com/NW7BrJSmuTBWKQvHH6sDi1u2R04cWChs-2APl50c2J3FmPimuT35Y306ZmoPdAjsabg
             id="page-icon"
             href="/"
             className="h-full w-full hover:bg-gray-700 block p-3"
