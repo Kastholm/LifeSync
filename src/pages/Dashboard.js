@@ -125,10 +125,12 @@ function Dashboard() {
             className="rounded-lg bg-gray-100 p-8 max-h-[12em] shadow-lg"
             onSubmit={handleYBSubmit}
           >
-            <img
-              className="m-auto w-72 mb-5"
-              src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1024px-YouTube_Logo_2017.svg.png"
-            />
+            <a href="https://www.youtube.com">
+              <img
+                className="m-auto w-72 mb-5"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1024px-YouTube_Logo_2017.svg.png"
+              />
+            </a>
             <div className="mb-4 flex items-center">
               <input
                 type="text"

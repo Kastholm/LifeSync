@@ -9,8 +9,8 @@ CREATE TABLE Users (
 -- @block
 INSERT INTO MonthEconomy (monthName, monthYear)
 VALUES (
-          'Oktober',
-          2021
+          'Januar',
+          2024
      ) 
      
 
@@ -21,6 +21,60 @@ CREATE TABLE MonthEconomy (
      monthName VARCHAR(255),
      monthYear INT(4)
 )
+
+-- @block
+
+CREATE TABLE Expense (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     monthEconomyId INT NOT NULL,
+     eyear INT(4) NOT NULL,
+     ename VARCHAR(255) NOT NULL,
+     enote TEXT,
+     etype INT NOT NULL,
+     ecategory VARCHAR(255) NOT NULL,
+     eamount DECIMAL(10,2) NOT NULL,
+     FOREIGN KEY (monthEconomyId) REFERENCES MonthEconomy(id)
+)
+
+
+-- @block
+INSERT INTO Expense (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
+VALUES 
+(1, 2023, 'Tryg', '', 1, 'Forsikringer', 323),
+(1, 2023, 'YouTube', '', 1, 'Software & Apps', 5.73),
+(1, 2023, 'Husleje', '', 1, 'Bolig', 4075),
+(1, 2023, 'Mad', '', 1, 'Mad & Takeaway', 1000),
+(1, 2023, 'Benzin', '', 1, 'Transport', 750),
+(1, 2023, 'Rejsekonto', '', 1, 'Opsparing', 250),
+(1, 2023, 'Klatreklub', '', 1, 'Fitness & Sundhed', 150),
+(1, 2023, 'PureGym', '', 1, 'Fitness & Sundhed', 358),
+(1, 2023, 'EWII', '', 1, 'Mobil & Internet', 266.5),
+(1, 2023, 'NetFlix', '', 1, 'Software & Apps', 36),
+(1, 2023, 'Lebara', '', 1, 'Mobil & Internet', 19)
+
+
+-- MD EXPENSES
+-- @block
+INSERT INTO Expense (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
+VALUES 
+(1, 2023, 'DSB', 'Odense billet', 2, 'Transport', 85),
+(1, 2023, 'EasyPark', 'Parkering', 2, 'Transport', 22.83),
+(1, 2023, 'Ronja', '?', 2, 'Køb', 492),
+(1, 2023, 'Asra', 'Frisør', 2, 'Personlig Pleje', 150),
+(1, 2023, 'Bini', 'MadKlubben', 2, 'Mad & Takeaway', 189),
+(1, 2023, 'Rued', 'PC', 2, 'Lån & Afdrag', 1000),
+(1, 2023, 'EasyPark', 'Parkering', 2, 'Transport', 31.25),
+(1, 2023, 'DAO', 'Pakke', 2, 'Køb', 54),
+(1, 2023, 'POPP Photo', 'Julegave', 2, 'Gaver', 98),
+(1, 2023, 'Displate', 'afmeld', 2, 'Køb', 60.45),
+(1, 2023, 'Normal', 'pakkeleg', 2, 'Gaver', 114),
+(1, 2023, 'EasyPark', 'Parkering', 2, 'Transport', 20),
+(1, 2023, 'Chromecast', 'Julegave', 2, 'Gaver', 280),
+(1, 2023, 'Alibaba', 'OP7 Pro', 2, 'Elektronik', 345),
+(1, 2023, 'Sauna Gus', '', 2, 'Fitness & Sundhed', 40),
+(1, 2023, 'FlixBus', 'Tyskland', 2, 'Transport', 500),
+(1, 2023, 'Apcoa', 'Parkering', 2, 'Transport', 15) 
+
 
 
 -- @block
@@ -39,7 +93,7 @@ CREATE TABLE Income (
 
 -- @block
 INSERT INTO Income (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
-VALUES (1, 2023, 'SU', '', 1, 'Løn', 4774)
+VALUES (15, 2024, 'SU', '', 1, 'Løn', 5996)
 
 -- @block
 
@@ -102,44 +156,7 @@ CREATE TABLE Expense (
 )
 
 -- FASTE EXPENSES
--- @block
-INSERT INTO Expense (monthEconomyId, etype, ename, enote, eamount)
-VALUES 
-(1, 1, 'Tryg', '', 323),
-(1, 1, 'YouTube', '', 5.73),
-(1, 1, 'Husleje', '', 4075),
-(1, 1, 'Mad & Benz', '', 2000),
-(1, 1, 'Klatreklub', '', 150),
-(1, 1, 'PureGym', '', 358),
-(1, 1, 'EWII', '', 266.5),
-(1, 1, 'NetFlix', '', 36),
-(1, 1, 'Lebara', '', 19)
 
-
--- MD EXPENSES
--- @block
-INSERT INTO Expense (monthEconomyId, etype, ename, enote, eamount)
-VALUES 
-(1, 2, 'DSB', 'Odense billet', 85),
-(1, 2, 'Etoro', 'Aktier', 1000),
-(1, 2, 'EasyPark', 'Parkering', 22.83),
-(1, 2, 'Ronja', '?', 492),
-(1, 2, 'Asra', 'Frisør', 150),
-(1, 2, 'Bini', 'MadKlubben', 189),
-(1, 2, 'Rued', 'PC & Padel', 1060),
-(1, 2, 'EasyPark', 'Parkering', 31.25),
-(1, 2, 'Etoro', 'Aktier', 500),
-(1, 2, 'DAO', 'Pakke', 54),
-(1, 2, 'POPP Photo', 'Julegave', 98),
-(1, 2, 'Displate', 'afmeld', 60.45),
-(1, 2, 'Normal', 'pakkeleg', 114),
-(1, 2, 'SuperBrugsen', 'Mel', 500),
-(1, 2, 'EasyPark', 'Parkering', 20),
-(1, 2, 'Chromecast', 'Julegave', 280),
-(1, 2, 'Alibaba', 'OP7 Pro', 345),
-(1, 2, 'Sauna Gus', '', 40),
-(1, 2, 'FlixBus', 'Tyskland', 500),
-(1, 2, 'Apcoa', 'Parkering', 500)
 
 
 -- @block

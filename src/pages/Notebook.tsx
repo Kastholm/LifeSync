@@ -75,6 +75,7 @@ function Notebook() {
                   <h1 className="text-5xl">🙂 : 0</h1>
                   <h1 className="text-5xl">🥱 : 0</h1>
                   <h1 className="text-5xl">😫 : 0</h1>
+
              </div>
         </div>
           <h1 className="text-4xl mb-4">MoodBoard</h1>

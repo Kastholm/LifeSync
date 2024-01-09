@@ -1,181 +1,545 @@
 import React, { useContext, useEffect, useState } from "react";
 import { EconomyContext, MonthData, IncomeData } from "./EconomyContext.tsx";
-import Expenses from "./Expenses.tsx";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
+import { 
+  faMoneyBillWave, 
+  faShoppingCart, 
+  faChartLine, 
+  faTags, 
+  faGift, 
+  faHandHoldingUsd, 
+  faEllipsisH, 
+  faShoppingBag, 
+  faBus, 
+  faUtensils, 
+  faDumbbell, 
+  faShieldAlt, 
+  faHome, 
+  faFilm, 
+  faGifts, 
+  faLaptopCode, 
+  faPiggyBank, 
+  faMobileAlt, 
+  faHandshake 
+} from '@fortawesome/free-solid-svg-icons';
 function Months() {
   /* MONTH LOGIC */
 
+  /* -------------------------------------------------------------------------- */
+  /*           Definerer typen for den data, vi forventer i contexten           */
+  /* -------------------------------------------------------------------------- */
   interface EconomyInterface {
     monthData: MonthData[];
     getMonths: () => Promise<MonthData[]>;
+
     incomeData: IncomeData[];
-    getIncome: () => Promise<IncomeData[]>;
+    getMonthIncome: () => Promise<IncomeData[]>;
+    incomeYearData: IncomeData[];
+    getYearIncome: () => Promise<IncomeData[]>;
+    incomeCategories: any;
+
+    expenseData: IncomeData[];
+    getMonthExpense: () => Promise<IncomeData[]>;
+    expenseYearData: IncomeData[];
+    getYearExpense: () => Promise<IncomeData[]>;
+
+    expenseCategories: any;
+
     selectedMonth: string;
-    getFullIncome: () => Promise<IncomeData[]>;
     selectedYear: string;
-    incomeFullData: string;
   }
 
+  /* -------------------------------------------------------------------------- */
+  /*             Indhenter data fra context filen EconomyContext.tsx            */
+  /* -------------------------------------------------------------------------- */
   const {
     monthData,
     getMonths,
+
     incomeData,
-    getIncome,
-    selectedMonth,
-    getFullIncome,
+    getMonthIncome,
+    getYearIncome,
+    incomeYearData,
+
+    incomeCategories,
+
+    expenseData,
+    getMonthExpense,
+    getYearExpense,
+    expenseYearData,
+
+    expenseCategories,
+
     selectedYear,
-    incomeFullData,
   } = useContext(EconomyContext) as EconomyInterface;
 
+  const iconMapping = {
+    "money-bill-1-wave": faMoneyBillWave,
+    "shopping-cart": faShoppingCart,
+    "chart-line": faChartLine,
+    "tags": faTags,
+    "gift": faGift,
+    "hand-holding-usd": faHandHoldingUsd,
+    "ellipsis-h": faEllipsisH,
+    "shopping-bag": faShoppingBag,
+    "bus": faBus,
+    "utensils": faUtensils,
+    "dumbbell": faDumbbell,
+    "shield-alt": faShieldAlt,
+    "home": faHome,
+    "film": faFilm,
+    "gifts": faGifts,
+    "laptop-code": faLaptopCode,
+    "piggy-bank": faPiggyBank,
+    "mobile-alt": faMobileAlt,
+    "handshake": faHandshake
+    // Tilføj flere ikoner efter behov...
+  };
+
+  // Hent måneder
   useEffect(() => {
     getMonths();
   }, []);
-  //console.log("md", monthData);
 
+  // Interface til at dele måneder op i år
+  interface dividedMonthsData {
+    year?: string;
+    months: MonthData[];
+  }
+  // Funktion der deler måneder op i år
   const divideMonths = monthData.reduce((total, month) => {
     const year = month.monthYear;
+
     if (!total[year]) {
       total[year] = [];
     }
+
     total[year].push(month);
     return total;
-  }, {});
+  }, {} as dividedMonthsData);
+  const monthsArray = Object.entries(divideMonths);
 
-  /*  const annualTotal = selectedYear 
-  ? incomeData
-      .filter(income => income.year === selectedYear) // Antager at income har et 'year' felt
-      .reduce((total, income) => total + parseFloat(income.eamount), 0)
-  : 0; */
+  const [selectedMonths, setSelectedMonths] = useState({});
+
+  /* -------------------------------------------------------------------------- */
+  /*                                INCOME LOGIC                                */
+  /* -------------------------------------------------------------------------- */
+
+  const [monthIncomeData, setMonthIncomeData] = useState({} as any);
+
+  const toggleMonthIncomeData = (monthId, monthYear) => {
+    const isSelected = !!selectedMonths[monthId];
+    setSelectedMonths((prev) => ({
+      ...prev,
+      [monthId]: !isSelected,
+    }));
+
+    if (!isSelected) {
+      // Tilføj data logik (som før)
+      getMonthIncome(monthId, monthYear).then((data) => {
+        setMonthIncomeData((prevData) => ({
+          ...prevData,
+          [monthId]: data,
+        }));
+      });
+    } else {
+      // Fjern data logik
+      setMonthIncomeData((prevData) => {
+        const newData = { ...prevData };
+        delete newData[monthId];
+        return newData;
+      });
+    }
+  };
+
+  const [yearIncomeData, setYearIncomeData] = useState({} as any);
+  const [incomeSummaryByCategory, setIncomeSummaryByCategory] = useState({});
+  // Hent indkomstdata for et givent år
+  const getYearIncomeData = (year) => {
+    getYearIncome(year).then((data: any) => {
+      setYearIncomeData((prevData) => ({
+        ...prevData,
+        [year]: data,
+      }));
+      // Kategoriser og summer indkomstdata efter kategori for det pågældende år
+      const categorySum = data.reduce((total, income) => {
+        const categoryObj = incomeCategories.find(
+          (cat) => cat.category === income.ecategory
+        );
+
+        if (categoryObj) {
+          const amount = parseFloat(income.eamount); // Konverterer eamount til et tal
+
+          if (total[categoryObj.category]) {
+            total[categoryObj.category].amount += amount;
+          } else {
+            total[categoryObj.category] = {
+              amount: amount,
+              icon: categoryObj.fonticon,
+              bgColor: categoryObj.bgColor,
+            };
+          }
+        }
+
+        return total;
+      }, {});
+
+      setIncomeSummaryByCategory((prevSummary) => ({
+        ...prevSummary,
+        [year]: categorySum,
+      }));
+    });
+  };
+
+  useEffect(() => {
+    monthsArray.forEach(([year]) => {
+      getYearIncomeData(year);
+    });
+  }, []);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                EXPENSE LOGIC                               */
+  /* -------------------------------------------------------------------------- */
+  const [monthExpenseData, setMonthExpenseData] = useState({} as any);
+
+  const toggleMonthExpenseData = (monthId, monthYear) => {
+    const isSelected = !!selectedMonths[monthId];
+    setSelectedMonths((prev) => ({
+      ...prev,
+      [monthId]: !isSelected,
+    }));
+
+    if (!isSelected) {
+      // Tilføj data logik (som før)
+      getMonthExpense(monthId, monthYear).then((data) => {
+        setMonthExpenseData((prevData) => ({
+          ...prevData,
+          [monthId]: data,
+        }));
+      });
+    } else {
+      // Fjern data logik
+      setMonthExpenseData((prevData) => {
+        const newData = { ...prevData };
+        delete newData[monthId];
+        return newData;
+      });
+    }
+  };
+
+  const [yearExpenseData, setYearExpenseData] = useState({} as any);
+  const [expenseSummaryByCategory, setExpenseSummaryByCategory] = useState({});
+  // Hent indkomstdata for et givent år
+  const getYearExpenseData = (year) => {
+    getYearExpense(year).then((data: any) => {
+      setYearExpenseData((prevData) => ({
+        ...prevData,
+        [year]: data,
+      }));
+      // Kategoriser og summer indkomstdata efter kategori for det pågældende år
+      const categorySum = data.reduce((total, expense) => {
+        const categoryObj = expenseCategories.find(
+          (cat) => cat.category === expense.ecategory
+        );
+
+        if (categoryObj) {
+          const amount = parseFloat(expense.eamount); // Konverterer eamount til et tal
+
+          if (total[categoryObj.category]) {
+            total[categoryObj.category].amount += amount;
+          } else {
+            total[categoryObj.category] = {
+              amount: amount,
+              icon: categoryObj.fonticon,
+              bgColor: categoryObj.bgColor,
+            };
+          }
+        }
+
+        return total;
+      }, {});
+
+      setExpenseSummaryByCategory((prevSummary) => ({
+        ...prevSummary,
+        [year]: categorySum,
+      }));
+    });
+  };
+
+  useEffect(() => {
+    monthsArray.forEach(([year]) => {
+      getYearExpenseData(year);
+    });
+  }, []);
+
+  /* -------------------------------------------------------------------------- */
+  /*                                     DOM                                    */
+  /* -------------------------------------------------------------------------- */
 
   return (
     <div className="  grid grid-cols-1 ">
-      {Object.keys(divideMonths).map((year, id) => {
-        return (
-          <div className="bg-red-200 p-12 m-2 " key={year}>
-            {}
-            <h1>
-              {year} {id}
-            </h1>
-            <button onClick={() => getFullIncome(year)}> hhjaasdfasdf</button>
-            {incomeFullData ? (
-              <div>
-                <h1>id ad</h1>
-                {incomeFullData.reduce((alle, individuel) => {
-                  return alle + parseFloat(individuel.eamount);
-                }, 0)}
+      <h1 className="text-white text-6xl">Hej</h1>
 
-                <div className="mt-12 grid grid-cols-4">
-                  {Object.entries(
-                    incomeFullData.reduce((acc, item) => {
-                      const ecategory = item.ecategory; // Antager at hver 'item' har en 'category' property
-                      if (!acc[ecategory]) {
-                        acc[ecategory] = 0;
-                      }
-                      acc[ecategory] += parseFloat(item.eamount);
-                      return acc;
-                    }, {})
-                  ).map(([ecategory, total]) => (
-                    <div  key={ecategory}>
-                      {/* <h3>{ecategory}</h3>
-                      <p>Total: {total}</p> */}
-                      <div className="relative w-2/3 mb-8 m-auto flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-                        <div className="bg-clip-border mx-4 rounded-xl overflow-hidden bg-gradient-to-tr from-pink-600 to-pink-400 text-white shadow-pink-500/40 shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center">
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 24 24"
-                            fill="currentColor"
-                            aria-hidden="true"
-                            className="w-6 h-6 text-white"
-                          >
-                            <path
-                              fill-rule="evenodd"
-                              d="M7.5 6a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM3.751 20.105a8.25 8.25 0 0116.498 0 .75.75 0 01-.437.695A18.683 18.683 0 0112 22.5c-2.786 0-5.433-.608-7.812-1.7a.75.75 0 01-.437-.695z"
-                              clip-rule="evenodd"
-                            ></path>
-                          </svg>
-                        </div>
-                        <div className="p-4 text-right">
-                          <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                            {ecategory}
-                          </p>
-                          <h4 class="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {total} Kr.
-                          </h4>
+      <div className="">
+        {monthsArray
+          .sort((a, b) => {
+            return Number(b[0]) - Number(a[0]);
+          })
+          .map(([year, months]) => (
+            <div className="bg-gray-700 m-4 p-6 rounded-xl" key={year}>
+              <h1 className="text-white text-6xl">{year}</h1>
+              <button
+                className="bg-green-800 p-4"
+                onClick={() => {
+                  getYearIncomeData(year);
+                  getYearExpenseData(year);
+                }}
+              >
+                Get year
+              </button>
+
+              <h1 className="text-white text-6xl mb-8">Indkomst</h1>
+              <div className="grid grid-cols-6 gap-2">
+                {incomeSummaryByCategory[year] &&
+                  Object.entries(incomeSummaryByCategory[year]).map(
+                    ([category, data], index) => (
+                      <div key={index}>
+                        {/* Resten af din kode */}
+                        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+                          <div className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}>
+                            {data.icon && (
+                              <FontAwesomeIcon
+                                className="text-3xl"
+                                icon={iconMapping[data.icon]}
+                              />
+                            )}
+                          </div>
+                          <div className="p-4 text-right">
+                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                              {category}
+                            </p>
+                            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                            {Number(data.amount).toFixed(0)} DKK
+                            </h4>
+                          </div>
                         </div>
                       </div>
+                    )
+                  )}
+              </div>
+
+              {/* <div class="border-t border-blue-gray-50 p-4">
+                      <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
+                        <strong class="text-green-500">+55%</strong>&nbsp;than last week
+                      </p>
+                    </div> */}
+              <h1 className="text-white text-6xl mb-8">Udgifter</h1>
+              <div className="grid grid-cols-6 gap-2">
+                {expenseSummaryByCategory[year] &&
+                  Object.entries(expenseSummaryByCategory[year]).map(
+                    ([category, data], index) => (
+                      <div key={index}>
+                        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+                        <div className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}>
+                            {data.icon && (
+                              <FontAwesomeIcon
+                                className="text-3xl"
+                                icon={iconMapping[data.icon]}
+                              />
+                            )}
+                          </div>
+                          <div className="p-4 text-right">
+                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                              {category}
+                            </p>
+                            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                            {Number(data.amount).toFixed(0)} DKK
+                            </h4>
+                          </div>
+                        </div>
+                      </div>
+                    )
+                  )}
+              </div>
+
+              {/* Indkomst tabel */}
+              <div className="grid grid-cols-2 gap-4 mb-4 mt-8">
+                <div className="overflow-x-auto">
+                  {yearIncomeData[year] && (
+                    <table className="min-w-full bg-white">
+                      <thead className="bg-gray-800 text-white">
+                        <tr>
+                          <th className="py-3 px-4 text-left">Navn</th>
+                          <th className="py-3 px-4 text-left">Note</th>
+                          <th className="py-3 px-4 text-left">Kategori</th>
+                          <th className="py-3 px-4 text-left">Beløb</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {yearIncomeData[year]
+                          .sort((a, b) => {
+                            const primarySort =
+                              a.monthEconomyId - b.monthEconomyId;
+                            if (primarySort !== 0) {
+                              return primarySort;
+                            }
+                            return a.etype - b.etype;
+                          })
+                          .map((income, index) => (
+                            <tr key={index} className="border-b">
+                              <td className="py-2 px-4">
+                                {income.ename} : ID {income.monthEconomyId}
+                              </td>
+                              <td className="py-2 px-4">{income.enote}</td>
+                              <td className="py-2 px-4">{income.ecategory}</td>
+                              <td className="py-2 px-4">{income.eamount}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+
+                {/* expense tabel */}
+                <div className="overflow-x-auto">
+                  {yearExpenseData[year] && (
+                    <table className="min-w-full bg-white">
+                      <thead className="bg-gray-800 text-white">
+                        <tr>
+                          <th className="py-3 px-4 text-left">Navn</th>
+                          <th className="py-3 px-4 text-left">Note</th>
+                          <th className="py-3 px-4 text-left">Kategori</th>
+                          <th className="py-3 px-4 text-left">Beløb</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {yearExpenseData[year]
+                          .sort((a, b) => {
+                            const primarySort =
+                              a.monthEconomyId - b.monthEconomyId;
+                            if (primarySort !== 0) {
+                              return primarySort;
+                            }
+                            // Tilføj dit sekundære sort-kriterium her. For eksempel, hvis 'etype' er en string:
+                            return a.etype - b.etype;
+                          })
+                          .map((expense, index) => (
+                            <tr key={index} className="border-b">
+                              <td className="py-2 px-4">
+                                {expense.ename} : ID {expense.monthEconomyId}
+                              </td>
+                              <td className="py-2 px-4">{expense.enote}</td>
+                              <td className="py-2 px-4">{expense.ecategory}</td>
+                              <td className="py-2 px-4">{expense.eamount}</td>
+                            </tr>
+                          ))}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              </div>
+              <h1 className="text-white text-4xl mb-4">
+                Se for individuel måned
+              </h1>
+              <div>
+                <div className="grid grid-cols-5 place-content-center gap-2">
+                  {months.map((month) => (
+                    <div key={month.id}>
+                      <label className="flex items-center justify-center py-4 space-x-3 rounded-xl bg-orange-200">
+                        <input
+                          type="checkbox"
+                          className="form-checkbox h-5 w-5 text-blue-600"
+                          onChange={() => {
+                            toggleMonthIncomeData(month.id, month.monthYear);
+                            toggleMonthExpenseData(month.id, month.monthYear);
+                          }}
+                          checked={!!selectedMonths[month.id]}
+                        />
+                        <span className="text-gray-700">
+                          {month.monthName} ID: {month.id}
+                        </span>
+                      </label>
                     </div>
                   ))}
                 </div>
-              </div>
-            ) : null}
-            <div className=" grid grid-cols-8">
-              {divideMonths[year].map((month) => {
-                return (
-                  <div>
-                    <br />
-                    <div
-                      onClick={() => getIncome(month.id, year)}
-                      className=" p-12 m-2 bg-blue-200"
-                      key={month.id}
-                    >
-                      <h2>{month.monthName}</h2> <h2>{month.id}</h2>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-            <div>
-              {selectedMonth === year && incomeData && (
-                <div className="grid grid-cols-2">
-                  <div>
-                    <h1>Indkomst</h1>
-                    {incomeData
-                      .filter((income) => income.etype === 1)
-                      .map((incomeType) => (
-                        // LIIST DIV INC. HIDE
-                        <div
-                          className="bg-green-200 p-4 m-2"
-                          key={incomeType.id}
-                        >
-                          <p>ID: {incomeType.id}</p>
-                          <p>Navn: {incomeType.ename}</p>
-                          <p>Kategori: {incomeType.ecategory}</p>
-                          <p>Type: {incomeType.etype}</p>
-                          <p>Beløb: {incomeType.eamount}</p>
-                        </div>
-                      ))}
-                  </div>
-                  <div>
-                    <h1>Andet</h1>
-                    {incomeData
-                      .filter((income) => income.etype === 2)
-                      .map((incomeType) => (
-                        <div
-                          className="bg-green-200 p-4 m-2"
-                          key={incomeType.id}
-                        >
-                          <p>ID: {incomeType.id}</p>
-                          <p>Navn: {incomeType.ename}</p>
-                          <p>Kategori: {incomeType.ecategory}</p>
-                          <p>Type: {incomeType.etype}</p>
-                          <p>Beløb: {incomeType.eamount}</p>
-                        </div>
-                      ))}
-                  </div>
-                  <h2 className="font-bold text-4xl">
-                    Samlet beløb:{" "}
-                    {incomeData.reduce(
-                      (total, income) => total + parseFloat(income.eamount),
-                      0
-                    )}
-                  </h2>
-                </div>
-              )}
-            </div>
-          </div>
-        );
-      })}
 
-      <Expenses></Expenses>
+                <div className="grid grid-cols-2 gap-4">
+                  <table className="min-w-full h-fit bg-white">
+                    <thead className="bg-gray-800 text-white">
+                      <tr>
+                        <th className="py-3 px-4 text-left">Navn</th>
+                        <th className="py-3 px-4 text-left">Note</th>
+                        <th className="py-3 px-4 text-left">Kategori</th>
+                        <th className="py-3 px-4 text-left">Beløb</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(monthIncomeData).map(
+                        ([monthId, incomes]) =>
+                          incomes.map(
+                            (income) =>
+                              income.eyear === Number(year) && (
+                                <tr key={income.id} className="border-b">
+                                  <td className="py-2 px-4">
+                                    {income.ename} : ID {income.monthEconomyId}
+                                  </td>
+                                  <td className="py-2 px-4">{income.enote}</td>
+                                  <td className="py-2 px-4">
+                                    {income.ecategory}
+                                  </td>
+                                  <td className="py-2 px-4">
+                                    {income.eamount}
+                                  </td>
+                                </tr>
+                              )
+                          )
+                      )}
+                    </tbody>
+                  </table>
+
+                  <table className="min-w-full bg-white">
+                    <thead className="bg-gray-800 text-white">
+                      <tr>
+                        <th className="py-3 px-4 text-left">Navn</th>
+                        <th className="py-3 px-4 text-left">Note</th>
+                        <th className="py-3 px-4 text-left">Kategori</th>
+                        <th className="py-3 px-4 text-left">Beløb</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.entries(monthExpenseData).map(
+                        ([monthId, expenses]) =>
+                          expenses.map(
+                            (expense) =>
+                              expense.eyear === Number(year) && (
+                                <tr key={expense.id} className="border-b">
+                                  <td className="py-2 px-4">
+                                    {expense.ename} : ID{" "}
+                                    {expense.monthEconomyId}
+                                  </td>
+                                  <td className="py-2 px-4">{expense.enote}</td>
+                                  <td className="py-2 px-4">
+                                    {expense.ecategory}
+                                  </td>
+                                  <td className="py-2 px-4">
+                                    {expense.eamount}
+                                  </td>
+                                </tr>
+                              )
+                          )
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          ))}
+      </div>
+
+      <h1>sdf</h1>
+      {/* <Expenses></Expenses> */}
     </div>
   );
 }
