@@ -3,27 +3,27 @@ import { EconomyContext, MonthData, IncomeData } from "./EconomyContext.tsx";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { icon, solid } from "@fortawesome/fontawesome-svg-core/import.macro";
-import { 
-  faMoneyBillWave, 
-  faShoppingCart, 
-  faChartLine, 
-  faTags, 
-  faGift, 
-  faHandHoldingUsd, 
-  faEllipsisH, 
-  faShoppingBag, 
-  faBus, 
-  faUtensils, 
-  faDumbbell, 
-  faShieldAlt, 
-  faHome, 
-  faFilm, 
-  faGifts, 
-  faLaptopCode, 
-  faPiggyBank, 
-  faMobileAlt, 
-  faHandshake 
-} from '@fortawesome/free-solid-svg-icons';
+import {
+  faMoneyBillWave,
+  faShoppingCart,
+  faChartLine,
+  faTags,
+  faGift,
+  faHandHoldingUsd,
+  faEllipsisH,
+  faShoppingBag,
+  faBus,
+  faUtensils,
+  faDumbbell,
+  faShieldAlt,
+  faHome,
+  faFilm,
+  faGifts,
+  faLaptopCode,
+  faPiggyBank,
+  faMobileAlt,
+  faHandshake,
+} from "@fortawesome/free-solid-svg-icons";
 function Months() {
   /* MONTH LOGIC */
 
@@ -79,22 +79,22 @@ function Months() {
     "money-bill-1-wave": faMoneyBillWave,
     "shopping-cart": faShoppingCart,
     "chart-line": faChartLine,
-    "tags": faTags,
-    "gift": faGift,
+    tags: faTags,
+    gift: faGift,
     "hand-holding-usd": faHandHoldingUsd,
     "ellipsis-h": faEllipsisH,
     "shopping-bag": faShoppingBag,
-    "bus": faBus,
-    "utensils": faUtensils,
-    "dumbbell": faDumbbell,
+    bus: faBus,
+    utensils: faUtensils,
+    dumbbell: faDumbbell,
     "shield-alt": faShieldAlt,
-    "home": faHome,
-    "film": faFilm,
-    "gifts": faGifts,
+    home: faHome,
+    film: faFilm,
+    gifts: faGifts,
     "laptop-code": faLaptopCode,
     "piggy-bank": faPiggyBank,
     "mobile-alt": faMobileAlt,
-    "handshake": faHandshake
+    handshake: faHandshake,
     // Tilføj flere ikoner efter behov...
   };
 
@@ -128,29 +128,47 @@ function Months() {
   /* -------------------------------------------------------------------------- */
 
   const [monthIncomeData, setMonthIncomeData] = useState({} as any);
+  const [incomeSummary, setIncomeSummary] = useState({});
 
-  const toggleMonthIncomeData = (monthId, monthYear) => {
-    const isSelected = !!selectedMonths[monthId];
-    setSelectedMonths((prev) => ({
-      ...prev,
-      [monthId]: !isSelected,
-    }));
+  // Denne funktion opdaterer den samlede sum for hver kategori
+  const updateIncomeCategorySummary = (monthData, isAdding) => {
+    const newSummary = { ...incomeSummary };
 
-    if (!isSelected) {
-      // Tilføj data logik (som før)
-      getMonthIncome(monthId, monthYear).then((data) => {
-        setMonthIncomeData((prevData) => ({
-          ...prevData,
-          [monthId]: data,
-        }));
-      });
-    } else {
-      // Fjern data logik
-      setMonthIncomeData((prevData) => {
-        const newData = { ...prevData };
-        delete newData[monthId];
-        return newData;
-      });
+    monthData.forEach(({ ecategory, eamount, eyear }) => {
+      const amount = parseFloat(eamount);
+      const categoryInfo =
+        incomeCategories.find((cat) => cat.category === ecategory) || {};
+
+      if (!newSummary[ecategory]) {
+        newSummary[ecategory] = {
+          amount: 0,
+          icon: categoryInfo.fonticon || "default-icon",
+          bgColor: categoryInfo.bgColor || "default-bg",
+          eyear: eyear, // Tilføjer eyear her
+        };
+      }
+
+      newSummary[ecategory].amount += isAdding ? amount : -amount;
+      newSummary[ecategory].eyear = eyear; // Opdaterer eyear hver gang
+    });
+
+    return newSummary;
+  };
+
+  const toggleMonthIncomeData = async (monthId, monthYear) => {
+    const isSelected = selectedMonths[monthId];
+
+    // Opdaterer den valgte måneds state
+    setSelectedMonths((prev) => ({ ...prev, [monthId]: !isSelected }));
+
+    // Henter månedsdata og opdaterer den samlede sum
+    try {
+      const monthData = await getMonthIncome(monthId, monthYear); // Antagelse om at denne funktion er asynkron
+      setIncomeSummary((prev) =>
+        updateIncomeCategorySummary(monthData, !isSelected)
+      );
+    } catch (error) {
+      console.error("Fejl under hentning af data for måneden:", error);
     }
   };
 
@@ -203,29 +221,49 @@ function Months() {
   /*                                EXPENSE LOGIC                               */
   /* -------------------------------------------------------------------------- */
   const [monthExpenseData, setMonthExpenseData] = useState({} as any);
+  const [expenseSummary, setExpenseSummary] = useState({});
 
-  const toggleMonthExpenseData = (monthId, monthYear) => {
-    const isSelected = !!selectedMonths[monthId];
-    setSelectedMonths((prev) => ({
-      ...prev,
-      [monthId]: !isSelected,
-    }));
+  // Denne funktion opdaterer den samlede sum for hver kategori
+  const updateCategorySummary = (monthData, isAdding) => {
+    const newSummary = { ...expenseSummary };
 
-    if (!isSelected) {
-      // Tilføj data logik (som før)
-      getMonthExpense(monthId, monthYear).then((data) => {
-        setMonthExpenseData((prevData) => ({
-          ...prevData,
-          [monthId]: data,
-        }));
-      });
-    } else {
-      // Fjern data logik
-      setMonthExpenseData((prevData) => {
-        const newData = { ...prevData };
-        delete newData[monthId];
-        return newData;
-      });
+    monthData.forEach(({ ecategory, eamount, eyear }) => {
+      const amount = parseFloat(eamount);
+      const categoryInfo =
+        expenseCategories.find((cat) => cat.category === ecategory) || {};
+
+      if (!newSummary[ecategory]) {
+        newSummary[ecategory] = {
+          amount: 0,
+          icon: categoryInfo.fonticon || "default-icon", // Standardikon hvis ikke defineret
+          bgColor: categoryInfo.bgColor || "default-bg", // Standard baggrundsfarve hvis ikke defineret
+          eyear: eyear, // Tilføjer eyear her
+        };
+      }
+
+      // Tilføj eller fratræk beløb baseret på om måneden er valgt eller ej
+      newSummary[ecategory].amount += isAdding ? amount : -amount;
+      newSummary[ecategory].eyear = eyear; // Opdaterer eyear hver gang
+      // Her antager vi at icon og bgColor ikke ændrer sig. Hvis de gør, skal du opdatere dem her.
+    });
+
+    return newSummary;
+  };
+
+  const toggleMonthExpenseData = async (monthId, monthYear) => {
+    const isSelected = selectedMonths[monthId];
+
+    // Opdaterer den valgte måneds state
+    setSelectedMonths((prev) => ({ ...prev, [monthId]: !isSelected }));
+
+    // Henter månedsdata og opdaterer den samlede sum
+    try {
+      const monthData = await getMonthExpense(monthId, monthYear); // Antagelse om at denne funktion er asynkron
+      setExpenseSummary((prev) =>
+        updateCategorySummary(monthData, !isSelected)
+      );
+    } catch (error) {
+      console.error("Fejl under hentning af data for måneden:", error);
     }
   };
 
@@ -308,7 +346,9 @@ function Months() {
                       <div key={index}>
                         {/* Resten af din kode */}
                         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-                          <div className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}>
+                          <div
+                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                          >
                             {data.icon && (
                               <FontAwesomeIcon
                                 className="text-3xl"
@@ -321,7 +361,7 @@ function Months() {
                               {category}
                             </p>
                             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {Number(data.amount).toFixed(0)} DKK
+                              {Number(data.amount).toFixed(0)} KR.
                             </h4>
                           </div>
                         </div>
@@ -335,6 +375,7 @@ function Months() {
                         <strong class="text-green-500">+55%</strong>&nbsp;than last week
                       </p>
                     </div> */}
+
               <h1 className="text-white text-6xl mb-8">Udgifter</h1>
               <div className="grid grid-cols-6 gap-2">
                 {expenseSummaryByCategory[year] &&
@@ -342,7 +383,9 @@ function Months() {
                     ([category, data], index) => (
                       <div key={index}>
                         <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-                        <div className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}>
+                          <div
+                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                          >
                             {data.icon && (
                               <FontAwesomeIcon
                                 className="text-3xl"
@@ -355,7 +398,7 @@ function Months() {
                               {category}
                             </p>
                             <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                            {Number(data.amount).toFixed(0)} DKK
+                              {Number(data.amount).toFixed(0)} KR.
                             </h4>
                           </div>
                         </div>
@@ -465,81 +508,81 @@ function Months() {
                   ))}
                 </div>
 
-                <div className="grid grid-cols-2 gap-4">
-                  <table className="min-w-full h-fit bg-white">
-                    <thead className="bg-gray-800 text-white">
-                      <tr>
-                        <th className="py-3 px-4 text-left">Navn</th>
-                        <th className="py-3 px-4 text-left">Note</th>
-                        <th className="py-3 px-4 text-left">Kategori</th>
-                        <th className="py-3 px-4 text-left">Beløb</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(monthIncomeData).map(
-                        ([monthId, incomes]) =>
-                          incomes.map(
-                            (income) =>
-                              income.eyear === Number(year) && (
-                                <tr key={income.id} className="border-b">
-                                  <td className="py-2 px-4">
-                                    {income.ename} : ID {income.monthEconomyId}
-                                  </td>
-                                  <td className="py-2 px-4">{income.enote}</td>
-                                  <td className="py-2 px-4">
-                                    {income.ecategory}
-                                  </td>
-                                  <td className="py-2 px-4">
-                                    {income.eamount}
-                                  </td>
-                                </tr>
-                              )
-                          )
-                      )}
-                    </tbody>
-                  </table>
+                <div>
+                  <h1 className="text-white text-6xl mb-8 mt-4">Indtægter</h1>
+                  {/* Expense Month Summary */}
+                  <div className="grid grid-cols-6 gap-2">
+                    {Object.entries(incomeSummary).map(([category, data]) => (
+                      <>
+                        {data.eyear === Number(year) ? (
+                          <div
+                            key={category}
+                            className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md mb-2"
+                          >
+                            <div
+                              className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                            >
+                              {data.icon && (
+                                <FontAwesomeIcon
+                                  className="text-3xl"
+                                  icon={iconMapping[data.icon]}
+                                />
+                              )}
+                            </div>
+                            <div className="p-4 text-right">
+                              <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                                {category}
+                              </p>
+                              <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                                {data.amount.toFixed(2)} KR.
+                              </h4>
+                            </div>
+                          </div>
+                        ) : null}
+                      </>
+                    ))}
+                  </div>
 
-                  <table className="min-w-full bg-white">
-                    <thead className="bg-gray-800 text-white">
-                      <tr>
-                        <th className="py-3 px-4 text-left">Navn</th>
-                        <th className="py-3 px-4 text-left">Note</th>
-                        <th className="py-3 px-4 text-left">Kategori</th>
-                        <th className="py-3 px-4 text-left">Beløb</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.entries(monthExpenseData).map(
-                        ([monthId, expenses]) =>
-                          expenses.map(
-                            (expense) =>
-                              expense.eyear === Number(year) && (
-                                <tr key={expense.id} className="border-b">
-                                  <td className="py-2 px-4">
-                                    {expense.ename} : ID{" "}
-                                    {expense.monthEconomyId}
-                                  </td>
-                                  <td className="py-2 px-4">{expense.enote}</td>
-                                  <td className="py-2 px-4">
-                                    {expense.ecategory}
-                                  </td>
-                                  <td className="py-2 px-4">
-                                    {expense.eamount}
-                                  </td>
-                                </tr>
-                              )
-                          )
-                      )}
-                    </tbody>
-                  </table>
+                  <h1 className="text-white text-6xl mb-8">Udgifter</h1>
+                  <div className="grid grid-cols-6 gap-2">
+                    {/* Expense Month Summary */}
+                    {Object.entries(expenseSummary).map(([category, data]) => (
+                      <>
+                      {
+                        data.eyear === Number(year) ? (
+                          <div
+                          key={category}
+                          className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md mb-2"
+                        >
+                          <div
+                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                          >
+                            {data.icon && (
+                              <FontAwesomeIcon
+                                className="text-3xl"
+                                icon={iconMapping[data.icon]}
+                              />
+                            )}
+                          </div>
+                          <div className="p-4 text-right">
+                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                              {category}
+                            </p>
+                            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                              {data.amount.toFixed(2)} KR.
+                            </h4>
+                          </div>
+                        </div>
+                        ) : null
+                      }
+                    </>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
           ))}
       </div>
-
-      <h1>sdf</h1>
-      {/* <Expenses></Expenses> */}
     </div>
   );
 }

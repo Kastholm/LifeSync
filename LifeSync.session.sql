@@ -57,10 +57,14 @@ VALUES
 -- @block
 INSERT INTO Expense (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
 VALUES 
-(1, 2023, 'DSB', 'Odense billet', 2, 'Transport', 85),
-(1, 2023, 'EasyPark', 'Parkering', 2, 'Transport', 22.83),
-(1, 2023, 'Ronja', '?', 2, 'Køb', 492),
-(1, 2023, 'Asra', 'Frisør', 2, 'Personlig Pleje', 150),
+(3, 2023, 'DSB', 'Odense billet', 2, 'Transport', 85),
+(3, 2023, 'EasyPark', 'Parkering', 2, 'Transport', 22.83),
+(3, 2023, 'Ronja', '?', 2, 'Køb', 492),
+(3, 2023, 'Asra', 'Frisør', 2, 'Personlig Pleje', 150)
+
+
+-- @block
+
 (1, 2023, 'Bini', 'MadKlubben', 2, 'Mad & Takeaway', 189),
 (1, 2023, 'Rued', 'PC', 2, 'Lån & Afdrag', 1000),
 (1, 2023, 'EasyPark', 'Parkering', 2, 'Transport', 31.25),
