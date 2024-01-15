@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { LoginContext } from "../../Base/Login";
-import LoginForm from "../LoginForm";
+import LoginForm from "../../Base/LoginForm";
 import { BadgeInfo } from "lucide-react";
 function MyShows() {
 

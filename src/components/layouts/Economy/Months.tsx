@@ -312,13 +312,17 @@ function Months() {
     });
   }, []);
 
+
+  
+  
+
+
   /* -------------------------------------------------------------------------- */
   /*                                     DOM                                    */
   /* -------------------------------------------------------------------------- */
 
   return (
     <div className="  grid grid-cols-1 ">
-      <h1 className="text-white text-6xl">Hej</h1>
 
       <div className="">
         {monthsArray
@@ -326,65 +330,73 @@ function Months() {
             return Number(b[0]) - Number(a[0]);
           })
           .map(([year, months]) => (
-            <div className="bg-gray-700 m-4 p-6 rounded-xl" key={year}>
-              <h1 className="text-white text-6xl">{year}</h1>
+            <div className="bg-gray-900 m-4 p-6 rounded-xl text-gray-100" key={year}>
+              <h1 className=" text-6xl">{year}</h1>
               <button
-                className="bg-green-800 p-4"
+                className="block m-auto mt-6 select-none rounded-lg bg-gray-700 py-3.5 px-7 text-center align-middle  text-sm font-bold uppercase text-gray-100 shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 onClick={() => {
                   getYearIncomeData(year);
                   getYearExpenseData(year);
                 }}
               >
-                Get year
+                Se hele året
               </button>
 
-              <h1 className="text-white text-6xl mb-8">Indkomst</h1>
-              <div className="grid grid-cols-6 gap-2">
-                {incomeSummaryByCategory[year] &&
-                  Object.entries(incomeSummaryByCategory[year]).map(
-                    ([category, data], index) => (
-                      <div key={index}>
-                        {/* Resten af din kode */}
-                        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
-                          <div
-                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
-                          >
-                            {data.icon && (
-                              <FontAwesomeIcon
-                                className="text-3xl"
-                                icon={iconMapping[data.icon]}
-                              />
-                            )}
-                          </div>
-                          <div className="p-4 text-right">
-                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
-                              {category}
-                            </p>
-                            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
-                              {Number(data.amount).toFixed(0)} KR.
-                            </h4>
+              <div>
+
+                {
+                  incomeSummaryByCategory[year] ? (
+                    <h1 className="mt-6 mb-10 text-lg text-left font-bold uppercase">Indtægter</h1>
+                  ) : null
+                }
+
+                <div className="grid grid-cols-6 gap-6">
+                  {incomeSummaryByCategory[year] &&
+                    Object.entries(incomeSummaryByCategory[year]).map(
+                      ([category, data], index) => (
+                        <div key={index}>
+                          <div className="relative flex flex-col bg-clip-border rounded-xl shadow-md shadow-gray-500/20 bg-gray-800 border border-gray-700 ">
+                            <div
+                              className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-gray-100  absolute -mt-4 grid h-16 w-16 place-items-center`}
+                            >
+                              {data.icon && (
+                                <FontAwesomeIcon
+                                  className="text-3xl text-gray-100"
+                                  icon={iconMapping[data.icon]}
+                                />
+                              )}
+                            </div>
+                            <div className="p-4 text-right">
+                              <p className="block antialiased  text-sm leading-normal font-normal text-gray-100">
+                                {category}
+                              </p>
+                              <h4 className="block antialiased tracking-normal  text-2xl font-semibold leading-snug text-gray-100">
+                                {Number(data.amount).toFixed(0)} KR.
+                              </h4>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                    )
-                  )}
+                      )
+                    )}
+                </div>
               </div>
 
-              {/* <div class="border-t border-blue-gray-50 p-4">
-                      <p class="block antialiased font-sans text-base leading-relaxed font-normal text-blue-gray-600">
-                        <strong class="text-green-500">+55%</strong>&nbsp;than last week
-                      </p>
-                    </div> */}
-
-              <h1 className="text-white text-6xl mb-8">Udgifter</h1>
-              <div className="grid grid-cols-6 gap-2">
+             
+                                
+              
+              {
+                  incomeSummaryByCategory[year] ? (
+                    <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Udgifter</h1>
+                  ) : null
+                }
+              <div className="grid grid-cols-6 gap-6 mt-4">
                 {expenseSummaryByCategory[year] &&
                   Object.entries(expenseSummaryByCategory[year]).map(
                     ([category, data], index) => (
                       <div key={index}>
-                        <div className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md">
+                        <div className="relative flex flex-col bg-clip-border rounded-xl shadow-md shadow-gray-500/20 bg-gray-800 border border-gray-700">
                           <div
-                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden   shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
                           >
                             {data.icon && (
                               <FontAwesomeIcon
@@ -394,10 +406,10 @@ function Months() {
                             )}
                           </div>
                           <div className="p-4 text-right">
-                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                            <p className="block antialiased  text-sm leading-normal font-normal text-blue-gray-600">
                               {category}
                             </p>
-                            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                            <h4 className="block antialiased tracking-normal  text-2xl font-semibold leading-snug text-blue-gray-900">
                               {Number(data.amount).toFixed(0)} KR.
                             </h4>
                           </div>
@@ -408,11 +420,17 @@ function Months() {
               </div>
 
               {/* Indkomst tabel */}
-              <div className="grid grid-cols-2 gap-4 mb-4 mt-8">
-                <div className="overflow-x-auto">
+              
+              {
+                  incomeSummaryByCategory[year] ? (
+                    <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Liste over {year}</h1>
+                  ) : null
+                }
+              <div className="grid grid-cols-2 gap-4 mb-4 mt-12">
+                <div className="max-h-[50em] overflow-y-scroll">
                   {yearIncomeData[year] && (
-                    <table className="min-w-full bg-white">
-                      <thead className="bg-gray-800 text-white">
+                    <table className="min-w-full bg-white max-h-[10em] overflow-hidden ">
+                      <thead className="bg-gray-800 ">
                         <tr>
                           <th className="py-3 px-4 text-left">Navn</th>
                           <th className="py-3 px-4 text-left">Note</th>
@@ -420,7 +438,7 @@ function Months() {
                           <th className="py-3 px-4 text-left">Beløb</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="bg-gray-700">
                         {yearIncomeData[year]
                           .sort((a, b) => {
                             const primarySort =
@@ -432,12 +450,12 @@ function Months() {
                           })
                           .map((income, index) => (
                             <tr key={index} className="border-b">
-                              <td className="py-2 px-4">
-                                {income.ename} : ID {income.monthEconomyId}
+                              <td className="py-4 px-4 font-bold">
+                                {income.ename}
                               </td>
-                              <td className="py-2 px-4">{income.enote}</td>
-                              <td className="py-2 px-4">{income.ecategory}</td>
-                              <td className="py-2 px-4">{income.eamount}</td>
+                              <td className="py-4 px-4">{income.enote}</td>
+                              <td className="py-4 px-4">{income.ecategory}</td>
+                              <td className="py-4 px-4">{income.eamount}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -446,10 +464,10 @@ function Months() {
                 </div>
 
                 {/* expense tabel */}
-                <div className="overflow-x-auto">
+                <div className="max-h-[50em] overflow-y-scroll">
                   {yearExpenseData[year] && (
-                    <table className="min-w-full bg-white">
-                      <thead className="bg-gray-800 text-white">
+                    <table className="min-w-full bg-white  ">
+                      <thead className="bg-gray-800 ">
                         <tr>
                           <th className="py-3 px-4 text-left">Navn</th>
                           <th className="py-3 px-4 text-left">Note</th>
@@ -457,7 +475,7 @@ function Months() {
                           <th className="py-3 px-4 text-left">Beløb</th>
                         </tr>
                       </thead>
-                      <tbody>
+                      <tbody className="bg-gray-700">
                         {yearExpenseData[year]
                           .sort((a, b) => {
                             const primarySort =
@@ -470,12 +488,12 @@ function Months() {
                           })
                           .map((expense, index) => (
                             <tr key={index} className="border-b">
-                              <td className="py-2 px-4">
-                                {expense.ename} : ID {expense.monthEconomyId}
+                              <td className="py-4 px-4">
+                                {expense.ename} 
                               </td>
-                              <td className="py-2 px-4">{expense.enote}</td>
-                              <td className="py-2 px-4">{expense.ecategory}</td>
-                              <td className="py-2 px-4">{expense.eamount}</td>
+                              <td className="py-4 px-4">{expense.enote}</td>
+                              <td className="py-4 px-4">{expense.ecategory}</td>
+                              <td className="py-4 px-4">{expense.eamount}</td>
                             </tr>
                           ))}
                       </tbody>
@@ -483,14 +501,14 @@ function Months() {
                   )}
                 </div>
               </div>
-              <h1 className="text-white text-4xl mb-4">
-                Se for individuel måned
-              </h1>
+
+
+             {/*  <h1 className="mt-8 mb-10 text-3xl text-left font-bold uppercase">Se individuel måned</h1> */}
               <div>
                 <div className="grid grid-cols-5 place-content-center gap-2">
                   {months.map((month) => (
                     <div key={month.id}>
-                      <label className="flex items-center justify-center py-4 space-x-3 rounded-xl bg-orange-200">
+                      <label className="flex items-center justify-center space-x-3 m-auto mt-6 select-none rounded-lg bg-gray-700 py-3.5 px-7 text-center align-middle  text-lg font-bold uppercase text-gray-100 shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none">
                         <input
                           type="checkbox"
                           className="form-checkbox h-5 w-5 text-blue-600"
@@ -500,8 +518,8 @@ function Months() {
                           }}
                           checked={!!selectedMonths[month.id]}
                         />
-                        <span className="text-gray-700">
-                          {month.monthName} ID: {month.id}
+                        <span className="text-gray-100">
+                          {month.monthName} 
                         </span>
                       </label>
                     </div>
@@ -509,18 +527,20 @@ function Months() {
                 </div>
 
                 <div>
-                  <h1 className="text-white text-6xl mb-8 mt-4">Indtægter</h1>
                   {/* Expense Month Summary */}
+                  
+                      <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Indtægter</h1>
+                   
                   <div className="grid grid-cols-6 gap-2">
                     {Object.entries(incomeSummary).map(([category, data]) => (
                       <>
                         {data.eyear === Number(year) ? (
                           <div
                             key={category}
-                            className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md mb-2"
+                            className="relative flex flex-col bg-clip-border rounded-xl  text-gray-100 shadow-md shadow-gray-500/20 bg-gray-800 border border-gray-700 mb-2"
                           >
                             <div
-                              className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                              className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
                             >
                               {data.icon && (
                                 <FontAwesomeIcon
@@ -530,10 +550,10 @@ function Months() {
                               )}
                             </div>
                             <div className="p-4 text-right">
-                              <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                              <p className="block antialiased  text-sm leading-normal font-normal text-blue-gray-600">
                                 {category}
                               </p>
-                              <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                              <h4 className="block antialiased tracking-normal  text-2xl font-semibold leading-snug text-blue-gray-900">
                                 {data.amount.toFixed(2)} KR.
                               </h4>
                             </div>
@@ -543,7 +563,7 @@ function Months() {
                     ))}
                   </div>
 
-                  <h1 className="text-white text-6xl mb-8">Udgifter</h1>
+                  <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Udgifter</h1>
                   <div className="grid grid-cols-6 gap-2">
                     {/* Expense Month Summary */}
                     {Object.entries(expenseSummary).map(([category, data]) => (
@@ -552,10 +572,10 @@ function Months() {
                         data.eyear === Number(year) ? (
                           <div
                           key={category}
-                          className="relative flex flex-col bg-clip-border rounded-xl bg-white text-gray-700 shadow-md mb-2"
+                          className="relative flex flex-col bg-clip-border rounded-xl text-gray-100 shadow-md shadow-gray-500/20 bg-gray-800 border border-gray-700 mb-2"
                         >
                           <div
-                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden text-white shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
                           >
                             {data.icon && (
                               <FontAwesomeIcon
@@ -565,10 +585,10 @@ function Months() {
                             )}
                           </div>
                           <div className="p-4 text-right">
-                            <p className="block antialiased font-sans text-sm leading-normal font-normal text-blue-gray-600">
+                            <p className="block antialiased  text-sm leading-normal font-normal text-blue-gray-600">
                               {category}
                             </p>
-                            <h4 className="block antialiased tracking-normal font-sans text-2xl font-semibold leading-snug text-blue-gray-900">
+                            <h4 className="block antialiased tracking-normal  text-2xl font-semibold leading-snug text-blue-gray-900">
                               {data.amount.toFixed(2)} KR.
                             </h4>
                           </div>
@@ -668,7 +688,7 @@ const [monthButton, setMonthButton] = useState<boolean>(false); */
        </div>
        <button
          onClick={() => createMonth(monthName, monthYear)}
-         className="w-full bg-indigo-500 text-white text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
+         className="w-full bg-indigo-500  text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
          type="submit"
        >
          Ny Måned

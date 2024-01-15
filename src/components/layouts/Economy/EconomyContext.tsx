@@ -61,29 +61,92 @@ export type IncomeData = {
 };
 
 const incomeCategories = [
-  { category: "Løn", fonticon: "money-bill-1-wave", bgColor: "from-green-500 to-green-300" },
-  { category: "Investering", fonticon: "chart-line", bgColor: "from-purple-500 to-purple-300"},
+  {
+    category: "Løn",
+    fonticon: "money-bill-1-wave",
+    bgColor: "from-green-500 to-green-300",
+  },
+  {
+    category: "Investering",
+    fonticon: "chart-line",
+    bgColor: "from-purple-500 to-purple-300",
+  },
   { category: "Salg", fonticon: "tags", bgColor: "from-pink-500 to-pink-300" },
-  { category: "Gaver & Arv", fonticon: "gift", bgColor: "from-yellow-500 to-yellow-300"},
-  { category: "Skatte refussioner", fonticon: "hand-holding-usd", bgColor: "from-indigo-500 to-indigo-300"},
-  { category: "Andet", fonticon: "ellipsis-h", bgColor: "from-teal-500 to-teal-300"},
+  {
+    category: "Gaver & Arv",
+    fonticon: "gift",
+    bgColor: "from-yellow-500 to-yellow-300",
+  },
+  {
+    category: "Skatte refussioner",
+    fonticon: "hand-holding-usd",
+    bgColor: "from-indigo-500 to-indigo-300",
+  },
+  {
+    category: "Andet",
+    fonticon: "ellipsis-h",
+    bgColor: "from-teal-500 to-teal-300",
+  },
 ];
 
 const expenseCategories = [
-  { category: "Køb", fonticon: "shopping-bag", bgColor: "from-red-500 to-red-300" },
-  { category: "Transport", fonticon: "bus", bgColor: "from-orange-500 to-orange-300" },
-  { category: "Mad & Takeaway", fonticon: "utensils", bgColor: "from-lime-500 to-lime-300" },
-  { category: "Fitness & Sundhed", fonticon: "dumbbell", bgColor: "from-emerald-500 to-emerald-300" },
-  { category: "Forsikringer", fonticon: "shield-alt", bgColor: "from-cyan-500 to-cyan-300" },
+  {
+    category: "Køb",
+    fonticon: "shopping-bag",
+    bgColor: "from-red-500 to-red-300",
+  },
+  {
+    category: "Transport",
+    fonticon: "bus",
+    bgColor: "from-orange-500 to-orange-300",
+  },
+  {
+    category: "Mad & Takeaway",
+    fonticon: "utensils",
+    bgColor: "from-lime-500 to-lime-300",
+  },
+  {
+    category: "Fitness & Sundhed",
+    fonticon: "dumbbell",
+    bgColor: "from-emerald-500 to-emerald-300",
+  },
+  {
+    category: "Forsikringer",
+    fonticon: "shield-alt",
+    bgColor: "from-cyan-500 to-cyan-300",
+  },
   { category: "Bolig", fonticon: "home", bgColor: "from-blue-500 to-blue-300" },
-  { category: "Underholdning", fonticon: "film", bgColor: "from-violet-500 to-violet-300" },
-  { category: "Gaver", fonticon: "gifts", bgColor: "from-fuchsia-500 to-fuchsia-300" },
-  { category: "Software & Apps", fonticon: "laptop-code", bgColor: "from-gray-500 to-gray-300" },
-  { category: "Opsparing", fonticon: "piggy-bank", bgColor: "from-amber-500 to-amber-300" },
-  { category: "Mobil & internet", fonticon: "mobile-alt", bgColor: "from-lime-500 to-lime-300" },
-  { category: "Lån & Afdrag", fonticon: "handshake", bgColor: "from-orange-500 to-orange-300" },
+  {
+    category: "Underholdning",
+    fonticon: "film",
+    bgColor: "from-violet-500 to-violet-300",
+  },
+  {
+    category: "Gaver",
+    fonticon: "gifts",
+    bgColor: "from-fuchsia-500 to-fuchsia-300",
+  },
+  {
+    category: "Software & Apps",
+    fonticon: "laptop-code",
+    bgColor: "from-gray-500 to-gray-300",
+  },
+  {
+    category: "Opsparing",
+    fonticon: "piggy-bank",
+    bgColor: "from-amber-500 to-amber-300",
+  },
+  {
+    category: "Mobil & internet",
+    fonticon: "mobile-alt",
+    bgColor: "from-lime-500 to-lime-300",
+  },
+  {
+    category: "Lån & Afdrag",
+    fonticon: "handshake",
+    bgColor: "from-orange-500 to-orange-300",
+  },
 ];
-
 
 export const EconomyContext = createContext<EconomyContextType>(
   defaultEconomyContextValue
@@ -103,15 +166,32 @@ export function EconomyProvider({ children }) {
   // Api GET der indhenter et helt års inkomst data
 
   // GET MONTHS
+
+  const localUser = localStorage.getItem("user");
+
+  console.log("user is", localUser);
+
   const getMonths = (): Promise<MonthData[]> => {
-    return fetch("http://localhost:3001/get/months")
+    const localUser = localStorage.getItem("user");
+
+    let url = "";
+    if (localUser === "Kastholm95") {
+      url = "http://localhost:3001/get/months";
+    } else if (localUser === "fredWard") {
+      url = "http://localhost:3001/get/months/fred";
+    } else {
+      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
+      return Promise.resolve([]);
+    }
+
+    return fetch(url)
       .then((res) => res.json() as Promise<MonthData[]>)
       .then((data: MonthData[]) => {
         setMonthData(data);
         return data;
       })
-      .catch((err: any) => {
-        console.log(err);
+      .catch((err) => {
+        console.error(err);
         return [];
       });
   };
@@ -120,12 +200,22 @@ export function EconomyProvider({ children }) {
   // Types Klarer vi i frontenden
   const getMonthIncome = (monthEconomyId, year): Promise<IncomeData[]> => {
     setSelectedMonth(year);
-    return fetch(`http://localhost:3001/get/months/${monthEconomyId}/income`)
+    const localUser = localStorage.getItem("user");
+
+    let url = "";
+    if (localUser === "Kastholm95") {
+      url = `http://localhost:3001/get/months/${monthEconomyId}/income`;
+    } else if (localUser === "fredWard") {
+      url = `http://localhost:3001/get/months/${monthEconomyId}/income/fred`;
+    } else {
+      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
+      return Promise.resolve([]);
+    }
+
+    return fetch(url)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setIncomeData(data);
-        //console.log("income data hentet", data);
-        //console.log(incomeData);
         return data;
       })
       .catch((err: any) => {
@@ -136,12 +226,22 @@ export function EconomyProvider({ children }) {
 
   const getYearIncome = (eyear): Promise<IncomeData[]> => {
     //setSelectedYear(eyear);
-    return fetch(`http://localhost:3001/get/allmonths/${eyear}/income`)
+    const localUser = localStorage.getItem("user");
+
+    let url = "";
+    if (localUser === "Kastholm95") {
+      url = `http://localhost:3001/get/allmonths/${eyear}/income`;
+    } else if (localUser === "fredWard") {
+      url = `http://localhost:3001/get/allmonths/${eyear}/income/fred`;
+    } else {
+      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
+      return Promise.resolve([]);
+    }
+
+    return fetch(url)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setYearIncomeData(data);
-        //console.log("year cho", eyear);
-        //console.log("Full income data hentet", data);
         return data;
       })
       .catch((err: any) => {
@@ -151,15 +251,25 @@ export function EconomyProvider({ children }) {
   };
 
   // GET Income from a specific Month
-  // Types Klarer vi i frontenden
   const getMonthExpense = (monthEconomyId, year): Promise<IncomeData[]> => {
     setSelectedMonth(year);
-    return fetch(`http://localhost:3001/get/months/${monthEconomyId}/expense`)
+
+    const localUser = localStorage.getItem("user");
+
+    let url = "";
+    if (localUser === "Kastholm95") {
+      url = `http://localhost:3001/get/months/${monthEconomyId}/expense`;
+    } else if (localUser === "fredWard") {
+      url = `http://localhost:3001/get/months/${monthEconomyId}/expense/fred`;
+    } else {
+      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
+      return Promise.resolve([]);
+    }
+
+    return fetch(url)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setIncomeData(data);
-        //console.log("income data hentet", data);
-        //console.log(incomeData);
         return data;
       })
       .catch((err: any) => {
@@ -169,13 +279,22 @@ export function EconomyProvider({ children }) {
   };
 
   const getYearExpense = (eyear): Promise<IncomeData[]> => {
-    //setSelectedYear(eyear);
-    return fetch(`http://localhost:3001/get/allmonths/${eyear}/expense`)
+    const localUser = localStorage.getItem("user");
+
+    let url = "";
+    if (localUser === "Kastholm95") {
+      url = `http://localhost:3001/get/allmonths/${eyear}/expense`;
+    } else if (localUser === "fredWard") {
+      url = `http://localhost:3001/get/allmonths/${eyear}/expense/fred`;
+    } else {
+      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
+      return Promise.resolve([]);
+    }
+
+    return fetch(url)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setYearExpenseData(data);
-        //console.log("year cho", eyear);
-        //console.log("Full expense data hentet", data);
         return data;
       })
       .catch((err: any) => {

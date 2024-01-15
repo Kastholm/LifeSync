@@ -12,6 +12,7 @@ import { LoginContext, LoginProvider } from "./components/Base/Login";
 import Economy from "./pages/Economy.tsx";
 import Homeassistant from "./pages/Homeassistant.tsx";
 import Notebook from "./pages/Notebook.tsx";
+import GoogleFit from "./pages/GoogleFit.tsx";
 function App() {
   return (
     <div className="App">
@@ -25,6 +26,7 @@ function App() {
               <Route path="/movies" element={<Movies />} />
               <Route path="/economy" element={<Economy />} />
               <Route path="/notebook" element={<Notebook />} />
+              <Route path="/googlefit" element={<GoogleFit />} />
               <Route path="/homeassistant" element={<Homeassistant />} />
             </Routes>
           </div>

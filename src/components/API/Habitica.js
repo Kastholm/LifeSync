@@ -1,6 +1,6 @@
 import { useState, useEffect, useContext } from "react";
 import { LoginContext } from "../Base/Login";
-import LoginForm from "./LoginForm.js";
+import LoginForm from "../Base/LoginForm.js";
 import { CheckSquare, ScanLine } from "lucide-react";
 
 function Habitica() {
@@ -184,7 +184,7 @@ function Habitica() {
                                     <img
                                       src="https://pm1.aminoapps.com/6564/ee09ccac2da477f00735db9aa49a11579fdea271_00.jpg"
                                       className="flex-shrink-0 bg-black object-cover rounded-full btn- w-10 h-10"
-                                      />
+                                    />
                                     <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                                       <p className="text-lg font-bold  truncate">
                                         {todo.text}
@@ -194,8 +194,8 @@ function Habitica() {
                                   <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
                                     {todo.completed ? (
                                       <a
-                                      onClick={() => unCompleteTask(todo.id)}
-                                      className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                        onClick={() => unCompleteTask(todo.id)}
+                                        className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
                                       duration-200 hover:bg-gray-700 rounded-lg"
                                       >
                                         <CheckSquare />
@@ -205,7 +205,7 @@ function Habitica() {
                                         onClick={() => completeTask(todo.id)}
                                         className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
                                         duration-200 hover:bg-gray-700 rounded-lg"
-                                        >
+                                      >
                                         <ScanLine />
                                       </a>
                                     )}
@@ -236,7 +236,7 @@ function Habitica() {
                                     <img
                                       src="https://pm1.aminoapps.com/6564/ee09ccac2da477f00735db9aa49a11579fdea271_00.jpg"
                                       className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
-                                      />
+                                    />
                                     <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                                       <p className="text-lg font-bold  truncate">
                                         {todo.text}
@@ -246,18 +246,18 @@ function Habitica() {
                                   <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
                                     {todo.completed ? (
                                       <a
-                                      onClick={() => unCompleteTask(todo.id)}
-                                      className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                        onClick={() => unCompleteTask(todo.id)}
+                                        className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
                                       duration-200 hover:bg-gray-700 rounded-lg"
                                       >
                                         <CheckSquare />
                                       </a>
                                     ) : (
                                       <a
-                                      onClick={() => completeTask(todo.id)}
+                                        onClick={() => completeTask(todo.id)}
                                         className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
                                         duration-200 hover:bg-gray-700 rounded-lg"
-                                        >
+                                      >
                                         <ScanLine />
                                       </a>
                                     )}
@@ -288,7 +288,7 @@ function Habitica() {
                                     <img
                                       src="https://pm1.aminoapps.com/6564/ee09ccac2da477f00735db9aa49a11579fdea271_00.jpg"
                                       className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
-                                      />
+                                    />
                                     <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
                                       <p className="text-lg font-bold  truncate">
                                         {todo.text}
@@ -298,16 +298,16 @@ function Habitica() {
                                   <div className="pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
                                     {todo.completed ? (
                                       <a
-                                      onClick={() => unCompleteTask(todo.id)}
-                                      className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                        onClick={() => unCompleteTask(todo.id)}
+                                        className="bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
                                       duration-200 hover:bg-gray-700 rounded-lg"
                                       >
                                         <CheckSquare />
                                       </a>
                                     ) : (
                                       <a
-                                      onClick={() => completeTask(todo.id)}
-                                      className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
+                                        onClick={() => completeTask(todo.id)}
+                                        className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
                                       duration-200 hover:bg-gray-700 rounded-lg"
                                       >
                                         <ScanLine />
@@ -326,20 +326,21 @@ function Habitica() {
               </div>
             ) : (
               <p>Henter data...</p>
-              )}
+            )}
             {/*   */}
           </div>
         </div>
       ) : (
         <LoginForm />
-        )}
+      )}
     </div>
   );
 }
 
 export default Habitica;
 
-{/* <div>
+{
+  /* <div>
   <ul className="bg-gray-700 p-4 rounded-2xl">
     <h2 className="text-4xl mb-6 text-gray-200 font-semibold">
       Daily
@@ -389,9 +390,12 @@ export default Habitica;
       </div>
     ))}
   </ul>
-</div> */}
-{/* {
+</div> */
+}
+{
+  /* {
       todo.notes === 'codetask' ? (
         <h1>HEj{todo.text}</h1>
       ) : null
-    } */}
+    } */
+}

@@ -6,6 +6,7 @@ import { LoginContext } from "../components/Base/Login";
 import Movies from "./Movies";
 import NeedToWatch from "../components/API/Trakt/NeedToWatch";
 import MyShows from "../components/API/Trakt/MyShows";
+import YouTube from "./YouTube.tsx";
 
 function Dashboard() {
   let myLinks = [
@@ -142,13 +143,13 @@ function Dashboard() {
           </form>
         </div>
       </div>
-
+              <YouTube />
       <div className="grid ">
         <Habitica />
       </div>
-      <div className="bg-gray-900 mx-4 px-4 mb-12 pt-2 pb-6 rounded-xl">
+      {/* <div className="bg-gray-900 mx-4 px-4 mb-12 pt-2 pb-6 rounded-xl">
         <MyShows />
-      </div>
+      </div> */}
     </main>
   );
 }

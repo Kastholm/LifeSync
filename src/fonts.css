@@ -1,0 +1,28 @@
+@font-face {
+     font-family: 'MonaSans-Regular';
+     src: url('../public/fonts/MonaSans-Regular.woff2') format('woff2');
+     font-weight: normal;
+     font-style: normal;
+   }
+   
+   @font-face {
+     font-family: 'MonaSans-SemiBold';
+     src: url('../public/fonts/MonaSans-SemiBold.woff2') format('woff2');
+     font-weight: 600; /* SemiBold */
+     font-style: normal;
+   }
+   
+   @font-face {
+     font-family: 'MonaSans-Medium';
+     src: url('../public/fonts/MonaSans-Medium.woff2') format('woff2');
+     font-weight: 500; /* Medium */
+     font-style: normal;
+   }
+   
+   /* @font-face {
+     font-family: 'MonaSans-Bold';
+     src: url('../public/fonts/MonaSans-Bold.woff2') format('woff2');
+     font-weight: bold;
+     font-style: normal;
+   } */
+   

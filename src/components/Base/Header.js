@@ -36,7 +36,7 @@ function Header() {
       link: "/notebook",
     },
     {
-      key: "6",
+      key: "7",
       name: "HA",
       icon: "https://community-assets.home-assistant.io/original/4X/1/3/8/13882a481a57f91f670def0fc33cf99d09dec293.png",
       link: "/homeassistant",

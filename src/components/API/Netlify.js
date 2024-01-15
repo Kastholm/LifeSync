@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Trash2 } from "lucide-react";
-import LoginForm from "./LoginForm";
+import LoginForm from "../Base/LoginForm";
 import { LoginContext } from "../Base/Login";
 
 function Netlify() {

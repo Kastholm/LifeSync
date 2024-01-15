@@ -12,11 +12,66 @@ VALUES (
           'Januar',
           2024
      ) 
+
+     -- @block
+INSERT INTO MonthEconomyFred (monthName, monthYear)
+VALUES (
+          'Januar',
+          2024
+     ) 
      
+-- @block 
+ALTER TABLE Journaling MODIFY bedTime TIME;
+ALTER TABLE Journaling MODIFY wakeUpTime TIME;
+
+-- @block
+CREATE TABLE Users (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     username VARCHAR(255) NOT NULL UNIQUE,
+     password VARCHAR(255) NOT NULL
+) 
+
+-- @block
+INSERT INTO Users (username, password)
+VALUES (
+          'fredWard',
+          'fredWard'
+)
 
 
 -- @block
-CREATE TABLE MonthEconomy (
+CREATE TABLE JournalingFred (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     journalDate DATETIME NOT NULL,
+     sleepScore INT(1) NOT NULL,
+     bedTime DATETIME NOT NULL,
+     wakeUpTime DATETIME NOT NULL,
+     sleepNote TEXT,
+     moodScore INT(1) NOT NULL,
+     moodNote TEXT,
+     journalNote TEXT,
+     firstGratitude TEXT,
+     secondGratitude TEXT
+)
+
+-- @block
+INSERT INTO JournalingFred (journalDate, sleepScore, bedTime, wakeUpTime, sleepNote, moodScore, moodNote, journalNote, firstGratitude, secondGratitude)
+VALUES (
+          '2024-01-05 00:00:00',
+          5,
+          '2024-01-04 22:00:00',
+          '2024-01-05 06:00:00',
+          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet, lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet', 
+          5,
+          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet, lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet, lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet, lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet',
+          'lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet, lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet'
+     )
+
+
+-- @block
+CREATE TABLE MonthEconomyFred (
      id INT PRIMARY KEY AUTO_INCREMENT,
      monthName VARCHAR(255),
      monthYear INT(4)
@@ -24,7 +79,7 @@ CREATE TABLE MonthEconomy (
 
 -- @block
 
-CREATE TABLE Expense (
+CREATE TABLE ExpenseFred (
      id INT PRIMARY KEY AUTO_INCREMENT,
      monthEconomyId INT NOT NULL,
      eyear INT(4) NOT NULL,
@@ -51,6 +106,12 @@ VALUES
 (1, 2023, 'EWII', '', 1, 'Mobil & Internet', 266.5),
 (1, 2023, 'NetFlix', '', 1, 'Software & Apps', 36),
 (1, 2023, 'Lebara', '', 1, 'Mobil & Internet', 19)
+
+
+-- @block
+INSERT INTO ExpenseFred (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
+VALUES 
+(1, 2024, 'Steroids', 'gainz', 2, 'Personlig Pleje', 150)
 
 
 -- MD EXPENSES
@@ -83,7 +144,7 @@ VALUES
 
 -- @block
 
-CREATE TABLE Income (
+CREATE TABLE IncomeFred (
      id INT PRIMARY KEY AUTO_INCREMENT,
      monthEconomyId INT NOT NULL,
      eyear INT(4) NOT NULL,

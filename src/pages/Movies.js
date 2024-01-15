@@ -5,7 +5,7 @@ import WatchedMovies from "../components/API/Trakt/WatchedMovies";
 
 import { LoginContext } from "../components/Base/Login";
 
-import LoginForm from "../components/API/LoginForm";
+import LoginForm from "../components/Base/LoginForm";
 import { KeyRound, KeyRoundIcon, LogIn } from "lucide-react";
 
 function Movies() {
