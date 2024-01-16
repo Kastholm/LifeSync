@@ -124,6 +124,102 @@ function Months() {
   const [selectedMonths, setSelectedMonths] = useState({});
 
   /* -------------------------------------------------------------------------- */
+  /*                                 POST INCOME                                */
+  /* -------------------------------------------------------------------------- */
+
+  const postIncome = async (year) => {
+    let url = "";
+    if (localStorage.getItem("user") === "Kastholm95") {
+      url = "http://localhost:3001/post/income";
+    } else if (localStorage.getItem("user") === "fredWard") {
+      url = "http://localhost:3001/post/income/fred";
+    }
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          monthEconomyId: incomeMonth,
+          eyear: year,
+          ename: incomeName,
+          enote: incomeNote,
+          etype: incomeType,
+          ecategory: incomeCategory,
+          eamount: incomeAmount,
+        }),
+      });
+      if (res.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 2000);
+      }
+      const response = await res.json();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [isSuccess, setIsSuccess] = useState(false);
+  const [incomeMonth, setIncomeMonth] = useState<string>("");
+  const [incomeName, setIncomeName] = useState<string>("");
+  const [incomeNote, setIncomeNote] = useState<string>("");
+  const [incomeType, setIncomeType] = useState<string>("");
+  const [incomeCategory, setIncomeCategory] = useState<string>("");
+  const [incomeAmount, setIncomeAmount] = useState<string>("");
+
+
+    /* -------------------------------------------------------------------------- */
+  /*                                 POST Expense                                */
+  /* -------------------------------------------------------------------------- */
+
+  const postExpense = async (year) => {
+    let url = "";
+    if (localStorage.getItem("user") === "Kastholm95") {
+      url = "http://localhost:3001/post/expense";
+    } else if (localStorage.getItem("user") === "fredWard") {
+      url = "http://localhost:3001/post/expense/fred";
+    }
+    try {
+      const res = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          monthEconomyId: expenseMonth,
+          eyear: year,
+          ename: expenseName,
+          enote: expenseNote,
+          etype: expenseType,
+          ecategory: expenseCategory,
+          eamount: expenseAmount,
+        }),
+      });
+      if (res.ok) {
+        setIsSuccess(true);
+        setTimeout(() => {
+          setIsSuccess(false);
+        }, 2000);
+      }
+      const response = await res.json();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const [expenseMonth, setExpenseMonth] = useState<string>("");
+  const [expenseName, setExpenseName] = useState<string>("");
+  const [expenseNote, setExpenseNote] = useState<string>("");
+  const [expenseType, setExpenseType] = useState<string>("");
+  const [expenseCategory, setExpenseCategory] = useState<string>("");
+  const [expenseAmount, setExpenseAmount] = useState<string>("");
+
+  /* -------------------------------------------------------------------------- */
   /*                                INCOME LOGIC                                */
   /* -------------------------------------------------------------------------- */
 
@@ -312,26 +408,175 @@ function Months() {
     });
   }, []);
 
-
-  
-  
-
-
   /* -------------------------------------------------------------------------- */
   /*                                     DOM                                    */
   /* -------------------------------------------------------------------------- */
-
   return (
     <div className="  grid grid-cols-1 ">
-
       <div className="">
         {monthsArray
           .sort((a, b) => {
             return Number(b[0]) - Number(a[0]);
           })
           .map(([year, months]) => (
-            <div className="bg-gray-900 m-4 p-6 rounded-xl text-gray-100" key={year}>
+            <div
+              className="bg-gray-900 m-4 p-6 rounded-xl text-gray-100"
+              key={year}
+            >
               <h1 className=" text-6xl">{year}</h1>
+
+              <div className="text-gray-900 mt-4 flex gap-4 bg-gray-800 p-2">
+                <label className="flex flex-col text-gray-100">
+                  Måned
+                  <select
+                    className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                    value={incomeMonth}
+                    onChange={(e) => setIncomeMonth(e.target.value)}
+                  >
+                    <option value="">Vælg Måned</option>
+                    {months.map((month) => (
+                      <option key={month.id} value={month.id}>
+                        {month.monthName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Navn
+                  <input
+                    className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                    type="text"
+                    value={incomeName}
+                    onChange={(e) => setIncomeName(e.target.value)}
+                  />
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Note
+                  <input
+                    className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                    type="text"
+                    value={incomeNote}
+                    onChange={(e) => setIncomeNote(e.target.value)}
+                  />
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Type
+                  <select
+                    className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                    onChange={(e) => setIncomeType(e.target.value)}
+                  >
+                    <option value="">Vælg Type</option>
+                    <option value="1">Løn</option>
+                    <option value="2">Salg</option>
+                  </select>
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Kategori
+                  <select
+                    className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                    onChange={(e) => setIncomeCategory(e.target.value)}
+                  >
+                    <option value="">Vælg Kategori</option>
+                    {incomeCategories.map((category) => (
+                      <option value={category.category}>
+                        {category.category}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Beløb
+                  <input
+                    className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                    type="number"
+                    value={incomeAmount}
+                    onChange={(e) => setIncomeAmount(e.target.value)}
+                  />
+                </label>
+                <button className="mt-4" onClick={() => postIncome(year)}>
+                  Tilføj Intægt
+                </button>
+                {isSuccess && <div className="text-gray-900 bg-green-200 p-4 rounded-lg m-auto">Indtægt tilføjet med succes!</div>}
+              </div>
+
+              
+              <div className="text-gray-900 mt-4 flex gap-4 bg-gray-800 p-2">
+                <label className="flex flex-col text-gray-100">
+                  Måned
+                  <select
+                    className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                    value={expenseMonth}
+                    onChange={(e) => setExpenseMonth(e.target.value)}
+                  >
+                    <option value="">Vælg Måned</option>
+                    {months.map((month) => (
+                      <option key={month.id} value={month.id}>
+                        {month.monthName}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Navn
+                  <input
+                    className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                    type="text"
+                    value={expenseName}
+                    onChange={(e) => setExpenseName(e.target.value)}
+                  />
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Note
+                  <input
+                    className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                    type="text"
+                    value={expenseNote}
+                    onChange={(e) => setExpenseNote(e.target.value)}
+                  />
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Type
+                  <select
+                    className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                    onChange={(e) => setExpenseType(e.target.value)}
+                  >
+                    <option value="">Vælg Type</option>
+                    <option value="1">Løn</option>
+                    <option value="2">Salg</option>
+                  </select>
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Kategori
+                  <select
+                    className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                    onChange={(e) => setExpenseCategory(e.target.value)}
+                  >
+                    <option value="">Vælg Kategori</option>
+                    {expenseCategories.map((category) => (
+                      <option value={category.category}>
+                        {category.category}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="flex flex-col text-gray-100">
+                  Beløb
+                  <input
+                    className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                    type="number"
+                    value={expenseAmount}
+                    onChange={(e) => setExpenseAmount(e.target.value)}
+                  />
+                </label>
+                <button className="mt-4" onClick={() => postExpense(year)}>
+                  Tilføj Udgift
+                </button>
+                {isSuccess && <div className="text-gray-900 bg-green-200 p-4 rounded-lg m-auto">Udgift tilføjet med succes!</div>}
+              </div>
+
+
+
+
               <button
                 className="block m-auto mt-6 select-none rounded-lg bg-gray-700 py-3.5 px-7 text-center align-middle  text-sm font-bold uppercase text-gray-100 shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
                 onClick={() => {
@@ -343,12 +588,11 @@ function Months() {
               </button>
 
               <div>
-
-                {
-                  incomeSummaryByCategory[year] ? (
-                    <h1 className="mt-6 mb-10 text-lg text-left font-bold uppercase">Indtægter</h1>
-                  ) : null
-                }
+                {incomeSummaryByCategory[year] ? (
+                  <h1 className="mt-6 mb-10 text-lg text-left font-bold uppercase">
+                    Indtægter
+                  </h1>
+                ) : null}
 
                 <div className="grid grid-cols-6 gap-6">
                   {incomeSummaryByCategory[year] &&
@@ -381,14 +625,11 @@ function Months() {
                 </div>
               </div>
 
-             
-                                
-              
-              {
-                  incomeSummaryByCategory[year] ? (
-                    <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Udgifter</h1>
-                  ) : null
-                }
+              {incomeSummaryByCategory[year] ? (
+                <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">
+                  Udgifter
+                </h1>
+              ) : null}
               <div className="grid grid-cols-6 gap-6 mt-4">
                 {expenseSummaryByCategory[year] &&
                   Object.entries(expenseSummaryByCategory[year]).map(
@@ -420,12 +661,12 @@ function Months() {
               </div>
 
               {/* Indkomst tabel */}
-              
-              {
-                  incomeSummaryByCategory[year] ? (
-                    <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Liste over {year}</h1>
-                  ) : null
-                }
+
+              {incomeSummaryByCategory[year] ? (
+                <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">
+                  Liste over {year}
+                </h1>
+              ) : null}
               <div className="grid grid-cols-2 gap-4 mb-4 mt-12">
                 <div className="max-h-[50em] overflow-y-scroll">
                   {yearIncomeData[year] && (
@@ -488,9 +729,7 @@ function Months() {
                           })
                           .map((expense, index) => (
                             <tr key={index} className="border-b">
-                              <td className="py-4 px-4">
-                                {expense.ename} 
-                              </td>
+                              <td className="py-4 px-4">{expense.ename}</td>
                               <td className="py-4 px-4">{expense.enote}</td>
                               <td className="py-4 px-4">{expense.ecategory}</td>
                               <td className="py-4 px-4">{expense.eamount}</td>
@@ -502,8 +741,7 @@ function Months() {
                 </div>
               </div>
 
-
-             {/*  <h1 className="mt-8 mb-10 text-3xl text-left font-bold uppercase">Se individuel måned</h1> */}
+              {/*  <h1 className="mt-8 mb-10 text-3xl text-left font-bold uppercase">Se individuel måned</h1> */}
               <div>
                 <div className="grid grid-cols-5 place-content-center gap-2">
                   {months.map((month) => (
@@ -518,9 +756,7 @@ function Months() {
                           }}
                           checked={!!selectedMonths[month.id]}
                         />
-                        <span className="text-gray-100">
-                          {month.monthName} 
-                        </span>
+                        <span className="text-gray-100">{month.monthName}</span>
                       </label>
                     </div>
                   ))}
@@ -528,9 +764,11 @@ function Months() {
 
                 <div>
                   {/* Expense Month Summary */}
-                  
-                      <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Indtægter</h1>
-                   
+
+                  <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">
+                    Indtægter
+                  </h1>
+
                   <div className="grid grid-cols-6 gap-2">
                     {Object.entries(incomeSummary).map(([category, data]) => (
                       <>
@@ -563,39 +801,39 @@ function Months() {
                     ))}
                   </div>
 
-                  <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">Udgifter</h1>
+                  <h1 className="mt-8 mb-10 text-lg text-left font-bold uppercase">
+                    Udgifter
+                  </h1>
                   <div className="grid grid-cols-6 gap-2">
                     {/* Expense Month Summary */}
                     {Object.entries(expenseSummary).map(([category, data]) => (
                       <>
-                      {
-                        data.eyear === Number(year) ? (
+                        {data.eyear === Number(year) ? (
                           <div
-                          key={category}
-                          className="relative flex flex-col bg-clip-border rounded-xl text-gray-100 shadow-md shadow-gray-500/20 bg-gray-800 border border-gray-700 mb-2"
-                        >
-                          <div
-                            className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                            key={category}
+                            className="relative flex flex-col bg-clip-border rounded-xl text-gray-100 shadow-md shadow-gray-500/20 bg-gray-800 border border-gray-700 mb-2"
                           >
-                            {data.icon && (
-                              <FontAwesomeIcon
-                                className="text-3xl"
-                                icon={iconMapping[data.icon]}
-                              />
-                            )}
+                            <div
+                              className={`bg-gradient-to-tr ${data.bgColor} bg-clip-border mx-4 rounded-xl overflow-hidden  shadow-lg absolute -mt-4 grid h-16 w-16 place-items-center`}
+                            >
+                              {data.icon && (
+                                <FontAwesomeIcon
+                                  className="text-3xl"
+                                  icon={iconMapping[data.icon]}
+                                />
+                              )}
+                            </div>
+                            <div className="p-4 text-right">
+                              <p className="block antialiased  text-sm leading-normal font-normal text-blue-gray-600">
+                                {category}
+                              </p>
+                              <h4 className="block antialiased tracking-normal  text-2xl font-semibold leading-snug text-blue-gray-900">
+                                {data.amount.toFixed(2)} KR.
+                              </h4>
+                            </div>
                           </div>
-                          <div className="p-4 text-right">
-                            <p className="block antialiased  text-sm leading-normal font-normal text-blue-gray-600">
-                              {category}
-                            </p>
-                            <h4 className="block antialiased tracking-normal  text-2xl font-semibold leading-snug text-blue-gray-900">
-                              {data.amount.toFixed(2)} KR.
-                            </h4>
-                          </div>
-                        </div>
-                        ) : null
-                      }
-                    </>
+                        ) : null}
+                      </>
                     ))}
                   </div>
                 </div>
@@ -607,96 +845,4 @@ function Months() {
   );
 }
 
-{
-  /* {incomeData.map((income) => (
-  
-  <div className="bg-green-200 p-4 m-2" key={income.id}>
-    <p>ID: {income.id}</p>
-    <p>Navn: {income.ename}</p>
-    <p>Kategori: {income.ecategory}</p>
-    <p>Type: {income.etype}</p>
-    <p>Beløb: {income.eamount}</p>
-  </div>
-))} */
-}
-
-//Create month
-/*  const [monthName, setMonthName] = useState<string>("");
-const [monthYear, setMonthYear] = useState<string>("");
-const [monthButton, setMonthButton] = useState<boolean>(false); */
-
-/*   // POST NEW MONTH
-  const createMonth = (
-    monthName: string,
-    monthYear: number
-  ): Promise<MonthData[]> => {
-    return fetch("http://localhost:3001/new/month", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        monthName: monthName,
-        monthYear: monthYear,
-      }),
-    })
-      .then((response) => response.json() as Promise<MonthData>)
-      .then((data: any) => {
-        return data;
-      })
-      .catch((err: any) => {
-        console.log(err);
-        return [];
-      });
-  }; */
-{
-  /*  <button onClick={() => setMonthButton(true)} className="bg-green-200 p-4">
-   Opret ny md
- </button>
-
- {monthButton ? (
-   <div className="mx-auto py-8 absolute">
-     <div className="w-full relative  max-w-sm m-auto bg-gray-900 p-8 rounded-md shadow-md">
-       <div className="mb-4 ">
-         <p
-           className="font-bold w-fit absolute right-2 top-2 text-3xl text-red-600 bg-white px-2 rounded-full cursor-pointer"
-           onClick={() => setMonthButton(false)}
-         >
-           X
-         </p>
-         <label className="block text-gray-700 text-sm font-bold mb-2">
-           Måned
-         </label>
-         <input
-           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-           value={monthName}
-           onChange={(e) => setMonthName(e.target.value)}
-           placeholder="Januar"
-         />
-       </div>
-       <div className="mb-4">
-         <label className="block text-gray-700 text-sm font-bold mb-2">
-           År
-         </label>
-         <input
-           className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-indigo-500"
-           value={monthYear}
-           type="number"
-           onChange={(e) => setMonthYear(e.target.value)}
-           placeholder="1978"
-         />
-       </div>
-       <button
-         onClick={() => createMonth(monthName, monthYear)}
-         className="w-full bg-indigo-500  text-sm font-bold py-2 px-4 rounded-md hover:bg-indigo-600 transition duration-300"
-         type="submit"
-       >
-         Ny Måned
-       </button>
-     </div>
-   </div>
- ) : null} */
-}
-{
-}
 export default Months;

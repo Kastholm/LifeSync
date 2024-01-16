@@ -88,7 +88,6 @@ function Notebook() {
           const res = await fetch("http://localhost:3001/get/journal/fred");
           const json = await res.json();
           setJournal(json);
-          
         }
       } catch (error) {
         console.log(error);
@@ -100,8 +99,15 @@ function Notebook() {
 
 
   const postJournal = async () => {
+    let url = "";
+    if(localStorage.getItem("user") === "Kastholm95") {
+      url = "http://localhost:3001/post/journal";
+    }
+    else if(localStorage.getItem("user") === "fredWard") {
+      url = "http://localhost:3001/post/journal/fred";
+    }
     try {
-      const res = await fetch("http://localhost:3001/post/journal", {
+      const res = await fetch(url, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

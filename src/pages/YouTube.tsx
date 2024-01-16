@@ -14,7 +14,6 @@ function YouTube() {
     getWatchList();
   }, [])
 
-  //AIzaSyAfZw_hFG7wSzEPHKqBkG6EQ0pIHWKaNIY
 
   console.log(videos);
   
