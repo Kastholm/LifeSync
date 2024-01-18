@@ -1,3 +1,4 @@
+import { LeafyGreen } from "lucide-react";
 import React, { createContext, useEffect, useState } from "react";
 
 // Definerer typen for den data, vi forventer i contexten
@@ -163,6 +164,11 @@ export function EconomyProvider({ children }) {
 
   const [selectedMonth, setSelectedMonth] = useState<string>("");
 
+  const serverurl = process.env.REACT_APP_SERVER_URL;
+
+  console.log('url er', serverurl);
+  
+
   // Api GET der indhenter et helt års inkomst data
 
   // GET MONTHS
@@ -176,9 +182,9 @@ export function EconomyProvider({ children }) {
 
     let url = "";
     if (localUser === "Kastholm95") {
-      url = "http://localhost:3001/get/months";
+      url = `${serverurl}/get/months`;
     } else if (localUser === "fredWard") {
-      url = "http://localhost:3001/get/months/fred";
+      url = "${serverurl}/get/months/fred";
     } else {
       // Hvis brugeren ikke er en af de forventede, returneres et tomt array
       return Promise.resolve([]);
@@ -204,9 +210,9 @@ export function EconomyProvider({ children }) {
 
     let url = "";
     if (localUser === "Kastholm95") {
-      url = `http://localhost:3001/get/months/${monthEconomyId}/income`;
+      url = `${serverurl}/get/months/${monthEconomyId}/income`;
     } else if (localUser === "fredWard") {
-      url = `http://localhost:3001/get/months/${monthEconomyId}/income/fred`;
+      url = `${serverurl}/get/months/${monthEconomyId}/income/fred`;
     } else {
       // Hvis brugeren ikke er en af de forventede, returneres et tomt array
       return Promise.resolve([]);
@@ -230,9 +236,9 @@ export function EconomyProvider({ children }) {
 
     let url = "";
     if (localUser === "Kastholm95") {
-      url = `http://localhost:3001/get/allmonths/${eyear}/income`;
+      url = `${serverurl}/get/allmonths/${eyear}/income`;
     } else if (localUser === "fredWard") {
-      url = `http://localhost:3001/get/allmonths/${eyear}/income/fred`;
+      url = `${serverurl}/get/allmonths/${eyear}/income/fred`;
     } else {
       // Hvis brugeren ikke er en af de forventede, returneres et tomt array
       return Promise.resolve([]);
@@ -258,9 +264,9 @@ export function EconomyProvider({ children }) {
 
     let url = "";
     if (localUser === "Kastholm95") {
-      url = `http://localhost:3001/get/months/${monthEconomyId}/expense`;
+      url = `${serverurl}/get/months/${monthEconomyId}/expense`;
     } else if (localUser === "fredWard") {
-      url = `http://localhost:3001/get/months/${monthEconomyId}/expense/fred`;
+      url = `${serverurl}/get/months/${monthEconomyId}/expense/fred`;
     } else {
       // Hvis brugeren ikke er en af de forventede, returneres et tomt array
       return Promise.resolve([]);
@@ -283,9 +289,9 @@ export function EconomyProvider({ children }) {
 
     let url = "";
     if (localUser === "Kastholm95") {
-      url = `http://localhost:3001/get/allmonths/${eyear}/expense`;
+      url = `${serverurl}/get/allmonths/${eyear}/expense`;
     } else if (localUser === "fredWard") {
-      url = `http://localhost:3001/get/allmonths/${eyear}/expense/fred`;
+      url = `${serverurl}/get/allmonths/${eyear}/expense/fred`;
     } else {
       // Hvis brugeren ikke er en af de forventede, returneres et tomt array
       return Promise.resolve([]);

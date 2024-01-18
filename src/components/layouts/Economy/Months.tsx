@@ -123,6 +123,8 @@ function Months() {
 
   const [selectedMonths, setSelectedMonths] = useState({});
 
+  const serverurl = process.env.REACT_APP_SERVER_URL;
+
   /* -------------------------------------------------------------------------- */
   /*                                 POST INCOME                                */
   /* -------------------------------------------------------------------------- */
@@ -130,9 +132,9 @@ function Months() {
   const postIncome = async (year) => {
     let url = "";
     if (localStorage.getItem("user") === "Kastholm95") {
-      url = "http://localhost:3001/post/income";
+      url = `${serverurl}/post/income`;
     } else if (localStorage.getItem("user") === "fredWard") {
-      url = "http://localhost:3001/post/income/fred";
+      url = `${serverurl}/post/income/fred`;
     }
     try {
       const res = await fetch(url, {
@@ -171,17 +173,16 @@ function Months() {
   const [incomeCategory, setIncomeCategory] = useState<string>("");
   const [incomeAmount, setIncomeAmount] = useState<string>("");
 
-
-    /* -------------------------------------------------------------------------- */
+  /* -------------------------------------------------------------------------- */
   /*                                 POST Expense                                */
   /* -------------------------------------------------------------------------- */
 
   const postExpense = async (year) => {
     let url = "";
     if (localStorage.getItem("user") === "Kastholm95") {
-      url = "http://localhost:3001/post/expense";
+      url = `${serverurl}/post/expense`;
     } else if (localStorage.getItem("user") === "fredWard") {
-      url = "http://localhost:3001/post/expense/fred";
+      url = `${serverurl}/post/expense/fred`;
     }
     try {
       const res = await fetch(url, {
@@ -496,10 +497,13 @@ function Months() {
                 <button className="mt-4" onClick={() => postIncome(year)}>
                   Tilføj Intægt
                 </button>
-                {isSuccess && <div className="text-gray-900 bg-green-200 p-4 rounded-lg m-auto">Indtægt tilføjet med succes!</div>}
+                {isSuccess && (
+                  <div className="text-gray-900 bg-green-200 p-4 rounded-lg m-auto">
+                    Indtægt tilføjet med succes!
+                  </div>
+                )}
               </div>
 
-              
               <div className="text-gray-900 mt-4 flex gap-4 bg-gray-800 p-2">
                 <label className="flex flex-col text-gray-100">
                   Måned
@@ -571,11 +575,12 @@ function Months() {
                 <button className="mt-4" onClick={() => postExpense(year)}>
                   Tilføj Udgift
                 </button>
-                {isSuccess && <div className="text-gray-900 bg-green-200 p-4 rounded-lg m-auto">Udgift tilføjet med succes!</div>}
+                {isSuccess && (
+                  <div className="text-gray-900 bg-green-200 p-4 rounded-lg m-auto">
+                    Udgift tilføjet med succes!
+                  </div>
+                )}
               </div>
-
-
-
 
               <button
                 className="block m-auto mt-6 select-none rounded-lg bg-gray-700 py-3.5 px-7 text-center align-middle  text-sm font-bold uppercase text-gray-100 shadow-md shadow-gray-600/20 transition-all hover:shadow-lg hover:shadow-gray-600/40 focus:opacity-[0.85] focus:shadow-none disabled:pointer-events-none disabled:opacity-50 disabled:shadow-none"
