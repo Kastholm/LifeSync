@@ -26,18 +26,19 @@ export function LoginProvider({ children }) {
         console.log(err);
       }
     };
+
     getUsers();
   }, []);
 
   const checkPassword = () => {
     const storedToken = localStorage.getItem("access");
-
+    console.log(userInput, passwordInput);
+    console.log("users", users);
     if (storedToken && storedToken === appToken) {
       setLoginStatus(true);
       console.log("yove got token");
       return;
     }
-
     users.find((user) => {
       if (userInput === user.username && passwordInput === user.password) {
         console.log("password match");
