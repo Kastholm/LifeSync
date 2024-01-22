@@ -6,7 +6,7 @@ import { LoginContext } from "../components/Base/Login";
 import Movies from "./Movies";
 import NeedToWatch from "../components/API/Trakt/NeedToWatch";
 import MyShows from "../components/API/Trakt/MyShows";
-import YouTube from "./YouTube.tsx";
+import YouTube from "../components/API/YouTube.tsx";
 
 function Dashboard() {
   let myLinks = [
@@ -98,10 +98,10 @@ function Dashboard() {
               alt="Google"
               src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
             />
-            <div className="mb-4 relative flex items-center">
+            <div className="mb-4  flex items-center">
               <input
                 type="text"
-                className="w-full relative border text-xl border-gray-400 p-4 rounded-full"
+                className="w-full border text-xl border-gray-400 p-4 rounded-full"
                 value={searchGooTerm}
                 onChange={(e) => setSearchGooTerm(e.target.value)}
               />
