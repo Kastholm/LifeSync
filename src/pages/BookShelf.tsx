@@ -10,6 +10,7 @@ function BookShelf() {
     <div className='bookShelfBody'>
          <div className="bookshelf first">
            <div className="book-grid">
+            <h2 className='text-6xl bold mb-6'>Thriller</h2>
              <ul>
                <li> <img src="https://images-na.ssl-images-amazon.com/images/I/51aBcwHY7aL._SX351_BO1,204,203,200_.jpg"/></li>
                <li> <img src="https://images-na.ssl-images-amazon.com/images/I/51QLLBtcCFL._SX345_BO1,204,203,200_.jpg"/></li>

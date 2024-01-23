@@ -81,7 +81,6 @@ function Header() {
                       to={navItem.link}
                     >
                       <img className="w-10 my-3" src={navItem.icon} />
-                      <p>Local</p>
                     </Link>
                   ) : null}
                 </>
@@ -97,7 +96,6 @@ function Header() {
                         to={navItem.link}
                       >
                         <img className="w-10 my-3" src={navItem.icon} />
-                        <p>Local</p>
                       </Link>
                     ) : null}
                   </>
@@ -107,7 +105,7 @@ function Header() {
           </div>
           <div
             onClick={() => seeSettings()}
-            className="sm:border-b absolute cursor-pointer bottom-0 left-6 grid place-content-center border-gray-900"
+            className="sm:border-b absolute cursor-pointer bottom-0 ml-[1.3vw] grid place-content-center border-gray-900"
           >
             <img
               className="w-10 my-3 "
@@ -117,7 +115,7 @@ function Header() {
         </ul>
       </aside>
       {settings ? (
-        <Settings navItems={navItems} settings={settings}></Settings>
+        <Settings navItems={navItems} settings={settings} seeSettings={seeSettings} ></Settings>
       ) : null}
     </div>
   );
