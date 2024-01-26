@@ -6,7 +6,10 @@ import { LoginContext } from "../components/Base/Login";
 import Movies from "./Movies";
 import NeedToWatch from "../components/API/Trakt/NeedToWatch";
 import MyShows from "../components/API/Trakt/MyShows";
-import YouTube from "../components/API/YouTube.tsx";
+import YouTube from "../components/widgets/YouTubeWidget.tsx";
+import BookWidget from "../components/widgets/BookWidget.tsx";
+import TraktWidget from "../components/widgets/TraktWidget.js";
+import CalendarWidget from "../components/widgets/CalendarWidget.tsx";
 
 function Dashboard() {
   let myLinks = [
@@ -74,76 +77,59 @@ function Dashboard() {
   return (
     <main>
       {traktAuth ? <Movies /> : null}
-
+      <CalendarWidget />
       <div className=" bg-gray-900 p-4 mx-4 rounded-2xl grid grid-cols-2 gap-4">
         <div>
-          <div className="flex justify-end h-fit mb-6 gap-8">
-            {myLinks.map((hyperlink, index) => (
-              <div
-                key={hyperlink.key}
-                className=" w-16 bg-gray-100 rounded-xl p-2 grid place-content-center"
-              >
-                <a href={hyperlink.link} target="_blank">
-                  <img src={hyperlink.src} className="m-auto" alt="" />
-                </a>
-              </div>
-            ))}
-          </div>
           <form
-            className="rounded-lg bg-gray-100 p-8 max-h-[12em] shadow-lg"
+            className="rounded-lg bg-gray-100 p-4 max-h-[12em] shadow-lg"
             onSubmit={handleGooSubmit}
           >
-            <img
-              className="m-auto w-56 mb-2"
-              alt="Google"
-              src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
-            />
-            <div className="mb-4  flex items-center">
+            <div className=" flex relative  items-center">
               <input
                 type="text"
                 className="w-full border text-xl border-gray-400 p-4 rounded-full"
+                placeholder="Search Google"
                 value={searchGooTerm}
                 onChange={(e) => setSearchGooTerm(e.target.value)}
+              />
+              <img
+                className="m-auto absolute right-4 top-4 w-24 mb-2"
+                alt="Google"
+                src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png"
               />
             </div>
           </form>
         </div>
 
         <div>
-          <div className="flex justify-start ml-4 h-fit mb-6 gap-8">
-            {webtifyLinks.map((hyperlink, index) => (
-              <div
-                key={hyperlink.key}
-                className=" w-16 bg-gray-100 rounded-xl p-2 grid place-content-center"
-              >
-                <a href={hyperlink.link} target="_blank">
-                  <img src={hyperlink.src} className="m-auto" alt="" />
-                </a>
-              </div>
-            ))}
-          </div>
           <form
-            className="rounded-lg bg-gray-100 p-8 max-h-[12em] shadow-lg"
+            className="rounded-lg bg-gray-100 p-4 max-h-[12em] shadow-lg"
             onSubmit={handleYBSubmit}
           >
-            <a href="https://www.youtube.com">
-              <img
-                className="m-auto w-72 mb-5"
-                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1024px-YouTube_Logo_2017.svg.png"
-              />
-            </a>
-            <div className="mb-4 flex items-center">
+            <div className=" flex items-center relative">
               <input
                 type="text"
                 className="w-full border text-xl border-gray-400 p-4 rounded-full"
+                placeholder="Search YouTube"
                 value={searchYBTerm}
                 onChange={(f) => setSearchYBTerm(f.target.value)}
               />
+            <a href="https://www.youtube.com">
+               <img
+                className="m-auto absolute right-4 top-4 w-28 mb-2"
+                src="https://upload.wikimedia.org/wikipedia/commons/thumb/b/b8/YouTube_Logo_2017.svg/1024px-YouTube_Logo_2017.svg.png"
+              />
+            </a>
             </div>
           </form>
         </div>
       </div>
-              <YouTube />
+      
+      <div className="grid grid-cols-3">
+        <YouTube />
+        <BookWidget />
+        <TraktWidget />
+      </div>
       <div className="grid ">
         <Habitica />
       </div>

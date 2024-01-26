@@ -125,12 +125,12 @@ function Habitica() {
         <div>
           <div className="bg-gray-700 w-full rounded-2xl grid p-4 mb-4">
             <div>
-              <div className="-mx-3 flex w-2/3 mx-auto ">
+              <div className=" flex align-middle justify-center items-center w-2/3 mx-auto ">
                 <div className="w-full px-3 m-auto ">
-                  <div className="mb-5">
-                    <label className="mb-3 block text-base font-medium text-gray-200">
+                  <div className="">
+                   {/*  <label className="mb-3 block text-base font-medium text-gray-200">
                       Task Name
-                    </label>
+                    </label> */}
                     <input
                       onChange={(e) => setTaskName(e.target.value)}
                       type="text"
@@ -140,10 +140,10 @@ function Habitica() {
                   </div>
                 </div>
                 <div className="w-full px-3 ">
-                  <div className="mb-5">
-                    <label className="mb-3 block text-base font-medium text-gray-200">
+                  <div className="">
+                    {/* <label className="mb-3 block text-base font-medium text-gray-200">
                       Task Type
-                    </label>
+                    </label> */}
                     <select
                       className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
                       onChange={(e) => setTaskType(e.target.value)}
@@ -154,10 +154,10 @@ function Habitica() {
                     </select>
                   </div>
                 </div>
-                <div className="grid w-fit mt-4 ml-4">
+                <div className="grid place-content-center w-fit mt-4 ml-4">
                   <button
                     onClick={() => createTask(taskName, taskType)}
-                    className="hover:shadow-form rounded-md m-auto bg-[#481847] py-3 px-8 text-center text-base font-semibold text-white outline-none"
+                    className="hover:shadow-form rounded-md m-auto -mt-4 bg-[#481847] py-3 px-8 text-center text-base font-semibold text-white outline-none"
                   >
                     Send
                   </button>
@@ -177,7 +177,7 @@ function Habitica() {
                       <div key={todo.id}>
                         {todo.notes === "codetask" ? (
                           <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
-                            <div className=" py-4">
+                            <div className=" py-2">
                               <div>
                                 <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
                                   <div className="flex items-center flex-1 min-w-0">
@@ -229,7 +229,7 @@ function Habitica() {
                       <div key={todo.id}>
                         {todo.notes === "todo" ? (
                           <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
-                            <div className=" py-4">
+                            <div className=" py-2">
                               <div>
                                 <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
                                   <div className="flex items-center flex-1 min-w-0">
@@ -281,7 +281,7 @@ function Habitica() {
                       <div key={todo.id}>
                         {todo.notes === "appointment" ? (
                           <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
-                            <div className=" py-4">
+                            <div className=" py-2">
                               <div>
                                 <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
                                   <div className="flex items-center flex-1 min-w-0">
@@ -338,64 +338,3 @@ function Habitica() {
 }
 
 export default Habitica;
-
-{
-  /* <div>
-  <ul className="bg-gray-700 p-4 rounded-2xl">
-    <h2 className="text-4xl mb-6 text-gray-200 font-semibold">
-      Daily
-    </h2>
-    {dailies.map((daily) => (
-      <div key={daily.id}>
-        <div className="shadow-xl bg-gray-900 text-gray-200 mt-4 mr-0 mb-0 ml-0 p-4 flow-root rounded-lg sm:py-2">
-          <div className=" py-4">
-            <div>
-              <div className="sm:flex sm:items-center sm:justify-between sm:space-x-5">
-                <div className="flex items-center flex-1 min-w-0">
-                  <img
-                    src="https://d34u8crftukxnk.cloudfront.net/slackpress/prod/sites/6/SlackLogo_CompanyNews_SecondaryAubergine_Hero.jpg?d=500x500&amp;f=fill"
-                    className="flex-shrink-0 object-cover rounded-full btn- w-10 h-10"
-                  />
-
-                  <div className="mt-0 mr-0 mb-0 ml-4 flex-1 min-w-0">
-                    <p className="text-lg font-bold truncate">
-                      {daily.text}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="mt-4 mr-0 mb-0 ml-0 pt-0 pr-0 pb-0 pl-14 flex items-center sm:space-x-6 sm:pl-0 sm:mt-0">
-                  {daily.completed ? (
-                    <a
-                      onClick={() => unCompleteTask(daily.id)}
-                      className="buttonCompleted bg-green-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
-    duration-200 hover:bg-gray-700 rounded-lg"
-                    >
-                      <CheckSquare />
-                    </a>
-                  ) : (
-                    <a
-                      onClick={() => completeTask(daily.id)}
-                      className="bg-red-500 cursor-pointer pt-2 pr-2 pb-2 pl-2 text-lg font-medium text-gray-100 transition-all
-  duration-200 hover:bg-gray-700 rounded-lg"
-                    >
-                      <ScanLine />
-                    </a>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ))}
-  </ul>
-</div> */
-}
-{
-  /* {
-      todo.notes === 'codetask' ? (
-        <h1>HEj{todo.text}</h1>
-      ) : null
-    } */
-}

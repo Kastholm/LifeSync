@@ -1,0 +1,64 @@
+[
+     {
+       "date": "1996-05-16",
+       "year": 1996,
+       "type": "birthday",
+       "localName": "Anton Fødselsdag",
+       "types": ["Public"]
+     },
+     {
+          "date": "1968-10-17",
+          "year": 1968,
+          "type": "birthday",
+          "localName": "Far Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "2024-01-30",
+          "year": 2024,
+          "type": "birthday",
+          "localName": "Mor Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "2000-01-30",
+          "year": 2000,
+          "type": "birthday",
+          "localName": "Ronja Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "1996-01-16",
+          "year": 1996,
+          "type": "birthday",
+          "localName": "Rued Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "1989-03-31",
+          "year": 1989,
+          "type": "birthday",
+          "localName": "Søster Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "1952-08-08",
+          "year": 1952,
+          "type": "birthday",
+          "localName": "Annegrethe Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "1950-12-23",
+          "year": 1950,
+          "type": "birthday",
+          "localName": "Farfar Fødselsdag",
+          "types": ["Public"]
+     },
+     {
+          "date": "2000-05-01",
+          "localName": "Mors dag - 2 søndag i maj",
+          "types": ["Public"]
+     }
+   ]
+   

@@ -91,6 +91,36 @@ CREATE TABLE ExpenseFred (
      FOREIGN KEY (monthEconomyId) REFERENCES MonthEconomy(id)
 )
 
+-- @block
+
+CREATE TABLE BookShelf (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     bookName VARCHAR(255) NOT NULL,
+     bookRating INT(1) NOT NULL,
+     bookRead BOOLEAN NOT NULL,
+     bookReadYear INT(4),
+     imgURL VARCHAR(255)
+)
+
+-- @block
+INSERT INTO BookShelf (bookName, bookRating, bookRead, bookReadYear, imgURL)
+VALUES 
+('Essentialism', 5, true, 2023, 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1403165375i/18077875.jpg'),
+('Atomic Habits', 5, true, 2023, 'https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1655988385i/40121378.jpg')
+
+-- @block
+
+CREATE TABLE BookNote (
+     id INT PRIMARY KEY AUTO_INCREMENT,
+     bookShelfId INT NOT NULL,
+     bookNote TEXT,
+     FOREIGN KEY (bookShelfId) REFERENCES BookShelf(id)
+)
+
+-- @block
+INSERT INTO BookNote (bookShelfId, bookNote)
+VALUES 
+(2, '222232323loresdfm ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit dsafamet lorem ipsum dolor sit amet, lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet lorem ipsum dolor sit amet')
 
 -- @block
 INSERT INTO Expense (monthEconomyId, eyear, ename, enote, etype, ecategory, eamount)
