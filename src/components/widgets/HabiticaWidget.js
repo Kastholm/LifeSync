@@ -12,9 +12,15 @@ function Habitica() {
   const [taskType, setTaskType] = useState("codetask");
 
  const { habiticaID, habiticaToken } = useContext(UserVariablesContext);
+ const [Registered, setRegistered] = useState(false);
 
   useEffect(() => {
 
+    if (habiticaID === '' || habiticaToken === '') {
+      
+      return;
+    }
+    const Registered = true;
     const fetchDailies = fetch(
       "https://habitica.com/api/v3/tasks/user?type=dailys",
       {
@@ -48,6 +54,8 @@ function Habitica() {
       .catch((err) => {
         console.log(err);
       });
+
+
   }, []);
 
   const completeTask = (taskId) => {
@@ -114,7 +122,11 @@ function Habitica() {
 
   return (
     <div className="bg-gray-900 rounded-2xl p-4 m-3">
-     
+     {
+      !Registered ? <p className="text-xl text-red-300">
+      You need to insert your Habitica Keys in Settings
+    </p> : (
+
         <div>
           <div className="bg-gray-700 w-full rounded-2xl grid p-4 mb-4">
             <div>
@@ -323,6 +335,9 @@ function Habitica() {
             {/*   */}
           </div>
         </div>
+
+      )
+     }
       
     </div>
   );

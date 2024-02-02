@@ -48,14 +48,14 @@ CREATE TABLE UserEnvironmentValues (
 -- @block
 INSERT INTO UserEnvironmentValues (userId, habiticaID, habiticaToken, traktClientId, traktClientSecret, TMDBApiKey, YouTubeApiKey, YouTubePlaylistId)
 VALUES (
-          1,
-          'c1c8f073-a138-4e20-bebe-cfbdb3461429',
-          'd5ba5de4-8702-46d7-8a21-f746f684b3d8',
-          'f07014fc66a30fe9307563589bebeae8b298cd556284f9b39631157e166664b9',
-          '958a9430b2a19014e607f80ed246070686cb54d0b6b5903480f6b2c7ed6af56c',
-          '28a99bff7df5d2424c43ca3930c6bc56',
-          'AIzaSyAfZw_hFG7wSzEPHKqBkG6EQ0pIHWKaNIY',
-          'PLAKDE8PiTIRlGHK3mombeOi8YFf19SwZz'
+          2,
+          '',
+          '',
+          '',
+          '',
+          '',
+          '',
+          ''
           )
 
 
