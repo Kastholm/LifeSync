@@ -1,7 +1,8 @@
 import { useState, useEffect, useContext } from "react";
-import { LoginContext } from "../Base/Login";
-import LoginForm from "../Base/LoginForm.js";
+
 import { CheckSquare, ScanLine } from "lucide-react";
+
+import { UserVariablesContext } from "../context/VariableProvider";
 
 function Habitica() {
   const [dailies, setDailies] = useState();
@@ -10,22 +11,16 @@ function Habitica() {
   const [taskName, setTaskName] = useState();
   const [taskType, setTaskType] = useState("codetask");
 
-  useEffect(() => {
-    checkPassword();
-  }, []);
-
-  const { loginStatus, checkPassword } = useContext(LoginContext);
+ const { habiticaID, habiticaToken } = useContext(UserVariablesContext);
 
   useEffect(() => {
-    const userId = process.env.REACT_APP_HABITICA_USERID;
-    const apiToken = process.env.REACT_APP_HABITICA_TOKEN;
 
     const fetchDailies = fetch(
       "https://habitica.com/api/v3/tasks/user?type=dailys",
       {
         headers: {
-          "x-api-user": userId,
-          "x-api-key": apiToken,
+          "x-api-user": habiticaID,
+          "x-api-key": habiticaToken,
         },
       }
     );
@@ -34,8 +29,8 @@ function Habitica() {
       "https://habitica.com/api/v3/tasks/user?type=todos",
       {
         headers: {
-          "x-api-user": userId,
-          "x-api-key": apiToken,
+          "x-api-user": habiticaID,
+          "x-api-key": habiticaToken,
         },
       }
     );
@@ -56,13 +51,11 @@ function Habitica() {
   }, []);
 
   const completeTask = (taskId) => {
-    const userId = process.env.REACT_APP_HABITICA_USERID;
-    const apiToken = process.env.REACT_APP_HABITICA_TOKEN;
     fetch(`https://habitica.com/api/v3/tasks/${taskId}/score/up`, {
       method: "POST",
       headers: {
-        "x-api-user": userId,
-        "x-api-key": apiToken,
+        "x-api-user": habiticaID,
+        "x-api-key": habiticaToken,
       },
     });
 
@@ -121,7 +114,7 @@ function Habitica() {
 
   return (
     <div className="bg-gray-900 rounded-2xl p-4 m-3">
-      {loginStatus ? (
+     
         <div>
           <div className="bg-gray-700 w-full rounded-2xl grid p-4 mb-4">
             <div>
@@ -330,9 +323,7 @@ function Habitica() {
             {/*   */}
           </div>
         </div>
-      ) : (
-        <LoginForm />
-      )}
+      
     </div>
   );
 }

@@ -15,6 +15,7 @@ function BookShelf() {
     bookReadYear: number;
     id: number;
     imgURL: string;
+    userId: number;
   }
 
   interface BookNotes {
@@ -24,18 +25,6 @@ function BookShelf() {
   }
 
   type BooksByYear = Record<string, Book[]>;
-
-  //const MySwal = withReactContent(Swal)
-
-  /* Swal.fire({
-  title: <p>Hello World</p>,
-  didOpen: () => {
-    // `MySwal` is a subclass of `Swal` with all the same instance & static methods
-    Swal.showLoading()
-  },
-}).then(() => {
-  return Swal.fire(<p>Shorthand works too</p>)
-}) */
 
   const [books, setBooks] = useState<BooksByYear[]>([]);
 
@@ -48,7 +37,7 @@ function BookShelf() {
   useEffect(() => {
     const getBooks = async () => {
       try {
-        const response = await fetch(`${serverUrl}/get/books`);
+        const response = await fetch(`${serverUrl}/get/books/${localStorage.getItem("userId")}`);
         const data = await response.json();
         console.log(data, "data");
 
@@ -108,6 +97,7 @@ function BookShelf() {
           bookRead: Number(document.getElementById("bookRead").value),
           bookReadYear: Number(document.getElementById("bookReadYear").value),
           imgURL: document.getElementById("imgURL").value,
+          userId: localStorage.getItem("userId"),
         };
       },
     }).then((result) => {

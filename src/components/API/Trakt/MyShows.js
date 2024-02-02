@@ -1,10 +1,8 @@
 import { useContext, useEffect, useState } from "react";
-import { LoginContext } from "../../Base/Login";
-import LoginForm from "../../Base/LoginForm";
+
 import { BadgeInfo } from "lucide-react";
 function MyShows() {
 
-  const {loginStatus} = useContext(LoginContext)
 
   const [watchShows, getWatchShows] = useState([]);
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
@@ -48,7 +46,7 @@ function MyShows() {
   return (
     <div>
       <h2 className="text-4xl font-bold text-gray-100 my-12">Current Shows</h2>
-      {watchShows && loginStatus ? (
+      {watchShows ? (
         <div className=" grid grid-cols-4 gap-4 rounded-3xl">
           {watchShows.map((show) => {
             return (
@@ -71,7 +69,10 @@ function MyShows() {
                     </a>
 
                     <div className="grid my-2">
-                      <a className="m-auto bg-gray-200 p-2 rounded-full" href={show.tmdbsData.homepage}>
+                      <a
+                        className="m-auto bg-gray-200 p-2 rounded-full"
+                        href={show.tmdbsData.homepage}
+                      >
                         <BadgeInfo color="#111827" size={32} />
                       </a>
                     </div>
@@ -107,7 +108,7 @@ function MyShows() {
           })}
         </div>
       ) : (
-        <LoginForm />
+        <div> afsdasdf </div>
       )}
     </div>
   );

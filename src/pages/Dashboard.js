@@ -1,11 +1,11 @@
 import { useContext, useState } from "react";
 import React from "react";
-import Habitica from "../components/API/Habitica";
+import Habitica from "../components/widgets/HabiticaWidget.js";
 
-import { LoginContext } from "../components/Base/Login";
+import { UserVariablesContext } from "../components/context/VariableProvider";
+
+
 import Movies from "./Movies";
-import NeedToWatch from "../components/API/Trakt/NeedToWatch";
-import MyShows from "../components/API/Trakt/MyShows";
 import YouTube from "../components/widgets/YouTubeWidget.tsx";
 import BookWidget from "../components/widgets/BookWidget.tsx";
 import TraktWidget from "../components/widgets/TraktWidget.js";
@@ -53,7 +53,8 @@ function Dashboard() {
 
   const [traktAuth, setTraktAuth] = useState(false);
 
-  const { loginStatus } = useContext(LoginContext);
+  const { variablesLoaded } = useContext(UserVariablesContext);
+  
 
   const handleGooSubmit = (e) => {
     //Stopper almindelig opførelse
@@ -125,14 +126,17 @@ function Dashboard() {
         </div>
       </div>
       
-      <div className="grid grid-cols-3">
+    {variablesLoaded ? (<div className="grid grid-cols-3">
         <YouTube />
         <BookWidget />
         <TraktWidget />
-      </div>
-      <div className="grid ">
-        <Habitica />
-      </div>
+      </div>) : <div>Loading...</div>}
+
+
+      {variablesLoaded ? (<div className="grid">
+      <Habitica />
+      </div>) : <div>Loading...</div>}
+
       {/* <div className="bg-gray-900 mx-4 px-4 mb-12 pt-2 pb-6 rounded-xl">
         <MyShows />
       </div> */}

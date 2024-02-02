@@ -12,6 +12,7 @@ function Header() {
       icon: "https://cdn-icons-png.flaticon.com/512/873/873147.png",
       link: "/",
       show: true,
+      admin: false,
     },
     {
       key: "2",
@@ -19,6 +20,7 @@ function Header() {
       icon: "https://iconape.com/wp-content/png_logo_vector/netlify.png",
       link: "/webtify",
       show: true,
+      admin: true,
     },
     {
       key: "3",
@@ -26,6 +28,7 @@ function Header() {
       icon: "https://cdn.iconscout.com/icon/free/png-256/free-trakt-3629115-3030255.png",
       link: "/Movies",
       show: true,
+      admin: false,
     },
     {
       key: "4",
@@ -33,6 +36,7 @@ function Header() {
       icon: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c5/Square_Cash_app_logo.svg/1200px-Square_Cash_app_logo.svg.png",
       link: "/economy",
       show: true,
+      admin: false,
     },
     {
       key: "5",
@@ -40,6 +44,7 @@ function Header() {
       icon: "https://play-lh.googleusercontent.com/NW7BrJSmuTBWKQvHH6sDi1u2R04cWChs-2APl50c2J3FmPimuT35Y306ZmoPdAjsabg",
       link: "/notebook",
       show: true,
+      admin: false,
     },
     {
       key: "6",
@@ -47,6 +52,7 @@ function Header() {
       icon: "https://cdn-icons-png.flaticon.com/512/2232/2232688.png",
       link: "/bookshelf",
       show: true,
+      admin: false,
     },
     {
       key: "7",
@@ -54,6 +60,7 @@ function Header() {
       icon: "https://community-assets.home-assistant.io/original/4X/1/3/8/13882a481a57f91f670def0fc33cf99d09dec293.png",
       link: "/homeassistant",
       show: true,
+      admin: true,
     },
   ];
 
@@ -61,6 +68,8 @@ function Header() {
   let storageNav = JSON.parse(localStorage.getItem("navItems"));
 
   const [settings, setSettings] = useState(false);
+
+  const userId = localStorage.getItem("userId");
 
   const seeSettings = () => {
     setSettings(!settings);
@@ -89,7 +98,17 @@ function Header() {
               <>
                 {navItems.map((navItem, index) => (
                   <>
-                    {navItem.show === true ? (
+                    {navItem.admin === false && userId < 1 ? (
+                      <Link
+                        key={navItem.key}
+                        className="sm:border-b grid place-content-center border-gray-900"
+                        to={navItem.link}
+                      >
+                        <img className="w-10 my-3" src={navItem.icon} />
+                      </Link>
+                    ) : null}
+
+                    {navItem.admin === false || (true && userId == 1) ? (
                       <Link
                         key={navItem.key}
                         className="sm:border-b grid place-content-center border-gray-900"
@@ -115,7 +134,11 @@ function Header() {
         </ul>
       </aside>
       {settings ? (
-        <Settings navItems={navItems} settings={settings} seeSettings={seeSettings} ></Settings>
+        <Settings
+          navItems={navItems}
+          settings={settings}
+          seeSettings={seeSettings}
+        ></Settings>
       ) : null}
     </div>
   );

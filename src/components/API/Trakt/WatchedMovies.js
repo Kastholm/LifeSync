@@ -1,6 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { LoginContext } from "../../Base/Login";
-import LoginForm from "../../Base/LoginForm";
 import { ArrowDownToLine } from "lucide-react";
 function WatchedMovies() {
   const [movies, setMovies] = useState([]);
@@ -12,7 +10,7 @@ function WatchedMovies() {
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
 
-  const { loginStatus } = useContext(LoginContext);
+ 
 
   const fetchWatchList = (pageNumber) => {
     const traktAccessToken = localStorage.getItem("traktAccessToken");
@@ -75,7 +73,7 @@ function WatchedMovies() {
       <h1 className="text-4xl font-bold text-center mb-12 text-gray-100">
         Currently Watched
       </h1>
-      {movies && loginStatus ? (
+      {movies ? (
         <div>
           <div className=" grid grid-cols-4 gap-4">
             {movies.map((movie) => {
@@ -180,10 +178,10 @@ function WatchedMovies() {
           </div>
         </div>
       ) : (
-        <LoginForm />
+        <p>afsd</p>
       )}
 
-      {loginStatus ? (
+     
         <div className=" bg-gray-900 rounded-b-3xl  ">
           <button
             className="mx-auto text-center bg-green-400 px-4 rounded-xl py-4 mt-8"
@@ -192,7 +190,6 @@ function WatchedMovies() {
           <ArrowDownToLine />
           </button>
         </div>
-      ) : null}
     </div>
   );
 }

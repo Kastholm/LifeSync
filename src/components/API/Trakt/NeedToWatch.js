@@ -1,15 +1,11 @@
 import { useEffect, useState, useContext } from "react";
-import { LoginContext } from "../../Base/Login";
-import LoginForm from "../../Base/LoginForm";
 import { MonitorPlay } from "lucide-react";
 function NeedToWatch() {
   const [watchMovies, getWatchMovies] = useState([]);
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
 
-  const { loginStatus} = useContext(LoginContext);
 
-  /* console.log("fra WL", one, loginStatus); */
 
   const fetchNeedToWatch = () => {
     const traktAccessToken = localStorage.getItem("traktAccessToken");
@@ -51,7 +47,7 @@ function NeedToWatch() {
       <h1 className="text-4xl font-bold text-center mb-12  text-gray-100 ">
         Watching list
       </h1>
-      {watchMovies && loginStatus ? (
+      {watchMovies  ? (
         <div className=" grid grid-cols-4 gap-4 rounded-3xl">
           {watchMovies.map((movie) => {
             return (
@@ -116,7 +112,7 @@ function NeedToWatch() {
           })}
         </div>
       ) : (
-        <LoginForm />
+        <p> asdf </p>
       )}
     </div>
   );

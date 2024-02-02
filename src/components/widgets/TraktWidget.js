@@ -1,13 +1,14 @@
 import { MonitorPlay } from "lucide-react";
 import React, { useContext, useEffect, useState } from "react";
+import { UserVariablesContext } from "../context/VariableProvider";
 
 function TraktWidget() {
-
   const [watchMovies, getWatchMovies] = useState([]);
   const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
   const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
 
- 
+  const { traktClientId, traktClientSecret, tmdbApiKey } =
+    useContext(UserVariablesContext);
 
   const fetchNeedToWatch = () => {
     const traktAccessToken = localStorage.getItem("traktAccessToken");
@@ -16,7 +17,7 @@ function TraktWidget() {
         "Content-type": "application/json",
         Authorization: `Bearer ${traktAccessToken}`,
         "trakt-api-version": 2,
-        "trakt-api-key": `${REACT_APP_CLIENT_ID}`,
+        "trakt-api-key": `${traktClientId}`,
       },
     })
       .then((response) => response.json())
@@ -24,7 +25,7 @@ function TraktWidget() {
         console.log("n data", data);
         const allMovieDetails = await data.map((movie) => {
           return fetch(
-            `https://api.themoviedb.org/3/movie/${movie.movie.ids.tmdb}?api_key=${REACT_APP_TMDB_API_KEY}`
+            `https://api.themoviedb.org/3/movie/${movie.movie.ids.tmdb}?api_key=${tmdbApiKey}`
           )
             .then((response) => response.json())
             .then((tmdbData) => {
@@ -44,7 +45,6 @@ function TraktWidget() {
   }, []);
   return (
     <div className="bg-gray-900 p-4 mx-2 mt-3 rounded-xl relative z-0 overflow-x-scroll">
-      
       <h1 className="text-xl font-bold text-center mb-4  text-gray-100 ">
         Need to watch
       </h1>
@@ -60,11 +60,10 @@ function TraktWidget() {
                   <img
                     src={`https://image.tmdb.org/t/p/w500${movie.tmdbData.poster_path}`}
                     alt={`Plakat for ${movie.movie.title}`}
-                    
                     className="rounded-lg justify-center grid object-cover w-40 transition-all"
                   />
 
-                 {/*  <div className="group p-2 grid z-10">
+                  {/*  <div className="group p-2 grid z-10">
                     <a className=" font-bold text-lg text-gray-100 line-clamp-2">
                     {movie.movie.year} 
                     </a>
@@ -108,12 +107,9 @@ function TraktWidget() {
             );
           })}
         </div>
-      ) : (
-        null
-      )}
+      ) : null}
     </div>
   );
 }
-
 
 export default TraktWidget;

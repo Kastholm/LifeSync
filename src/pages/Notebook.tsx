@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { LoginContext } from "../components/Base/Login";
-import LoginForm from "../components/Base/LoginForm";
+
 function Notebook() {
   interface JournalData {
     id: number;
@@ -16,11 +15,6 @@ function Notebook() {
     secondGratitude: string;
   }
 
-  useEffect(() => {
-    checkPassword();
-  }, []);
-
-  const { loginStatus, checkPassword } = useContext(LoginContext);
 
   const sleepEmojiToNumber = {
     "🤩": 1,
@@ -76,20 +70,14 @@ function Notebook() {
 
   console.log(yearMonthDay);
 
-  console.log("user logged in", localStorage.getItem("user"));
+
 
   useEffect((): void => {
     const getJournal = async () => {
       try {
-        if (localStorage.getItem("user") === "Kastholm95") {
-          const res = await fetch(`${serverurl}/get/journal`);
+          const res = await fetch(`${serverurl}/get/journal/${localStorage.getItem("userId")}`);
           const json = await res.json();
           setJournal(json);
-        } else if (localStorage.getItem("user") === "fredWard") {
-          const res = await fetch(`${serverurl}/get/journal/fred`);
-          const json = await res.json();
-          setJournal(json);
-        }
       } catch (error) {
         console.log(error);
       }
@@ -98,12 +86,7 @@ function Notebook() {
   }, []);
 
   const postJournal = async () => {
-    let url = "";
-    if (localStorage.getItem("user") === "Kastholm95") {
-      url = `${serverurl}/post/journal`;
-    } else if (localStorage.getItem("user") === "fredWard") {
-      url = `${serverurl}/post/journal/fred`;
-    }
+      let url = `${serverurl}/post/journal`;
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -121,6 +104,7 @@ function Notebook() {
           journalNote: journalNote,
           firstGratitude: firstGratitude,
           secondGratitude: secondGratitude,
+          userId: localStorage.getItem("userId"),
         }),
       });
       const response = await res.json();
@@ -132,7 +116,6 @@ function Notebook() {
 
   return (
     <div>
-      {loginStatus ? (
         <>
           <div className="bg-gray-900 text-gray-100 text-2xl p-32 m-4 rounded-lg">
             {journal.find(
@@ -370,9 +353,7 @@ function Notebook() {
             ))}
           </div>
         </>
-      ) : (
-        <LoginForm />
-      )}
+     
     </div>
   );
 }

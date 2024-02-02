@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Trash2 } from "lucide-react";
-import LoginForm from "../Base/LoginForm";
-import { LoginContext } from "../Base/Login";
+
 
 function Netlify() {
 
-  const { loginStatus } = useContext(LoginContext)
+
 
   const [sites, setSites] = useState(null);
   const [buildStatus, setBuildStatus] = useState(null);
@@ -96,7 +95,8 @@ function Netlify() {
   return (
     <div>
 
-      { loginStatus ? (<div>
+     
+      <div>
 
         {buildStatus && bandwidthStatus ? (
           <div className="bg-gray-900 p-4 mb-4 rounded-lg mx-4 text-white">
@@ -195,7 +195,8 @@ function Netlify() {
         ) : (
           <p>Henter siderne...</p>
         )}
-      </div>) : (<LoginForm />)}
+      </div>
+     
       
     </div>
   );

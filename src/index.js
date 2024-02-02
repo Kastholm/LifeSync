@@ -6,12 +6,18 @@ import "react-tooltip/dist/react-tooltip.css";
 
 //Routing
 import { BrowserRouter } from "react-router-dom";
+import { AuthProvider } from "./components/Auth/AuthProvider";
+import { VariableProvider } from "./components/context/VariableProvider.js";
 import App from "./App";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <BrowserRouter>
-    <App />
+    <AuthProvider>
+      <VariableProvider>
+        <App />
+      </VariableProvider>
+    </AuthProvider>
   </BrowserRouter>
 );
 
