@@ -82,22 +82,22 @@ function Header() {
           <div>
             {storageNav ? (
               storageNav.map((navItem, index) => (
-                <>
+                <div key={navItem.key}>
                   {navItem.show === true ? (
                     <Link
-                      key={navItem.key}
+                      
                       className="sm:border-b grid place-content-center border-gray-900"
                       to={navItem.link}
                     >
                       <img className="w-10 my-3" src={navItem.icon} />
                     </Link>
                   ) : null}
-                </>
+                </div>
               ))
             ) : (
               <>
                 {navItems.map((navItem, index) => (
-                  <>
+                  <div key={navItem.key}>
                     {navItem.admin === false && userId < 1 ? (
                       <Link
                         key={navItem.key}
@@ -117,7 +117,7 @@ function Header() {
                         <img className="w-10 my-3" src={navItem.icon} />
                       </Link>
                     ) : null}
-                  </>
+                  </div>
                 ))}
               </>
             )}

@@ -9,6 +9,7 @@ export function VariableProvider({ children }) {
   const server = process.env.REACT_APP_SERVER_URL;
   const userId = localStorage.getItem("userId");
 
+
   useEffect(() => {
     const getVariables = () => {
       fetch(`${server}/get/userenv/${userId}`)

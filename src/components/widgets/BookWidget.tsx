@@ -7,7 +7,7 @@ function BookWidget() {
 
   useEffect(() => {
     const getBooks = () => {
-      fetch(`${serverUrl}/get/books`)
+      fetch(`${serverUrl}/get/books/${localStorage.getItem("userId")}`)
         .then((res) => res.json())
         .then((data) => setBooks(data));
     };

@@ -20,7 +20,7 @@ function Habitica() {
       
       return;
     }
-    const Registered = true;
+    setRegistered(true);
     const fetchDailies = fetch(
       "https://habitica.com/api/v3/tasks/user?type=dailys",
       {

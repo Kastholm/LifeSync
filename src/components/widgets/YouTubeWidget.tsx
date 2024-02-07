@@ -14,7 +14,7 @@ function YouTube() {
     if (youtubeApiKey === "" || youtubePlaylistId === "") {
       return;
     }
-    const Registered = true;
+    setRegistred(true);
 
     const getWatchList = async () => {
       const res = await fetch(

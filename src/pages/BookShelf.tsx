@@ -32,6 +32,8 @@ function BookShelf() {
   const [showBook, setShowBook] = useState<Book[]>([]);
   const [showBookNotes, setShowBookNotes] = useState<BookNotes[]>([]);
 
+  const user = localStorage.getItem("userName");
+
   const serverUrl = process.env.REACT_APP_SERVER_URL;
 
   useEffect(() => {
@@ -190,15 +192,18 @@ function BookShelf() {
 
   return (
     <div>
-      <div className="bookShelfBody">
-        <button onClick={() => addBook()} className="mt-0">
-          Add Book
-        </button>
+      <div className="bookShelfBody min-h-[100vh] ">
+        <div className="bg-gray-900 p-4 bg-opacity-50 pt-6">
+          <h1 className="text-gray-100 text-3xl mb-6">Hi <b className="text-green-400">{user}!</b> welcome to your personal Bookshelf</h1>
+          <button onClick={() => addBook()} className="m-auto bg-green-700 ">
+            Add Book
+          </button>
+        </div>
         {books.map((book: any) => {
           return (
             <div key={book.id} className="bookshelf">
               <div className="book-grid">
-                <h1>{book[0]}</h1>
+                <h1 className="text-4xl text-gray-100 my-8">{book[0]}</h1>
                 <ul>
                   {book[1].map((book: any) => {
                     return (

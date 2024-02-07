@@ -149,6 +149,11 @@ const expenseCategories = [
   },
 ];
 
+
+
+
+
+
 export const EconomyContext = createContext<EconomyContextType>(
   defaultEconomyContextValue
 );
@@ -178,19 +183,9 @@ export function EconomyProvider({ children }) {
   console.log("user is", localUser);
 
   const getMonths = (): Promise<MonthData[]> => {
-    const localUser = localStorage.getItem("user");
+   
 
-    let url = "";
-    if (localUser === "Kastholm95") {
-      url = `${serverurl}/get/months`;
-    } else if (localUser === "fredWard") {
-      url = "${serverurl}/get/months/fred";
-    } else {
-      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
-      return Promise.resolve([]);
-    }
-
-    return fetch(url)
+    return fetch(`${serverurl}/get/months`)
       .then((res) => res.json() as Promise<MonthData[]>)
       .then((data: MonthData[]) => {
         setMonthData(data);
@@ -206,19 +201,9 @@ export function EconomyProvider({ children }) {
   // Types Klarer vi i frontenden
   const getMonthIncome = (monthEconomyId, year): Promise<IncomeData[]> => {
     setSelectedMonth(year);
-    const localUser = localStorage.getItem("user");
+   
 
-    let url = "";
-    if (localUser === "Kastholm95") {
-      url = `${serverurl}/get/months/${monthEconomyId}/income`;
-    } else if (localUser === "fredWard") {
-      url = `${serverurl}/get/months/${monthEconomyId}/income/fred`;
-    } else {
-      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
-      return Promise.resolve([]);
-    }
-
-    return fetch(url)
+    return fetch(`${serverurl}/get/months/${monthEconomyId}/income`)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setIncomeData(data);
@@ -231,20 +216,9 @@ export function EconomyProvider({ children }) {
   };
 
   const getYearIncome = (eyear): Promise<IncomeData[]> => {
-    //setSelectedYear(eyear);
-    const localUser = localStorage.getItem("user");
 
-    let url = "";
-    if (localUser === "Kastholm95") {
-      url = `${serverurl}/get/allmonths/${eyear}/income`;
-    } else if (localUser === "fredWard") {
-      url = `${serverurl}/get/allmonths/${eyear}/income/fred`;
-    } else {
-      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
-      return Promise.resolve([]);
-    }
 
-    return fetch(url)
+    return fetch(`${serverurl}/get/allmonths/${eyear}/income`)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setYearIncomeData(data);
@@ -260,19 +234,9 @@ export function EconomyProvider({ children }) {
   const getMonthExpense = (monthEconomyId, year): Promise<IncomeData[]> => {
     setSelectedMonth(year);
 
-    const localUser = localStorage.getItem("user");
+   
 
-    let url = "";
-    if (localUser === "Kastholm95") {
-      url = `${serverurl}/get/months/${monthEconomyId}/expense`;
-    } else if (localUser === "fredWard") {
-      url = `${serverurl}/get/months/${monthEconomyId}/expense/fred`;
-    } else {
-      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
-      return Promise.resolve([]);
-    }
-
-    return fetch(url)
+    return fetch(`${serverurl}/get/months/${monthEconomyId}/expense`)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setIncomeData(data);
@@ -285,19 +249,8 @@ export function EconomyProvider({ children }) {
   };
 
   const getYearExpense = (eyear): Promise<IncomeData[]> => {
-    const localUser = localStorage.getItem("user");
-
-    let url = "";
-    if (localUser === "Kastholm95") {
-      url = `${serverurl}/get/allmonths/${eyear}/expense`;
-    } else if (localUser === "fredWard") {
-      url = `${serverurl}/get/allmonths/${eyear}/expense/fred`;
-    } else {
-      // Hvis brugeren ikke er en af de forventede, returneres et tomt array
-      return Promise.resolve([]);
-    }
-
-    return fetch(url)
+   
+    return fetch(`${serverurl}/get/allmonths/${eyear}/expense`)
       .then((res) => res.json())
       .then((data: IncomeData[]) => {
         setYearExpenseData(data);

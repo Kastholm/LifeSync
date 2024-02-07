@@ -130,14 +130,8 @@ function Months() {
   /* -------------------------------------------------------------------------- */
 
   const postIncome = async (year) => {
-    let url = "";
-    if (localStorage.getItem("user") === "Kastholm95") {
-      url = `${serverurl}/post/income`;
-    } else if (localStorage.getItem("user") === "fredWard") {
-      url = `${serverurl}/post/income/fred`;
-    }
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${serverurl}/post/income`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -178,14 +172,9 @@ function Months() {
   /* -------------------------------------------------------------------------- */
 
   const postExpense = async (year) => {
-    let url = "";
-    if (localStorage.getItem("user") === "Kastholm95") {
-      url = `${serverurl}/post/expense`;
-    } else if (localStorage.getItem("user") === "fredWard") {
-      url = `${serverurl}/post/expense/fred`;
-    }
+   
     try {
-      const res = await fetch(url, {
+      const res = await fetch(`${serverurl}/post/expense`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

@@ -61,7 +61,10 @@ VALUES (
 
 
 -- @block
-ALTER TABLE Users ADD COLUMN email VARCHAR(255) UNIQUE;
+ALTER TABLE Users ADD COLUMN loginCounter INT NOT NULL DEFAULT 0;
+
+-- @block
+ALTER TABLE Users DROP COLUMN firstLogin;
 
 -- @block
 INSERT INTO Users (username, password)

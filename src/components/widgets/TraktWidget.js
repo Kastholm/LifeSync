@@ -23,7 +23,7 @@ function TraktWidget() {
     if (traktClientId === '' || traktClientSecret === '' || tmdbApiKey === '') {
       return;
     }
-    const Registered = true;
+    setRegistered(true);
 
     const fetchNeedToWatch = () => {
       const traktAccessToken = localStorage.getItem("traktAccessToken");

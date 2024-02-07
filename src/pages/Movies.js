@@ -53,18 +53,20 @@ function Movies() {
   return (
     <div className="bg-black mt-2 px-4 rounded-3xl">
       <div className="rounded-t-3xl mt-4 flex py-4 bg-gray-900 justify-end ">
-        <button
-          className=" bg-gray-200 p-2 rounded-full my-auto ml-auto "
-          onClick={() => authenticateWithTrakt()}
-        >
-          <LogIn />
-        </button>
-        <button
-          onClick={() => getAccessToken()}
-          className=" mx-4 bg-gray-200 p-2 rounded-full"
-        >
-          <KeyRoundIcon />
-        </button>
+        <div className="flex gap-4 mr-4">
+          <button
+            className=" bg-gray-200 text-gray-700 p-2 rounded-full  "
+            onClick={() => authenticateWithTrakt()}
+          > 
+            <LogIn />
+          </button>
+          <button
+            onClick={() => getAccessToken()}
+            className=" bg-gray-200 text-gray-700 p-2 rounded-full"
+          >
+            <KeyRoundIcon />
+          </button>
+        </div>
       </div>
 
       <div>

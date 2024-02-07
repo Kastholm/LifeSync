@@ -5,7 +5,6 @@ import { useEffect, useContext } from "react";
 
 import { AuthContext } from "./components/Auth/AuthProvider.js";
 
-
 //Components
 import Header from "./components/Base/Header";
 import Dashboard from "./pages/Dashboard";
@@ -18,19 +17,21 @@ import GoogleFit from "./pages/GoogleFit.tsx";
 import Timer from "./components/tools/Timer.tsx";
 import BookShelf from "./pages/BookShelf.tsx";
 import LoginScreen from "./components/Auth/LoginScreen.js";
+import WelcomePage from "./components/tools/WelcomePage.tsx";
 
 function App() {
-
   const { auth, setAuth } = useContext(AuthContext);
+
+  const newUser = localStorage.getItem("newUser");
 
   return (
     <div className="App">
-      {
-        auth === true ? (
-      <main className="flex">
-        <Header />
-        <Timer />
+      {auth === true ? (
+        <main className="flex">
+          <Header />
+          <Timer />
           <div className="mx-auto ml-[5vw] w-[95vw]">
+            {newUser === "1" ? <WelcomePage /> : null}
             <Routes>
               <Route exact path="/" element={<Dashboard />} />
               <Route path="/webtify" element={<Webtify />} />
@@ -42,10 +43,10 @@ function App() {
               <Route path="/homeassistant" element={<Homeassistant />} />
             </Routes>
           </div>
-      </main>
-
-        ) : <LoginScreen />
-      }
+        </main>
+      ) : (
+        <LoginScreen />
+      )}
     </div>
   );
 }
