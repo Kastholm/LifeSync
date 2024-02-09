@@ -53,7 +53,7 @@ function UserEnv() {
       </h2>
       {variablesLoaded && userEnv ? (
         <div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div className="bg-gray-800 p-4 rounded-lg shadow-md">
               <h3 className="text-xl font-semibold mb-3">Habitica</h3>
               <div className="mb-4">
@@ -144,6 +144,7 @@ function UserEnv() {
           <button onClick={() => editVariables()} className="bg-blue-700 mb-10">
             Set Variables
           </button>
+          <hr  />
         </div>
       ) : (
         <h3 className="text-xl text-center font-semibold my-6">No data</h3>

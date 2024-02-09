@@ -42,14 +42,14 @@ function Settings({ navItems, settings, seeSettings }) {
   };
 
   return (
-    <div className="bg-gray-800 bg-opacity-80 overflow-hidden h-screen w-screen z-50 isolate fixed top-0 grid place-content-center">
-      <div className="bg-gray-900 text-gray-100 relative w-[75vw] min-h-[40vh] rounded-2xl grid p-6">
+    <div className="bg-gray-800 bg-opacity-80 h-screen w-screen z-50 isolate fixed  top-0 grid place-content-center">
+      <div className="bg-gray-900 text-gray-100 overflow-scroll relative w-[75vw] min-h-[10vh] rounded-2xl grid p-6">
         <X
           size={44}
           onClick={() => closeSettings()}
           className="p-2 absolute cursor-pointer rounded-full top-4 right-4 bg-red-800"
         />
-        <h1 className="text-2xl my-12">
+        <h1 className="text-2xl my-4">
           Hej <b>{user}</b>
         </h1>
           <UserEnv />
@@ -72,11 +72,12 @@ function Settings({ navItems, settings, seeSettings }) {
                   })}
                 </>
               </div>
+              <hr  />
             </div>
           ) : null}
 
-          <h2 className="text-xl mb-4 mt-8">Lav en ny navigationsmenu:</h2>
-          <div className="grid grid-cols-4 gap-4 mx-4">
+          <h2 className="text-xl mb-4 mt-8">Choose which items you want in your Menu:</h2>
+          <div className="grid grid-cols-5 gap-4 mx-4">
             <>
               {navItems.map((item) => {
                 return (
@@ -119,10 +120,12 @@ function Settings({ navItems, settings, seeSettings }) {
               })}
             </>
           </div>
-          <button onClick={() => setLocalNavItems()} className="bg-green-900">
-            Opdater
+          <button onClick={() => setLocalNavItems()} className="bg-green-900 mb-5">
+            Create Nav Menu
           </button>
         </div>
+        <hr  />
+        <button  onClick={() => closeSettings()} className="bg-red-700">Exit Settings</button>
       </div>
     </div>
   );

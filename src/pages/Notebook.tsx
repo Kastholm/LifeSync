@@ -88,6 +88,7 @@ function Notebook() {
 
   const postJournal = async () => {
     let url = `${serverurl}/post/journal`;
+    
     try {
       const res = await fetch(url, {
         method: "POST",
@@ -110,20 +111,22 @@ function Notebook() {
       });
       const response = await res.json();
       console.log(response);
-      Swal.fire({
+
+      
+      
+    } catch (error) {
+      const result = await Swal.fire({
         title: "Journal Posted!",
         text: "Remember to check in tomorrow!",
         icon: "success",
         confirmButtonText: "OK",
       });
-    } catch (error) {
+    
+      // Tjekker om brugeren bekræftede dialogen
+      if (result.isConfirmed) {
+        window.location.reload();
+      }
       console.log(error);
-      Swal.fire({
-        title: "Journal not posted",
-        text: "Something went wrong, please try again later.",
-        icon: "error",
-        confirmButtonText: "OK",
-      });
     }
   };
 

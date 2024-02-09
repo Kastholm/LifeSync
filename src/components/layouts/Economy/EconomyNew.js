@@ -24,6 +24,9 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Construction from "../../tools/Construction.js";
 
+
+import SimpleBarChart from "../../figures/SimpleBarChart.js";
+
 function EconomyNew() {
   const serverurl = process.env.REACT_APP_SERVER_URL;
 
@@ -245,9 +248,23 @@ function EconomyNew() {
           if (!newMonthByYear[year].incomes[category]) {
             newMonthByYear[year].incomes[category] = { items: [], total: 0 };
           }
-
+          console.log(
+            "newMonthByYear",
+            newMonthByYear[year].incomes[category].items.id,
+            income.id
+          );
           // Tilføj indkomst til items og opdater total for kategorien.
-          newMonthByYear[year].incomes[category].items.push(income);
+          if (income.id) {
+            // Tjek om indkomsten allerede findes baseret på id
+            const exists = newMonthByYear[year].incomes[category].items.some(
+              (item) => item.id === income.id
+            );
+
+            // Hvis den ikke findes, tilføj den til items
+            if (!exists) {
+              newMonthByYear[year].incomes[category].items.push(income);
+            }
+          }
           newMonthByYear[year].incomes[category].total += parseFloat(eamount);
 
           // Opdater det samlede indkomstbeløb for året.
@@ -260,7 +277,7 @@ function EconomyNew() {
 
       setIncomeLoaded(true);
     } catch (error) {
-      console.error("Error fetching income data:", error);
+      console.error("Error fetching income dat a:", error);
     }
   };
 
@@ -289,7 +306,20 @@ function EconomyNew() {
           }
 
           // Tilføj udgiften til items-arrayet for den pågældende kategori og opdater total.
-          newMonthByYear[year].expenses[category].items.push(expense);
+
+          if (expense.id) {
+            // Tjek om indkomsten allerede findes baseret på id
+            const exists = newMonthByYear[year].expenses[category].items.some(
+              (item) => item.id === expense.id
+            );
+
+            // Hvis den ikke findes, tilføj den til items
+            if (!exists) {
+              newMonthByYear[year].expenses[category].items.push(expense);
+            }
+          }
+
+          //newMonthByYear[year].expenses[category].items.push(expense);
           newMonthByYear[year].expenses[category].total += parseFloat(eamount);
 
           // Opdater det samlede udgiftsbeløb for året.
@@ -309,6 +339,7 @@ function EconomyNew() {
   return (
     <div>
       <Construction />
+
       {dataLoaded === false ? (
         <h1>Loading...</h1>
       ) : (
@@ -318,6 +349,9 @@ function EconomyNew() {
               <div key={year} className="text-white">
                 <h2 className="text-4xl my-12">{year} </h2>
 
+      <div className="bg-gray-800 mb-8">
+        <SimpleBarChart chartData={monthByYear} year={year} />
+      </div>
                 <div className="grid grid-cols-6 gap-6">
                   {Object.entries(yearData.incomes).map(
                     ([category, { items, total }], index) => {

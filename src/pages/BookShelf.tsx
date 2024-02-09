@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import "../stylesheets/BookShelf.css";
 import Swal from "sweetalert2";
 import { Info, Pencil } from "lucide-react";
-import { Tooltip } from 'react-tooltip'
+import { Tooltip } from "react-tooltip";
 //import withReactContent from 'sweetalert2-react-content'
 
 function BookShelf() {
@@ -39,7 +39,9 @@ function BookShelf() {
   useEffect(() => {
     const getBooks = async () => {
       try {
-        const response = await fetch(`${serverUrl}/get/books/${localStorage.getItem("userId")}`);
+        const response = await fetch(
+          `${serverUrl}/get/books/${localStorage.getItem("userId")}`
+        );
         const data = await response.json();
         console.log(data, "data");
 
@@ -86,11 +88,17 @@ function BookShelf() {
     Swal.fire({
       title: "Add a new book",
       html: `
-        <input id="bookName" class="swal2-input" placeholder="Book Name">
-        <input id="bookRating" class="swal2-input" type="number" placeholder="Book Rating">
-        <input id="bookRead" class="swal2-input" type="number" placeholder="Book Read">
-        <input id="bookReadYear" class="swal2-input" type="number" placeholder="Book Read Year">
-        <input id="imgURL" class="swal2-input" placeholder="Image URL">
+       <div className='grid'>
+          <input id="bookName" class="swal2-input" placeholder="Book Name">
+          <input id="bookRating" class="swal2-input" type="number" placeholder="Book Rating">
+          <br /> <label for="bookRating">Rate between 1-5</label> <br />
+          <input id="bookRead" class="swal2-input" type="number" placeholder="Book Read">
+          <br /> <label for="bookRead">1 = Read 2 = Need to read</label> <br />
+          <input id="bookReadYear" class="swal2-input" type="number" placeholder="Book Read Year">
+          <br /> <label for="bookReadYear">If read, What year did you read</label> <br />
+          <input id="imgURL" class="swal2-input" placeholder="Image URL">
+          <br /> <label for="imgURL">Copy image url from <a className='text-blue-700' href="https://www.goodreads.com" target="_blank" rel="noopener noreferrer"><b style='color: darkblue; font: bold;' >GoodReads</b></a></label> <br />
+       </div>
       `,
       preConfirm: () => {
         return {
@@ -104,22 +112,41 @@ function BookShelf() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-        console.log(result.value); // Process the values here
+        Swal.fire({
+          title: "Book added!",
+          text: "Book is now on your bookshelf!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
         fetch(`${serverUrl}/post/book`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(result.value),
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            console.log(data);
-            window.location.reload();
-          });
+        }).then((response) => response.json());
       }
     });
   };
+
+  /*   Swal.fire({
+    title: "Journal Posted!",
+    text: "Remember to check in tomorrow!",
+    icon: "success",
+    confirmButtonText: "OK",
+  });
+} catch (error) {
+  console.log(error);
+  Swal.fire({
+    title: "Journal not posted",
+    text: "Something went wrong, please try again later.",
+    icon: "error",
+    confirmButtonText: "OK",
+  }); */
 
   const editBook = (book) => {
     Swal.fire({
@@ -143,6 +170,16 @@ function BookShelf() {
       },
     }).then((result) => {
       if (result.isConfirmed) {
+        Swal.fire({
+          title: "Book Edited!",
+          text: "Book is now on your bookshelf!",
+          icon: "success",
+          confirmButtonText: "OK",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            window.location.reload();
+          }
+        });
         console.log(result.value); // Process the values here
         fetch(`${serverUrl}/put/book/${book.id}`, {
           method: "PUT",
@@ -194,7 +231,10 @@ function BookShelf() {
     <div>
       <div className="bookShelfBody min-h-[100vh] ">
         <div className="bg-gray-900 p-4 bg-opacity-50 pt-6">
-          <h1 className="text-gray-100 text-3xl mb-6">Hi <b className="text-green-400">{user}!</b> welcome to your personal Bookshelf</h1>
+          <h1 className="text-gray-100 text-3xl mb-6">
+            Hi <b className="text-green-400">{user}!</b> welcome to your
+            personal Bookshelf
+          </h1>
           <button onClick={() => addBook()} className="m-auto bg-green-700 ">
             Add Book
           </button>
@@ -253,12 +293,24 @@ function BookShelf() {
                                   <span className="text-xl">⭐</span>
                                 ))}
                               </li>
-                              <button
-                                onClick={() => handleShowBoard(book)}
-                                className="mt-2"
-                              >
-                                Se Mere
-                              </button>
+                              <div className="flex gap-4 justify-center mt-2">
+                                <Info
+                                  className="cursor-pointer"
+                                  onClick={() => handleShowBoard(book)}
+                                  size={30}
+                                  data-tooltip-id="info"
+                                  data-tooltip-content="Se dine noter om bogen"
+                                />
+                                <Tooltip id="info" />
+                                <Pencil
+                                  className="cursor-pointer"
+                                  onClick={() => editBook(book)}
+                                  size={30}
+                                  data-tooltip-id="edit"
+                                  data-tooltip-content="Rediger bogen"
+                                />
+                                <Tooltip id="edit" />
+                              </div>
                             </div>
                           </div>
                         )}
