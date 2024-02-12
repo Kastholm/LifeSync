@@ -128,6 +128,7 @@ function LoginScreen() {
       },
     }).then((result) => {
       console.log("indskrevet secret", result.value.secretKey);
+      console.log("indhentet secret", secretKey)
       if (result.value.secretKey !== secretKey) {
         Swal.fire({
           title: "Invalid Secret Key",
