@@ -29,7 +29,7 @@ function LoginScreen() {
       });
 
       if (!response.ok) {
-        throw new Error("Invalid credentials");
+        throw new Error("Invalid credential s");
       }
 
       const data = await response.json();
