@@ -58,7 +58,11 @@ VALUES (
           ''
           )
 
+-- @block
+ALTER TABLE MonthEconomy ADD COLUMN userId INT NOT NULL DEFAULT 1;
 
+-- @block
+ALTER TABLE Expense ADD COLUMN userId INT NOT NULL DEFAULT 1;
 
 -- @block
 ALTER TABLE Users ADD COLUMN loginCounter INT NOT NULL DEFAULT 0;

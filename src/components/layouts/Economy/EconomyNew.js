@@ -24,8 +24,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import Construction from "../../tools/Construction.js";
 
-
 import SimpleBarChart from "../../figures/SimpleBarChart.js";
+import SimpleBarChartMonth from "../../figures/SimpleBarChartMonth.js";
 
 function EconomyNew() {
   const serverurl = process.env.REACT_APP_SERVER_URL;
@@ -160,11 +160,33 @@ function EconomyNew() {
   const [yearlyExpenses, setYearlyExpenses] = useState(0);
   const [yearlyIncomes, setYearlyIncomes] = useState(0);
 
+  const [addYear, setAddYear] = useState(0);
+
+  const addNewYear = async () => {
+    // Fjernet year parameter, da det ikke blev brugt korrekt
+    try {
+      const year = addYear; // Bruger addYear tilstand
+      const userId = localStorage.getItem("userId");
+      const newYear = await fetch(`${serverurl}/new/year/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ monthYear: year, userId: userId }), // Rettede key til 'monthYear' for at matche backend
+      });
+      const newYearData = await newYear.json();
+      console.log("newYearData", newYearData);
+    } catch (error) {
+      console.error("Error adding new year:", error);
+    }
+  };
+
   useEffect(() => {
     const yearObejects = async () => {
       try {
         //Get Months
-        const response = await fetch(`${serverurl}/get/months`);
+        const userId = localStorage.getItem("userId");
+        const response = await fetch(`${serverurl}/get/months/${userId}`);
         const data = await response.json();
         setMonthData(data);
 
@@ -216,8 +238,8 @@ function EconomyNew() {
 
     if (incomeLoaded && expensesLoaded) {
       setDataLoaded(true);
-      console.log("Data loaded", monthByYear);
-      console.log("frontend", Object.entries(monthByYear));
+      //console.log("Data loaded", monthByYear);
+      //console.log("frontend", Object.entries(monthByYear));
     }
 
     yearObejects();
@@ -225,7 +247,10 @@ function EconomyNew() {
 
   const getYearlyIncome = async () => {
     try {
-      const yearlyIncome = await fetch(`${serverurl}/get/allmonths/income`);
+      const userId = localStorage.getItem("userId");
+      const yearlyIncome = await fetch(
+        `${serverurl}/get/allmonths/income/${userId}`
+      );
       const incomeData = await yearlyIncome.json();
 
       setMonthByYear((prev) => {
@@ -248,11 +273,11 @@ function EconomyNew() {
           if (!newMonthByYear[year].incomes[category]) {
             newMonthByYear[year].incomes[category] = { items: [], total: 0 };
           }
-          console.log(
+          /* console.log(
             "newMonthByYear",
             newMonthByYear[year].incomes[category].items.id,
             income.id
-          );
+          ); */
           // Tilføj indkomst til items og opdater total for kategorien.
           if (income.id) {
             // Tjek om indkomsten allerede findes baseret på id
@@ -263,15 +288,16 @@ function EconomyNew() {
             // Hvis den ikke findes, tilføj den til items
             if (!exists) {
               newMonthByYear[year].incomes[category].items.push(income);
+              newMonthByYear[year].incomes[category].total +=
+                parseFloat(eamount);
+
+              // Opdater det samlede indkomstbeløb for året.
+              newMonthByYear[year].yearlyIncomes += parseFloat(eamount);
             }
           }
-          newMonthByYear[year].incomes[category].total += parseFloat(eamount);
-
-          // Opdater det samlede indkomstbeløb for året.
-          newMonthByYear[year].yearlyIncomes += parseFloat(eamount);
         });
 
-        console.log("Updated monthByYear with incomes:", newMonthByYear);
+        //console.log("Updated monthByYear with incomes:", newMonthByYear);
         return newMonthByYear; // Returnerer den opdaterede tilstand.
       });
 
@@ -283,7 +309,10 @@ function EconomyNew() {
 
   const getYearlyExpenses = async () => {
     try {
-      const yearlyExpense = await fetch(`${serverurl}/get/allmonths/expense`);
+      const userId = localStorage.getItem("userId");
+      const yearlyExpense = await fetch(
+        `${serverurl}/get/allmonths/expense/${userId}`
+      );
       const expenseData = await yearlyExpense.json();
 
       setMonthByYear((prev) => {
@@ -316,17 +345,17 @@ function EconomyNew() {
             // Hvis den ikke findes, tilføj den til items
             if (!exists) {
               newMonthByYear[year].expenses[category].items.push(expense);
+              //newMonthByYear[year].expenses[category].items.push(expense);
+              newMonthByYear[year].expenses[category].total +=
+                parseFloat(eamount);
+
+              // Opdater det samlede udgiftsbeløb for året.
+              newMonthByYear[year].yearlyExpenses += parseFloat(eamount);
             }
           }
-
-          //newMonthByYear[year].expenses[category].items.push(expense);
-          newMonthByYear[year].expenses[category].total += parseFloat(eamount);
-
-          // Opdater det samlede udgiftsbeløb for året.
-          newMonthByYear[year].yearlyExpenses += parseFloat(eamount);
         });
 
-        console.log("Updated monthByYear with expenses:", newMonthByYear);
+        //console.log("Updated monthByYear with expenses:", newMonthByYear);
         return newMonthByYear; // Returnerer den opdaterede tilstand.
       });
 
@@ -336,6 +365,77 @@ function EconomyNew() {
     }
   };
 
+  const [checkedMonths, setCheckedMonths] = useState([]);
+  const [monthIncome, setMonthIncome] = useState([]);
+  const [monthExpense, setMonthExpense] = useState([]);
+
+  const handleCheckboxChange = (month, isChecked) => {
+    if (isChecked) {
+      setCheckedMonths((prev) => [
+        ...prev,
+        { id: month.id, name: month.monthName, myear: month.monthYear },
+      ]);
+
+      const myear = month.monthYear;
+      const mmonth = month.id;
+      console.log(monthByYear);
+      console.log(
+        `helloo ${myear} , ${mmonth}`,
+        monthByYear[myear].expenses,
+        monthByYear[myear].expenses.items
+      );
+      //console.log("arr", Object.entries(monthByYear[myear].expenses));
+      // For each expense - same month - tilføj til ul
+      let matchingExpense = [];
+      let matchingIncome = [];
+
+      //Expense
+      Object.entries(monthByYear[myear].expenses).forEach((expense) => {
+        const expenses = expense[1].items;
+        if (expenses) {
+          expenses.forEach((item) => {
+            if (item.monthEconomyId == mmonth) {
+              matchingExpense.push(item); // Tilføj item til det midlertidige array, hvis det matcher
+            }
+          });
+        }
+      });
+
+      Object.entries(monthByYear[myear].incomes).forEach((income) => {
+        const incomes = income[1].items;
+        if (incomes) {
+          incomes.forEach((item) => {
+            if (item.monthEconomyId == mmonth) {
+              matchingIncome.push(item); // Tilføj item til det midlertidige array, hvis det matcher
+            }
+          });
+        }
+      });
+
+      setMonthExpense((prev) => [...prev, ...matchingExpense]);
+      setMonthIncome((prev) => [...prev, ...matchingIncome]);
+    } else {
+      // Fjern items der matcher den unchecked måned
+      setMonthExpense((prev) =>
+        prev.filter((item) => item.monthEconomyId !== month.id)
+      );
+
+      setMonthIncome((prev) =>
+        prev.filter((item) => item.monthEconomyId !== month.id)
+      );
+
+      // Fjern måneden fra checkedMonths
+      setCheckedMonths((prev) =>
+        prev.filter((monthDetail) => monthDetail.id !== month.id)
+      );
+    }
+  };
+
+  // Log når checkedMonths ændres
+  useEffect(() => {
+    console.log(checkedMonths);
+  }, [checkedMonths, monthExpense]);
+
   return (
     <div>
       <Construction />
@@ -344,14 +444,26 @@ function EconomyNew() {
         <h1>Loading...</h1>
       ) : (
         <>
+          <div>
+            <input
+              type="text"
+              value={addYear}
+              onChange={(e) => setAddYear(e.target.value)}
+              placeholder="Indtast år"
+            />
+            <button onClick={addNewYear}>Tilføj År</button>
+          </div>
           {Object.entries(monthByYear).map(([year, yearData]) => {
             return (
-              <div key={year} className="text-white">
+              <div
+                key={year}
+                className="text-white bg-gray-700 p-4 m-4 rounded-2xl"
+              >
                 <h2 className="text-4xl my-12">{year} </h2>
 
-      <div className="bg-gray-800 mb-8">
-        <SimpleBarChart chartData={monthByYear} year={year} />
-      </div>
+                <div className="bg-gray-800 mb-8">
+                  {/*  <SimpleBarChart chartData={monthByYear} year={year} /> */}
+                </div>
                 <div className="grid grid-cols-6 gap-6">
                   {Object.entries(yearData.incomes).map(
                     ([category, { items, total }], index) => {
@@ -444,9 +556,11 @@ function EconomyNew() {
                     }
                   )}
                 </div>
-
                 <div className="grid grid-cols-2 gap-4">
                   <div className=" max-h-[32em] overflow-scroll">
+                    <h1 className="text-2xl bg-gray-200 text-gray-700 p-4">
+                      INCOME
+                    </h1>
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50">
                         <tr>
@@ -506,6 +620,9 @@ function EconomyNew() {
                   </div>
 
                   <div className=" max-h-[32em] overflow-scroll">
+                    <h1 className="text-2xl bg-gray-200 text-gray-700 p-4">
+                      EXPENSE
+                    </h1>
                     <table className="min-w-full divide-y divide-gray-200">
                       <thead className="bg-gray-50 ">
                         <tr>
@@ -564,11 +681,169 @@ function EconomyNew() {
                     </table>
                   </div>
                 </div>
-                {/* <ul>
-                  {months.months.map((month) => {
-                    return <li>{month.monthName}</li>;
-                  })}
-                </ul> */}
+                <h1 className="text-2xl my-6">
+                  Se indkomst for individuelle mdr.
+                </h1>
+                {
+                  <>
+                    <ul className=" p-8 grid grid-cols-6 gap-4">
+                      {yearData.months.map((month, index) => (
+                        <li
+                          key={index}
+                          className="bg-gray-400 text-gray-700 p-4 flex items-center justify-between"
+                        >
+                          <span>{month.monthName}</span>
+                          <input
+                            type="checkbox"
+                            className="form-checkbox h-5 w-5 text-blue-600"
+                            onChange={(e) =>
+                              handleCheckboxChange(month, e.target.checked)
+                            }
+                          />
+                        </li>
+                      ))}
+                    </ul>
+
+                    {monthExpense.length > 0 || monthIncome.length > 0 ? (
+                      <SimpleBarChartMonth
+                        monthIncome={monthIncome}
+                        monthExpense={monthExpense}
+                      />
+                    ) : null}
+                    <div className="grid grid-cols-2 gap-4">
+                      <div className="max-h-[32em] overflow-scroll">
+                        {monthExpense.length > 0 ? (
+                          <>
+                            <h1 className="text-2xl bg-gray-200 text-gray-700 p-4">
+                              INCOME
+                            </h1>
+                            <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Name
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Category
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Amount
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    ID
+                                  </th>
+                                </tr>
+                              </thead>
+                              <tbody className="bg-white divide-y divide-gray-200">
+                                {monthExpense.map((expense, index) => (
+                                  <tr
+                                    key={expense.id}
+                                    className={
+                                      index % 2 === 0
+                                        ? "bg-white"
+                                        : "bg-gray-50"
+                                    }
+                                  >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {expense.ename}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {expense.ecategory}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {expense.eamount}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {expense.id}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </>
+                        ) : null}
+                      </div>
+
+                      <div className="max-h-[32em] overflow-scroll">
+                        {monthIncome.length > 0 ? (
+                          <>
+                            <h1 className="text-2xl bg-gray-200 text-gray-700 p-4">
+                              EXPENSE
+                            </h1>
+                            <table className="min-w-full divide-y divide-gray-200">
+                              <thead className="bg-gray-50">
+                                <tr>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Name
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Category
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    Amount
+                                  </th>
+                                  <th
+                                    scope="col"
+                                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
+                                  >
+                                    ID
+                                  </th>
+                                </tr>
+                              </thead>
+
+                              <tbody className="bg-white divide-y divide-gray-200">
+                                {monthIncome.map((income, index) => (
+                                  <tr
+                                    key={income.id}
+                                    className={
+                                      index % 2 === 0
+                                        ? "bg-white"
+                                        : "bg-gray-50"
+                                    }
+                                  >
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {income.ename}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {income.ecategory}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {income.eamount}
+                                    </td>
+                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                      {income.id}
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </>
+                        ) : null}
+                      </div>
+                    </div>
+                  </>
+                }
               </div>
             );
           })}

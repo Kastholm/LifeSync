@@ -1,4 +1,4 @@
-import React, { PureComponent, useEffect, useState } from "react";
+import React from "react";
 import {
   BarChart,
   Bar,
@@ -11,54 +11,28 @@ import {
   ResponsiveContainer,
 } from "recharts";
 
-function SimpleBarChart(props) {
-  const { chartData, year } = props;
+function SimpleBarChartMonth(props) {
+  const { monthIncome, monthExpense } = props;
 
-  function getIncomeChartData(chartYear, data) {
-    const thisYear = data[chartYear];
+  function getChartData(data) {
+    const categoryTotals = data.reduce((acc, curr) => {
+      const { ecategory, eamount } = curr;
+      if (!acc[ecategory]) {
+        acc[ecategory] = { total: 0 };
+      }
+      acc[ecategory].total += parseFloat(eamount); // Antager eamount er et tal
+      return acc;
+    }, {});
 
-    if (!thisYear) return [];
-
-    const incomes = thisYear.incomes;
-
-    const categories = Object.keys(thisYear.incomes);
-
-    return categories.map((category) => {
-     /*  console.log(
-        "total",
-        thisYear.incomes[category].items.ename,
-        thisYear.incomes[category].total
-      );
-      console.log("cat gory ", category); */
-
-      const total = thisYear.incomes[category].total;
-
-      return {
-        name: category,
-        Amount: total, // To decimaler for præcision
-        amt: 10000,
-      };
-    });
+    return Object.entries(categoryTotals).map(([category, { total }]) => ({
+      name: category,
+      Amount: total,
+      amt: 10000, // Static value, adjust if needed
+    }));
   }
-  const dataForChartIncome = getIncomeChartData(year, chartData);
 
-  function getExpenseChartData(chartYear, data) {
-    const thisYear = data[chartYear];
-
-    if (!thisYear) return [];
-    const categories = Object.keys(thisYear.expenses);
-
-    return categories.map((category) => {
-      const total = thisYear.expenses[category].total;
-
-      return {
-        name: category,
-        Amount: total, // To decimaler for præcision
-        amt: 10000,
-      };
-    });
-  }
-  const dataForChartExpense = getExpenseChartData(year, chartData);
+  const dataForChartIncome = getChartData(monthIncome);
+  const dataForChartExpense = getChartData(monthExpense);
 
   const CustomTick = (props) => {
     const { x, y, payload } = props;
@@ -79,14 +53,12 @@ function SimpleBarChart(props) {
     );
   };
 
-  // Returnér JSX-koden for BarChart ved at bruge dataForChart
+  // Return JSX-koden for BarChart ved at bruge dataForChart
   return (
-    //Income chart
     <div className="grid grid-cols-2 h-[35em] py-5">
+      {/* Income Chart */}
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          width={500}
-          height={300}
           data={dataForChartIncome}
           margin={{
             top: 5,
@@ -102,16 +74,15 @@ function SimpleBarChart(props) {
           <Legend />
           <Bar
             dataKey="Amount"
-            fill="#8884d8"
+            fill="#82ca9d"
             activeBar={<Rectangle fill="pink" stroke="blue" />}
           />
         </BarChart>
       </ResponsiveContainer>
 
+      {/* Expense Chart */}
       <ResponsiveContainer width="100%" height="100%">
         <BarChart
-          width={500}
-          height={300}
           data={dataForChartExpense}
           margin={{
             top: 5,
@@ -136,4 +107,4 @@ function SimpleBarChart(props) {
   );
 }
 
-export default SimpleBarChart;
+export default SimpleBarChartMonth;
