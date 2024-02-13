@@ -11,7 +11,7 @@ function Movies() {
   const { traktClientId, traktClientSecret, tmdbApiKey } =
     useContext(UserVariablesContext);
 
-  pageUrl = process.env.REACT_APP_PAGE_URL;
+  const pageUrl = process.env.REACT_APP_PAGE_URL;
 
   const [dataCollected, setDataCollected] = useState(false);
 
@@ -67,7 +67,7 @@ function Movies() {
           </button>
           <button
             onClick={() => getAccessToken()}
-            className=" bg-gray-200 text-gray-700 p-2 rounded-full"
+            className=" bg-gray-200 text-gray-700  p-2 rounded-full"
           >
             <div className="flex gap-2">
               <p>2.</p>
