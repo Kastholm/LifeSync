@@ -8,13 +8,15 @@ import { UserVariablesContext } from "../components/context/VariableProvider";
 import { KeyRound, KeyRoundIcon, LogIn } from "lucide-react";
 
 function Movies() {
-  const { traktClientId, traktClientSecret, tmdbApiKey, server } =
+  const { traktClientId, traktClientSecret, tmdbApiKey } =
     useContext(UserVariablesContext);
+
+  pageUrl = process.env.REACT_APP_PAGE_URL;
 
   const [dataCollected, setDataCollected] = useState(false);
 
   function authenticateWithTrakt() {
-    window.location.href = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${traktClientId}&redirect_uri=${server}`;
+    window.location.href = `https://trakt.tv/oauth/authorize?response_type=code&client_id=${traktClientId}&redirect_uri=${pageUrl}`;
   }
 
   const getAccessToken = () => {
@@ -32,7 +34,7 @@ function Movies() {
         code: `${authCode}`,
         client_id: traktClientId,
         client_secret: traktClientSecret,
-        redirect_uri: server,
+        redirect_uri: pageUrl,
         grant_type: "authorization_code",
       }),
     })
@@ -57,11 +59,11 @@ function Movies() {
           <button
             className=" bg-gray-200 text-gray-700 p-2 rounded-full  "
             onClick={() => authenticateWithTrakt()}
-          > 
-          <div className="flex gap-2">
-            <p>1.</p> 
+          >
+            <div className="flex gap-2">
+              <p>1.</p>
               <LogIn />
-          </div>
+            </div>
           </button>
           <button
             onClick={() => getAccessToken()}
@@ -69,7 +71,8 @@ function Movies() {
           >
             <div className="flex gap-2">
               <p>2.</p>
-              <KeyRoundIcon /></div>
+              <KeyRoundIcon />
+            </div>
           </button>
         </div>
       </div>
