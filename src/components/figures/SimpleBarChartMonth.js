@@ -55,9 +55,9 @@ function SimpleBarChartMonth(props) {
 
   // Return JSX-koden for BarChart ved at bruge dataForChart
   return (
-    <div className="grid grid-cols-2 h-[35em] py-5">
+    <div className="grid grid-cols-2 h-[35em] py-5 gap-4 mb-8">
       {/* Income Chart */}
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer className='bg-gray-800 rounded-2xl bg-opacity-60 p-4' width="100%" height="100%">
         <BarChart
           data={dataForChartIncome}
           margin={{
@@ -81,7 +81,7 @@ function SimpleBarChartMonth(props) {
       </ResponsiveContainer>
 
       {/* Expense Chart */}
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer className='bg-gray-800 rounded-2xl bg-opacity-60 p-4' width="100%" height="100%">
         <BarChart
           data={dataForChartExpense}
           margin={{

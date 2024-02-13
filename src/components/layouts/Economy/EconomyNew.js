@@ -160,7 +160,9 @@ function EconomyNew() {
   const [yearlyExpenses, setYearlyExpenses] = useState(0);
   const [yearlyIncomes, setYearlyIncomes] = useState(0);
 
-  const [addYear, setAddYear] = useState(0);
+  const [addYear, setAddYear] = useState();
+
+  const user = localStorage.getItem("userName");
 
   const addNewYear = async () => {
     // Fjernet year parameter, da det ikke blev brugt korrekt
@@ -175,7 +177,11 @@ function EconomyNew() {
         body: JSON.stringify({ monthYear: year, userId: userId }), // Rettede key til 'monthYear' for at matche backend
       });
       const newYearData = await newYear.json();
-      console.log("newYearData", newYearData);
+      if (newYear.ok) {
+        window.location.reload(); 
+      } else {
+        window.location.reload(); 
+      }
     } catch (error) {
       console.error("Error adding new year:", error);
     }
@@ -436,33 +442,274 @@ function EconomyNew() {
     console.log(checkedMonths);
   }, [checkedMonths, monthExpense]);
 
+
+    /* -------------------------------------------------------------------------- */
+  /*                                 POST Expense                                */
+  /* -------------------------------------------------------------------------- */
+
+  const postExpense = async (year) => {
+   
+    try {
+      const userId = localStorage.getItem("userId");
+      const res = await fetch(`${serverurl}/post/expense`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          monthEconomyId: expenseMonth,
+          eyear: year,
+          ename: expenseName,
+          enote: expenseNote,
+          etype: 2,
+          ecategory: expenseCategory,
+          eamount: expenseAmount,
+          userId: localStorage.getItem("userId"),
+        }),
+      });
+      if (res.ok) {
+        setExSuccess(true);
+        setTimeout(() => {
+          setExSuccess(false);
+        }, 2000);
+      }
+      const response = await res.json();
+      console.log(response);
+    } catch (error) { 
+      console.log(error);
+    }
+  };
+
+  const [exSuccess, setExSuccess] = useState(false);
+  const [expenseMonth, setExpenseMonth] = useState("");
+  const [expenseName, setExpenseName] = useState("");
+  const [expenseNote, setExpenseNote] = useState("");
+  const [expenseCategory, setExpenseCategory] = useState("");
+  const [expenseAmount, setExpenseAmount] = useState("");
+
+
+/* -------------------------------------------------------------------------- */
+/*                                 POST INCOME                                */
+/* -------------------------------------------------------------------------- */
+
+  const postIncome = async (year) => {
+    try {
+      const userId = localStorage.getItem("userId");
+      const res = await fetch(`${serverurl}/post/income`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          monthEconomyId: incomeMonth,
+          eyear: year,
+          ename: incomeName,
+          enote: incomeNote,
+          etype: 2,
+          ecategory: incomeCategory,
+          eamount: incomeAmount,
+          userId: userId,
+        }),
+      });
+      if (res.ok) {
+        setIncSuccess(true);
+        setTimeout(() => {
+          setIncSuccess(false);
+        }, 2000);
+      }
+      const response = await res.json();
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+  const [incomeMonth, setIncomeMonth] = useState("");
+  const [incomeName, setIncomeName] = useState("");
+  const [incomeNote, setIncomeNote] = useState("");
+  const [incomeCategory, setIncomeCategory] = useState("");
+  const [incomeAmount, setIncomeAmount] = useState("");
+  const [incSuccess, setIncSuccess] = useState(false);
+
   return (
-    <div>
-      <Construction />
+    <div className="bg-gray-900 min-h-screen">
+      
 
       {dataLoaded === false ? (
         <h1>Loading...</h1>
       ) : (
         <>
-          <div>
-            <input
-              type="text"
-              value={addYear}
-              onChange={(e) => setAddYear(e.target.value)}
-              placeholder="Indtast år"
-            />
-            <button onClick={addNewYear}>Tilføj År</button>
+        <div className="bg-green-900 p-4 bg-opacity-50 pt-6">
+          <h1 className="text-gray-100 text-3xl mb-6">
+            Hi <b className="text-green-400">{user}!</b> welcome to your
+            Economydata <br /> Start by adding a year
+          </h1>
+          <div className="grid place-content-center">
+            <div className="flex gap-8">
+              <input
+                  type="text"
+                  value={addYear}
+                  onChange={(e) => setAddYear(e.target.value)}
+                  placeholder="Indtast år"
+                />
+              <button onClick={addNewYear} className="m-auto bg-green-700 ">
+                Add Year
+              </button>
+            </div>
           </div>
+        </div>
           {Object.entries(monthByYear).map(([year, yearData]) => {
             return (
               <div
                 key={year}
                 className="text-white bg-gray-700 p-4 m-4 rounded-2xl"
               >
-                <h2 className="text-4xl my-12">{year} </h2>
+                <h2 className="text-6xl my-12">{year} </h2>
+<h2 className="bg-gray-800 p-4">Here you can add your expense/income fast. Refresh the page to see the changes when done</h2>
+{/* -------------------------------------------------------------------------- */}
+{/*                                 ADD EXPENSE                                */}
+{/* -------------------------------------------------------------------------- */}
+               <div className="bg-gray-800 pb-8">
+                    {
+                      exSuccess ? (<h2 className="bg-green-600 mx-4">Expense added</h2>) : null
+                    }
+                  <div className="text-gray-900 flex gap-4 bg-gray-700 p-4 mx-4">
+                  <label className="flex flex-col text-gray-100">
+                    Måned
+                    <select
+                      className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                      value={expenseMonth}
+                      onChange={(e) => setExpenseMonth(e.target.value)}
+                    >
+                      <option value="">Vælg Måned</option>
+                      {yearData.months.map((month) => (
+                        <option key={month.id} value={month.id}>
+                          {month.monthName}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Navn
+                    <input
+                      className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                      type="text"
+                      value={expenseName}
+                      onChange={(e) => setExpenseName(e.target.value)}
+                    />
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Note
+                    <input
+                      className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                      type="text"
+                      value={expenseNote}
+                      onChange={(e) => setExpenseNote(e.target.value)}
+                    />
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Kategori
+                    <select
+                      className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                      onChange={(e) => setExpenseCategory(e.target.value)}
+                    >
+                      <option value="">Vælg Kategori</option>
+                      {expenseCategories.map((category) => (
+                        <option value={category.category}>
+                          {category.category}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Beløb
+                    <input
+                      className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                      type="number"
+                      value={expenseAmount}
+                      onChange={(e) => setExpenseAmount(e.target.value)}
+                    />
+                  </label>
+                  <button className="mt-4 bg-green-800" onClick={() => postExpense(year)}>
+                    Tilføj Udgift
+                  </button>
+                 
+                </div>
+  
+  {/* -------------------------------------------------------------------------- */}
+  {/*                                  ADD INCOME                                */}
+  {/* -------------------------------------------------------------------------- */}
+  {
+    incSuccess ? (<h2 className="bg-green-600 mx-4 mt-4">Income added</h2>) : null
+  }
+                  <div className="text-gray-900 flex gap-4 bg-gray-600 p-4 mx-4">
+                  <label className="flex flex-col text-gray-100">
+                    Måned
+                    <select
+                      className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                      value={incomeMonth}
+                      onChange={(e) => setIncomeMonth(e.target.value)}
+                    >
+                      <option value="">Vælg Måned</option>
+                      {yearData.months.map((month) => (
+                        <option key={month.id} value={month.id}>
+                          {month.monthName}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Navn
+                    <input
+                      className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                      type="text"
+                      value={incomeName}
+                      onChange={(e) => setIncomeName(e.target.value)}
+                    />
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Note
+                    <input
+                      className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                      type="text"
+                      value={incomeNote}
+                      onChange={(e) => setIncomeNote(e.target.value)}
+                    />
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Kategori
+                    <select
+                      className="mt-1 p-2 border text-gray-900 border-gray-300 rounded"
+                      onChange={(e) => setIncomeCategory(e.target.value)}
+                    >
+                      <option value="">Vælg Kategori</option>
+                      {incomeCategories.map((category) => (
+                        <option value={category.category}>
+                          {category.category}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="flex flex-col text-gray-100">
+                    Beløb
+                    <input
+                      className="mt-1 p-2 border border-gray-300 text-gray-900 rounded"
+                      type="number"
+                      value={incomeAmount}
+                      onChange={(e) => setIncomeAmount(e.target.value)}
+                    />
+                  </label>
+                  <button className="mt-4 bg-green-800" onClick={() => postIncome(year)}>
+                    Tilføj Intægt
+                  </button>
+                </div>
+               </div>
 
-                <div className="bg-gray-800 mb-8">
-                  {/*  <SimpleBarChart chartData={monthByYear} year={year} /> */}
+
+
+                <div className="mb-8">
+                    <SimpleBarChart chartData={monthByYear} year={year} /> 
                 </div>
                 <div className="grid grid-cols-6 gap-6">
                   {Object.entries(yearData.incomes).map(
@@ -500,7 +747,7 @@ function EconomyNew() {
                                 {category}
                               </p>
                               <h4 className="block antialiased tracking-normal text-2xl font-semibold leading-snug text-gray-100">
-                                {total.toFixed(0)} KR.
+                                {total.toFixed(0)} 
                               </h4>
                             </div>
                           </div>
@@ -547,7 +794,7 @@ function EconomyNew() {
                                 {category}
                               </p>
                               <h4 className="block antialiased tracking-normal text-2xl font-semibold leading-snug text-gray-100">
-                                {total.toFixed(0)} KR.
+                                {total.toFixed(0)} 
                               </h4>
                             </div>
                           </div>
@@ -600,7 +847,7 @@ function EconomyNew() {
                                       rowSpan={items.length}
                                       className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900"
                                     >
-                                      {category} (Total: {total})
+                                      {category} {/* (Total: {total}) */}
                                     </td>
                                   )}
                                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
@@ -662,7 +909,7 @@ function EconomyNew() {
                                       rowSpan={items.length}
                                       className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 "
                                     >
-                                      {category} (Total: {total})
+                                      {category}{/*  (Total: {total}) */}
                                     </td>
                                   )}
                                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

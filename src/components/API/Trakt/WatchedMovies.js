@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 import { ArrowDownToLine } from "lucide-react";
+import { UserVariablesContext } from "../../context/VariableProvider";
 function WatchedMovies() {
   const [movies, setMovies] = useState([]);
   const [movieDetails, setMovieDetails] = useState({});
@@ -7,8 +8,11 @@ function WatchedMovies() {
   const duplicateMovie = new Set();
   const [page, setPage] = useState(1);
 
-  const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
-  const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
+  const { traktClientId, traktClientSecret, tmdbApiKey, server } =
+  useContext(UserVariablesContext);
+
+  const REACT_APP_TMDB_API_KEY = tmdbApiKey;
+  const REACT_APP_CLIENT_ID = traktClientId;
 
  
 

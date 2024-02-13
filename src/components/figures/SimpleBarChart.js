@@ -82,8 +82,8 @@ function SimpleBarChart(props) {
   // Returnér JSX-koden for BarChart ved at bruge dataForChart
   return (
     //Income chart
-    <div className="grid grid-cols-2 h-[35em] py-5">
-      <ResponsiveContainer width="100%" height="100%">
+    <div className="grid grid-cols-2 gap-4 h-[35em] py-5">
+      <ResponsiveContainer className='bg-gray-800 rounded-2xl bg-opacity-60 p-4'  width="100%" height="100%">
         <BarChart
           width={500}
           height={300}
@@ -108,7 +108,7 @@ function SimpleBarChart(props) {
         </BarChart>
       </ResponsiveContainer>
 
-      <ResponsiveContainer width="100%" height="100%">
+      <ResponsiveContainer className='bg-gray-800 rounded-2xl bg-opacity-60 p-4' width="100%" height="100%">
         <BarChart
           width={500}
           height={300}

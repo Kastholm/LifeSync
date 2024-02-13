@@ -58,13 +58,18 @@ function Movies() {
             className=" bg-gray-200 text-gray-700 p-2 rounded-full  "
             onClick={() => authenticateWithTrakt()}
           > 
-            <LogIn />
+          <div className="flex gap-2">
+            <p>1.</p> 
+              <LogIn />
+          </div>
           </button>
           <button
             onClick={() => getAccessToken()}
             className=" bg-gray-200 text-gray-700 p-2 rounded-full"
           >
-            <KeyRoundIcon />
+            <div className="flex gap-2">
+              <p>2.</p>
+              <KeyRoundIcon /></div>
           </button>
         </div>
       </div>

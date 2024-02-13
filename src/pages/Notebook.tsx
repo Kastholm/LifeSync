@@ -133,14 +133,14 @@ function Notebook() {
   return (
     <div>
       <>
-        <div className="bg-gray-900 text-gray-900 text-2xl  m-4 rounded-lg">
+        <div className="bg-gray-900 rounded-2xl text-gray-100 text-2xl  m-4">
           {journal.find(
             (item) => formatJournalDate(item.journalDate) === yearMonthDay
           ) ? (
             <div>
-              <h1>Du har allerede skrevet dagbog i dag</h1>
+              <h1>You've already made you Journal for today</h1>
               <p>
-                Fundet dagbog for:{" "}
+                Found Journal for:{" "}
                 {formatJournalDate(
                   journal.find(
                     (item) =>

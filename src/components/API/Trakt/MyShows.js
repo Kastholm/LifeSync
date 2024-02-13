@@ -1,12 +1,15 @@
 import { useContext, useEffect, useState } from "react";
+import { UserVariablesContext } from "../../context/VariableProvider";
 
 import { BadgeInfo } from "lucide-react";
 function MyShows() {
 
+  const { traktClientId, traktClientSecret, tmdbApiKey, server } =
+  useContext(UserVariablesContext);
 
   const [watchShows, getWatchShows] = useState([]);
-  const REACT_APP_CLIENT_ID = process.env.REACT_APP_TRAKT_CLIENT_ID;
-  const REACT_APP_TMDB_API_KEY = process.env.REACT_APP_TMDB_API_KEY;
+  const REACT_APP_CLIENT_ID = traktClientId;
+  const REACT_APP_TMDB_API_KEY = tmdbApiKey;
   useEffect(() => {
     fetchShowsToWatch();
   }, []);
