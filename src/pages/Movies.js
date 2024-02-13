@@ -51,7 +51,7 @@ function Movies() {
   };
 
   return (
-    <div className="bg-black mt-2 px-4 rounded-3xl">
+    <div className="bg-black mt-2 px-4 rounded-3xl ">
       <div className="rounded-t-3xl mt-4 flex py-4 bg-gray-900 justify-end ">
         <div className="flex gap-4 mr-4">
           <button
